@@ -28,10 +28,8 @@ import { createDrawerNavigator, createAppContainer, DrawerItems, DrawerNavigatio
 
 var Spinner = require('react-native-spinkit');
 
-
+//
 var PushNotification = require("react-native-push-notification");
-
-
 
 PushNotification.localNotification({
       foreground: false, // BOOLEAN: If the notification was received in foreground or not
@@ -39,14 +37,6 @@ PushNotification.localNotification({
       message: 'My Notification Message', // STRING: The notification message
       data: {}, // OBJECT: The push data
 });
-
-
-
-
-
-
-
-
 
 
 const instructions = Platform.select({
@@ -338,11 +328,9 @@ export default class App extends Component<Props> {
 
   if(TRUE){
   // if(isLoading){
+  console.log('CAME HERE');
     return (
         <View style={styles.container}>
-          <Text>
-            XD
-          </Text>
           <Spinner type="9CubeGrid" color="#d3a04c" />
         </View>
       );
@@ -427,6 +415,7 @@ export default class App extends Component<Props> {
     //     </View>
     //     );
     // }
+
 
     // if(isLogged === false){
       // return (

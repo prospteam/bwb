@@ -210,7 +210,7 @@ class MapContainer extends React.Component {
             />
             <BottomDrawer
               containerHeight={400}
-              offset={20}
+              offset={10}
               backgroundColor='rgba(255, 0, 0, 0)'
             >
               <View style={{

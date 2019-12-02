@@ -20,12 +20,12 @@ const MyMapView = (props) => {
   // height = (props.height)?props.height+300:height;
   return (
     <MapView
-        // style={{ flex: 1,  height: height-100,  width: width }}
+        style={{ flex: 1,  height: height-100,  width: width }}
         // region={{origin}}
-        // region={props.region}
-        // showsUserLocation={true}
-        // ref={c => this.mapView = c}
-        // onRegionChangeComplete={(reg) => props.onRegionChange(reg)}
+        region={props.region}
+        showsUserLocation={true}
+        ref={c => this.mapView = c}
+        onRegionChangeComplete={(reg) => props.onRegionChange(reg)}
         >
           {
             //   <MapView.Marker
