@@ -88,7 +88,7 @@ export default class Dashboard extends Component {
   async getDriverStatus(){
       const data = JSON.parse(await AsyncStorage.getItem('userData'));
 
-      this.setState({ user_type: data['user_type_id'] });
+      // this.setState({ user_type: data['user_type_id'] });
 
       fetch(Helpers.api_url+'get_driver_status', {
        method: 'POST',
@@ -241,7 +241,7 @@ export default class Dashboard extends Component {
         console.log('naa');
         // console.log(await AsyncStorage.getItem('userData'));
       }else {
-          this.props.actions.navigate('Logout');
+          // this.props.actions.navigate('Logout');
       }
       // setTimeout(() => {
       //   this.setState({

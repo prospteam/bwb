@@ -372,12 +372,12 @@ export default class App extends Component<Props> {
     // if (userData.user_type_id) {
       if (true) {
       // if (userData.user_type_id==3) {
-        varUserType = "driver";
-          console.log('I AMA DRIVER');
-      }else if (userData.user_type_id==2) {
-        varUserType = "rider";
-          console.log('I AMA RIDER');
-      }else if (userData.user_type_id==1) {
+        // varUserType = "driver";
+        //   console.log('I AMA DRIVER');
+      // }else if (userData.user_type_id==2) {
+        // varUserType = "rider";
+        //   console.log('I AMA RIDER');
+      // }else if (userData.user_type_id==1) {
         varUserType = "admin";
           console.log('I AMA ADMIN');
       }else {
@@ -414,6 +414,7 @@ export default class App extends Component<Props> {
   }
 
   render() {
+    console.log("App loaded");
     console.log(this.state.userType);
     // console.log('Getting');
     // console.log(AsyncStorage.setItem('userData', true));
