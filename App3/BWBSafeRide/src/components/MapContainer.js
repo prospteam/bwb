@@ -10,7 +10,7 @@ import BottomDrawer from 'rn-bottom-drawer';
 import styles from '.././assets/my_styles.js';
 import Helpers from '../../Helpers';
 import AsyncStorage from '@react-native-community/async-storage';
-import firebase from './common/Firebase';
+import Firebase from './common/Firebase';
 
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
 
@@ -43,7 +43,7 @@ class MapContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.ref = firebase.firestore().collection('books');
   }
 
@@ -385,7 +385,7 @@ class MapContainer extends React.Component {
     // console.log(this.state);
     // console.log("getting NEW PROPS");
     const { window_height, can_book } =this.props;
-    
+
     // console.log('YYYYYYYYYYYYYY');
     // console.log(this.state.testlocation);
     // console.log(this.state.can_book);
