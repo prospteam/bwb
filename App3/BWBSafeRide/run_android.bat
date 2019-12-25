@@ -1,3 +1,1 @@
-react-native run-android
-cmd /k
-pause
+npx react-native run-android & pause

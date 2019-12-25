@@ -27,19 +27,16 @@ import companyLogosm from './src/assets/images/main_logo-sm.png';
 import { createDrawerNavigator, createAppContainer, DrawerItems, DrawerNavigation } from 'react-navigation';
 // import firebase from './src/components/common/Firebase';
 
-
 var Spinner = require('react-native-spinkit');
 
-// var PushNotification = require("react-native-push-notification");
-
+// var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
+//
 // PushNotification.localNotification({
 //       foreground: false, // BOOLEAN: If the notification was received in foreground or not
 //       userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
 //       message: 'My Notification Message', // STRING: The notification message
 //       data: {}, // OBJECT: The push data
 // });
-
-
 
 
 const instructions = Platform.select({
@@ -80,9 +77,9 @@ const MyDrawerNavigator = createDrawerNavigator(
     Profile: {
       screen: Profile,
     },
-    DriverProfile: {
-      screen: DriverProfile,
-    },
+    // DriverProfile: {
+    //   screen: DriverProfile,
+    // },
     History: {
       screen: History,
     },
@@ -125,15 +122,15 @@ const MyDrawerNavigatorDriver = createDrawerNavigator(
     Dashboard:{
       screen: Dashboard,
     },
-    DriverDashboard:{
-      screen: DriverDashboard,
-    },
+    // DriverDashboard:{
+    //   screen: DriverDashboard,
+    // },
     DriverProfile: {
       screen: DriverProfile,
     },
-    Profile: {
-      screen: Profile,
-    },
+    // Profile: {
+    //   screen: Profile,
+    // },
     History: {
       screen: History,
     },
@@ -179,9 +176,9 @@ const MyDrawerNavigatorRider = createDrawerNavigator(
       Profile: {
         screen: Profile,
       },
-      DriverProfile: {
-        screen: DriverProfile,
-      },
+      // DriverProfile: {
+      //   screen: DriverProfile,
+      // },
       History: {
         screen: History,
       },
@@ -191,9 +188,9 @@ const MyDrawerNavigatorRider = createDrawerNavigator(
       Bookings: {
         screen: Bookings,
         navigationOptions: ({navigation}) => {
-            return {
-                drawerLabel: () => "Trip History",
-            }
+          return {
+            drawerLabel: () => "Trip History",
+          }
         }
       },
       Payment: {
@@ -311,13 +308,12 @@ export default class App extends Component<Props> {
     let varUserType ="";
 
     if(await AsyncStorage.getItem('userData')){
-      this.setState({
-        isLogged: true,
+        this.setState({
+          isLogged: true,
         });
-        
-        // console.log('BUWHAHAAAAAAAAAAAAAAAAAAX');
-        // console.log(await AsyncStorage.getItem('userData'));
-        // console.log('BUWHAHAAAAAAAAAAAAAAAAAA');
+        console.log('LOGGED USER');
+        console.log(await AsyncStorage.getItem('userData'));
+        console.log('LOGGED USER');
     }
 
     // if(await AsyncStorage.getItem('userData')){

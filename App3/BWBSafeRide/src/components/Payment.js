@@ -145,29 +145,25 @@ export default class Payment extends Component {
              <Right>
              </Right>
             </Header>
-                <Content>
+                <Content style={{margin: 30}}>
                   {params ? (
                     <>
-                      <Text>
-                        Chosen Date:
-                        {params.chosenDate}
-                      </Text>
-                      <Text>
-                        Chosen Time:
-                        {params.chosenTime}
-                      </Text>
-                      <Text>
-                        Total Travel Distance:
-                        {params.distance}
-                      </Text>
-                      <Text>
-                        Pickup Location:
-                        {params.form_from_text}
-                      </Text>
-                      <Text>
-                        Dropoff Location:
-                        {params.form_to_text}
-                      </Text>
+                        <View style={{backgroundColor: '#1c1b22', padding: 10, marginBottom: 5}}><Text style={{color: '#d3a04c'}}>$ {params.payByDistance.toFixed(2)}</Text></View>
+                      <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
+                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Chosen Date </Text><Text style={{padding: 5, fontSize: 14}}>{params.chosenDate}</Text>
+                      </View>
+                      <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
+                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Chosen Time </Text><Text style={{padding: 5, fontSize: 14}}>{params.chosenTime}</Text>
+                      </View>
+                      <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
+                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Travel Distance </Text><Text style={{padding: 5, fontSize: 14}}>{params.distance}</Text>
+                      </View>
+                      <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
+                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Pickup Location </Text><Text style={{padding: 5, fontSize: 14}}>{params.form_from_text}</Text>
+                      </View>
+                      <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
+                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Drop-off Location </Text><Text style={{padding: 5, fontSize: 14}}>{params.form_to_text}</Text>
+                      </View>
                     </>
                   ):null }
                 {/*<View style={s.container}>

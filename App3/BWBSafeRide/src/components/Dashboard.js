@@ -14,11 +14,11 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const origin = {latitude: 37.3318456, longitude: -122.0296002};
-const destination = {latitude: 37.771707, longitude: -122.4053769};
+const origin = {latitude: 37.3318456, longitude: 123.0296002};
+const destination = {latitude: 37.771707, longitude: 123.4053769};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 
-const getCurrentLocation = () => {
+// const getCurrentLocation = () => { // TO REMOVE NA
   // alert('3');
    // this.watchID = navigator.geolocation.watchPosition((position) => {
    //  console.log(position);
@@ -32,23 +32,23 @@ const getCurrentLocation = () => {
    //    //   }
    //    //   this.onRegionChange(region, region.latitude, region.longitude);
    //    }, (error)=>console.log(error));
-}
+// }
 
 export default class Dashboard extends Component {
   // getCurrentLocation();
-  state = {
-    isMapReady: false,
-    longitude: 37.771707,
-    latitude: -122.4053769,
-  }
+  // state = {
+  // }
 
   // componentWillUnmount() {
   //   navigator.geolocation.clearWatch(this.watchID);
   // }
 
-  constructor(){
-      super();
+  constructor(props){
+      super(props);
       this.state = {
+          isMapReady: false,
+          longitude: 37.771707,
+          latitude: -122.4053769,
           switchValue: false,
           user_type: null
       }
@@ -116,6 +116,9 @@ export default class Dashboard extends Component {
 
   componentDidMount() {
 
+      // const {latitude} = this.props;
+      // navigation.getParam('latitude', 0)
+
       this.getDriverStatus();
 
     var that = this;
@@ -132,10 +135,10 @@ export default class Dashboard extends Component {
               }
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-              // that.callLocation(that);
+              // that.callLocation(that); // TEMP
             }
           } catch (err) {
-            alert("Something went wrong.");
+            // alert("Unable to get current location."); // TEMP
             console.warn("err",err);
           }
         }
@@ -144,25 +147,26 @@ export default class Dashboard extends Component {
   }
   callLocation(that){
     console.log('getting Location');
-     navigator.geolocation.getCurrentPosition(
-       //Will give you the current location
-        (position) => {
-          console.log(position);
-           const currentLongitude = Number(JSON.stringify(position.coords.longitude));
-           //getting the Longitude from the location json
-           const currentLatitude = Number(JSON.stringify(position.coords.latitude));
-           //getting the Latitude from the location json
-           //Setting state Longitude to re re-render the Longitude Text
-           that.setState({
-             longitude:currentLongitude,
-             latitude:currentLatitude,
-             isMapReady:true
-           });
-           //Setting state Latitude to re re-render the Longitude Text
-        },
-        (error) => console.log(error.message),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-     );
+    console.log(navigator);
+    navigator.geolocation.getCurrentPosition(
+     //Will give you the current location
+      (position) => {
+        console.log(position);
+         const currentLongitude = Number(JSON.stringify(position.coords.longitude));
+         //getting the Longitude from the location json
+         const currentLatitude = Number(JSON.stringify(position.coords.latitude));
+         //getting the Latitude from the location json
+         //Setting state Longitude to re re-render the Longitude Text
+         that.setState({
+           longitude:currentLongitude,
+           latitude:currentLatitude,
+           isMapReady:true
+         });
+         //Setting state Latitude to re re-render the Longitude Text
+      },
+      (error) => console.log(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
      // that.watchID = navigator.geolocation.watchPosition((position) => {
      //   //Will give you the location on location change
      //     console.log(position);
@@ -251,7 +255,9 @@ export default class Dashboard extends Component {
     }
 
     render() {
-let params = false;
+        const { navigation } = this.props;
+
+        let params = false;
       if (this.props.navigation.getParam('params',false)) {
         params = this.props.navigation.getParam('params',false);
         // console.log('XDXDXDXDXD');
@@ -296,19 +302,7 @@ let params = false;
           <Content Styles={{position:'relative'}}>
             <View style={styles.container}>
             {
-              // <Text>
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              //   aslkdjsakljdkla slkjdklas jdlkjsa kldjaskl
-              // </Text>
-
-                <MapContainer navigation={this.props.navigation} {...params} window_height={height}/>
+                <MapContainer navigation={this.props.navigation} {...params} pinned_latitude={navigation.getParam('pinned_loc_lat', 0)} pinned_longitude={navigation.getParam('pinned_loc_long', 0)} pinned_stat={navigation.getParam('pinned_stat', true)} window_height={height} set_destination_lat={navigation.getParam('latitude', 0)} set_destination_long={navigation.getParam('longitude', 0)} />
               }
             </View>
           </Content>

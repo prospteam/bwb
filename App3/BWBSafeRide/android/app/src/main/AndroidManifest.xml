@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.bwbsaferide">
+  package="com.bwbsaferide" android:installLocation="preferExternal">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -17,6 +17,9 @@
       <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyCsCARtyDaiIeDtGY0r3jz4pT4YwiR41Fw"/>
+      <!-- <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyDNiQ_vrw3zB6pM_s2nNC-0mohwlWi6wGo"/> -->
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

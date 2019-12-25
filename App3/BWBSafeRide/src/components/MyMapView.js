@@ -6,33 +6,55 @@ import MapViewDirections from 'react-native-maps-directions';
 import Helpers from '../../Helpers';
 
 let { width, height } = Dimensions.get('window');
-const origin = {latitude: 37.3318456, longitude: -122.0296002};
-const destination = {latitude: 37.771707, longitude: -122.4053769};
+const origin = {latitude: 10.3157, longitude: 123.886};
+const destination = {latitude: 37.771707, longitude: 123.4053769};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 
 // this.mapView = null;
 
 const MyMapView = (props) => {
-  console.log('MyMapView Renedering');
+    // Alert.alert('hello');
+  console.log('MyMapView Rendering-start');
   console.log(props);
+  console.log('MyMapView Rendering-end');
   // height = (props.height)?props.height+300:height;
   return (
     <MapView
         style={{ flex: 1,  height: height-100,  width: width }}
+
         // region={{origin}}
-        // region={props.region}
-        showsUserLocation={true}
-        // ref={c => this.mapView = c}
-        onRegionChangeComplete={(reg) => props.onRegionChange(reg)}
-        initialRegion={{
-          // latitude: props.marker1 ? props.marker1.latitude:37.78825,
-          latitude: 37.78825,
-          // longitude: props.marker1 ? props.marker1.longitude:-122.4324,
-          longitude: -122.4324,
-          latitudeDelta: 0.0,
-          longitudeDelta: 0.0,
+        // region={props.marker1?props.marker1:props.region?props.region:origin}
+        // region={{
+        //   latitude: props.marker1 ? props.marker1.latitude:37.78825,
+        //   // latitude: 37.78825,
+        //   longitude: props.marker1 ? props.marker1.longitude:-122.4324,
+        //   // longitude: -122.4324,
+        //   latitudeDelta: 0.0,
+        //   longitudeDelta: 0.0,
+        // }}
+
+        region={{
+          latitude: (props.pinned_lat !== 0) ? parseFloat(props.pinned_lat) : props.region.latitude,
+          longitude: (props.pinned_stat !== 0) ? parseFloat(props.pinned_long) : props.region.longitude,
+          // latitude: (props.pinned_lat !== 0) ? parseFloat(props.pinned_lat) : props.region.region,
+          // longitude: (props.pinned_stat !== 0) ? parseFloat(props.pinned_long) : props.region.region,
+          latitudeDelta: props.region.latitudeDelta,
+          longitudeDelta: props.region.longitudeDelta,
         }}
 
+        showsUserLocation={true}
+        // ref={c => this.mapView = c}
+        // onRegionChangeComplete={(reg) => props.onRegionChange(reg)}
+        // initialRegion={{
+        //   // latitude: props.my_latitude_as_rider,
+        //   // latitude: props.marker1 ? props.marker1.latitude:37.78825,
+        //   latitude: 37.78825,
+        //   // longitude: props.my_longitude_as_rider,
+        //   // longitude: props.marker1 ? props.marker1.longitude:-122.4324,
+        //   longitude: -122.4324,
+        //   latitudeDelta: 0.0,
+        //   longitudeDelta: 0.0,
+        // }}
         >
           {props.form_from && <MapView.Marker
                coordinate={props.form_from}
@@ -92,10 +114,9 @@ const MyMapView = (props) => {
             {props.form_to && <MapView.Marker
                  coordinate={props.form_to}
                  title={"Drop-off Location"}
-                 description={props.geocode_name}
               />}
 
-            {true && <MapView.Marker
+            {props.marker1 && <MapView.Marker
                  coordinate={{
                     // latitude: 37.78825,
                     latitude: props.marker1 ? props.marker1.latitude:37.78825,
@@ -103,17 +124,36 @@ const MyMapView = (props) => {
                     longitude: props.marker1 ? props.marker1.longitude:-122.4324,
                   }}
                  title={"Drop-off LocationX"}
-                 description={props.geocode_name}
+                 // description={props.geocode_name}
               />}
-              {
 
-        // <MapView.Marker
-        //     coordinate={{latitude: 37.78825,
-        //     longitude: -122.4324}}
-        //     title={"title"}
-        //     description={"description"}
-        //  />
-         }
+            {props.my_latitude!=0 && <MapView.Marker
+                 coordinate={{
+                    // latitude: 37.78825,
+                    latitude: props.my_latitude,
+                    // longitude: -122.4324,
+                    longitude: props.my_longitude,
+                  }}
+                 title={"Drop-off LocationX"}
+                 // description={props.geocode_name}
+              />}
+              {(props.pinned_lat !== 0) && <MapView.Marker
+                   coordinate={{latitude: parseFloat(props.pinned_lat), longitude: parseFloat(props.pinned_long)}}
+                   title={"Saved Location"}
+                   pinColor='#d3a04c'
+                >
+                <MapView.Callout tooltip={true}
+                    style={{backgroundColor: '#d3a04c'}}
+                    onPress={() => {props.navigation.navigate('Dashboard', {
+                        latitude: parseFloat(props.pinned_lat),
+                        longitude: parseFloat(props.pinned_long)
+                    })}}
+                    >
+                    <TouchableOpacity>
+                        <Text style={{color: '#fff', padding: 10}}>Set Destination</Text>
+                    </TouchableOpacity>
+                </MapView.Callout>
+                </MapView.Marker>}
           <MapViewDirections
             origin={props.form_from}
             destination={props.form_to}
