@@ -25,6 +25,12 @@ export default class PinnedLocations extends Component {
         this.getSavedLoc();
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if(prevState.locations_list != this.state.locations_list){
+            this.getSavedLoc();
+        }
+    }
+
     async getSavedLoc(){
 
         const data = JSON.parse(await AsyncStorage.getItem('userData'));
@@ -78,7 +84,7 @@ export default class PinnedLocations extends Component {
             // Alert.alert(res.response);
             if(res.response === 'success'){
                 Alert.alert('Location has been deleted.')
-                this.getSavedLoc();
+                // this.getSavedLoc();
             }
 
         }).catch((error) => {
@@ -90,8 +96,9 @@ export default class PinnedLocations extends Component {
         return (
             <Container>
             <Header>
-             <Left style={{ flexDirection: 'row' }}>
+             <Left style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Icon onPress={() => this.props.navigation.openDrawer()} name="md-menu" style={{ color: '#d3a04c', marginRight: 15 }} />
+              <Text style={{width: 300, color: '#d3a04c'}}>Pinned Locations</Text>
              </Left>
              <Right>
              </Right>
@@ -120,14 +127,6 @@ export default class PinnedLocations extends Component {
                         <Button vertical onPress={() => this.props.navigation.navigate('Dashboard')}>
                             <Icon name="apps" />
                             <Text>Dashboard</Text>
-                        </Button>
-                        <Button vertical>
-                            <Icon name="map" />
-                            <Text>Book Now</Text>
-                        </Button>
-                        <Button vertical>
-                            <Icon name="navigate" />
-                            <Text>Navigate</Text>
                         </Button>
                     </FooterTab>
                 </Footer>

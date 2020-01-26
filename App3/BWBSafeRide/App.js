@@ -5,6 +5,7 @@
  * @format
  * @flow
  */
+
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, ImageBackground, Image, Alert} from 'react-native';
 import { Container, Content, StyleProvider } from 'native-base';
@@ -15,19 +16,23 @@ import RegisterView from './src/components/RegisterView';
 import Dashboard from './src/components/Dashboard';
 import DriverDashboard from './src/components/DriverDashboard';
 import Profile from './src/components/Profile';
-import History from './src/components/History';
+import TripHistory from './src/components/TripHistory';
+import SavedRoutes from './src/components/SavedRoutes';
 import Payment from './src/components/Payment';
 import Routes from './src/components/Routes';
 import DriverProfile from './src/components/DriverProfile';
 import Bookings from './src/components/Bookings';
 import PinnedLocations from './src/components/PinnedLocations';
-import * as TripHistory from './src/components/Bookings';
+// import * as TripHistory from './src/components/Bookings';
 import AsyncStorage, { useAsyncStorage } from '@react-native-community/async-storage';
 import companyLogosm from './src/assets/images/main_logo-sm.png';
 import { createDrawerNavigator, createAppContainer, DrawerItems, DrawerNavigation } from 'react-navigation';
 // import firebase from './src/components/common/Firebase';
 
 var Spinner = require('react-native-spinkit');
+
+console.disableYellowBox = true;
+console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
 
 // var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
 //
@@ -77,11 +82,11 @@ const MyDrawerNavigator = createDrawerNavigator(
     Profile: {
       screen: Profile,
     },
-    // DriverProfile: {
-    //   screen: DriverProfile,
-    // },
-    History: {
-      screen: History,
+    DriverProfile: {
+      screen: DriverProfile,
+    },
+    TripHistory: {
+      screen: TripHistory,
     },
     Bookings: {
       screen: Bookings,
@@ -131,8 +136,8 @@ const MyDrawerNavigatorDriver = createDrawerNavigator(
     // Profile: {
     //   screen: Profile,
     // },
-    History: {
-      screen: History,
+    TripHistory: {
+      screen: TripHistory,
     },
     Payment: {
       screen: (props) => <Payment {...props} test='test' />,
@@ -176,11 +181,11 @@ const MyDrawerNavigatorRider = createDrawerNavigator(
       Profile: {
         screen: Profile,
       },
-      // DriverProfile: {
-      //   screen: DriverProfile,
-      // },
-      History: {
-        screen: History,
+      TripHistory: {
+        screen: TripHistory,
+      },
+      SavedRoutes: {
+        screen: SavedRoutes,
       },
       PinnedLocations: {
         screen: PinnedLocations,
@@ -188,9 +193,9 @@ const MyDrawerNavigatorRider = createDrawerNavigator(
       Bookings: {
         screen: Bookings,
         navigationOptions: ({navigation}) => {
-          return {
-            drawerLabel: () => "Trip History",
-          }
+            return {
+                drawerLabel: () => "Bookings",
+            }
         }
       },
       Payment: {

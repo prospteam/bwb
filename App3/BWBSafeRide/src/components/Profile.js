@@ -24,7 +24,8 @@ export default class Profile extends ValidationComponent {
         this.state = {
             userData: [],
             modalVisible: false,
-            isLoading: true
+            isLoading: true,
+            userData2: null
         }
     }
 
@@ -91,6 +92,30 @@ export default class Profile extends ValidationComponent {
           }else{
               Alert.alert(this.getErrorMessages());
           }
+        }
+
+        componentDidUpdate(prevProps, prevState){
+            if(prevState.userData !== this.state.userData){
+                this.setUserData();
+            }
+        }
+
+        checkSession(){
+            AsyncStorage.getItem("userData", (errs,result) => {
+               if (!errs) {
+                   if (result === null) {
+                       // console.error(result);
+                       this.setState({userData2: result});
+                       this.props.navigation.navigate('Logout');
+                   }
+                }
+           });
+
+            setTimeout(() => {
+                this.setState({
+                    isLoading: false,
+                });
+            }, 1000);
         }
 
   setUserData = async (e) => {

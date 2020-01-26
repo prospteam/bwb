@@ -64,7 +64,9 @@ export default class LoginView extends Component {
             this.setData(responseJson.data);
             console.log('came');
             // Actions.dashboard();
-            this.props.navigation.navigate('Dashboard');
+            this.props.navigation.navigate('Dashboard', {
+                login_success: true
+            });
         }
         else{
           Alert.alert(JSON.stringify(responseJson.msg));
