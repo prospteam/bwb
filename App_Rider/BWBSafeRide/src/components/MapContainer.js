@@ -680,8 +680,9 @@ class MapContainer extends React.Component {
           form_from_latlong:state.form_from_latlong,
           form_from_text:state.form_from_text ? state.form_from_text: from,
           form_to_latlong:state.form_to_latlong,
-          form_to_text:state.form_to_text ? state.form_to_text: to,
-          payByDistance:payByDistance,
+          form_to_text: state.form_to_text ? state.form_to_text : to,
+          payByDistance: payByDistance,
+          baseFare: baseFare,
         };
 
         // Actions.payment();
@@ -894,8 +895,8 @@ class MapContainer extends React.Component {
                     </Text>
                   <Label>Pickup</Label>
                   <KeyboardAvoidingView
-                  behavior="padding"
-                >
+                    behavior="padding"
+                  >
                     <GooglePlacesAutocomplete
                         // textInputProps={{
                         //     onChangeText: (loc) => this.setState({set_destination_name: loc})
@@ -1084,8 +1085,8 @@ class MapContainer extends React.Component {
                 // )
               }
 
-              { false &&
-              // { this.state.can_book == false && this.state.is_finish_check_booking_status == true &&
+              { this.state.can_book == false && this.state.is_finish_check_booking_status == true &&
+              // { true &&
 
               <BottomDrawer
                 containerHeight={500}

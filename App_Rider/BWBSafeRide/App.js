@@ -28,11 +28,11 @@ import AsyncStorage, { useAsyncStorage } from '@react-native-community/async-sto
 import companyLogosm from './src/assets/images/main_logo-sm.png';
 import { createDrawerNavigator, createAppContainer, DrawerItems, DrawerNavigation } from 'react-navigation';
 // import firebase from './src/components/common/Firebase';
-import AutoStart from 'react-native-autostart';
-
-if(AutoStart.isCustomAndroid()) {
-    AutoStart.startAutostartSettings();
-}
+// import AutoStart from 'react-native-autostart';
+//
+// if(AutoStart.isCustomAndroid()) {
+//     AutoStart.startAutostartSettings();
+// }
 
 var Spinner = require('react-native-spinkit');
 
