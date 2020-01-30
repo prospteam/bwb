@@ -15,8 +15,6 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import firebase from './common/Firebase';
 // import Geolocation from "@react-native-community/geolocation";
 
-const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
-
 const TAB_BAR_HEIGHT = 80;
 const DRAWER_HEIGHT_SMALL = 300;
 const DRAWER_HEIGHT_BIG = 500;
@@ -126,6 +124,7 @@ class MapContainer extends React.Component {
             fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.props.set_destination_lat + ',' + this.props.set_destination_long + '&key=' + GOOGLE_MAPS_APIKEY)
                 .then((response) => response.json())
                 .then((responseJson) => {
+                  
                     this.setState({set_destination_lat: this.props.set_destination_lat,
                         form_to_text: responseJson.results[0].formatted_address,
                         form_to:'to',
@@ -481,20 +480,22 @@ class MapContainer extends React.Component {
                    // console.error(responseJson.num_of_active_booking);
                    if(responseJson.num_of_active_booking > 0){
                      // msg = responseJson.msg;
+                     console.log('if');
 
                      this.setState({
                        can_book:false,
                        driver_details:responseJson.driver_details,
                        booking_details:responseJson.booking_details,
                      });
-                     console.log('LOEDDEDDDD2');
 
                    }else{
+                     console.log('else');
                      this.setState({
                        can_book:true,
                        driver_details:[],
                        booking_details:[],
                      });
+
                    }
                 }).catch((error) => {
                   console.log('NOT getting API');
@@ -805,8 +806,8 @@ class MapContainer extends React.Component {
         if(this.state.form_to_text !== null)
             this.locationDestRef.setAddressText(this.state.form_to_text);
     }
-    console.log('YYYYYYYYYYYYYY');
-    console.log(this.state.can_book);
+    console.log('STATE BEFORE RENDER');
+    console.log(this.state);
     // console.log(this.state.booking_details);
     const marker1 = this.state.is_user_type_ready ? this.state.user != 3 ? this.state.testlocation ? this.state.testlocation : null :null:null;
     // console.log(this.props);
@@ -1027,7 +1028,8 @@ class MapContainer extends React.Component {
 
                  </KeyboardAvoidingView>
                   {/*<MapInput notifyChange={(loc,loc_text) => this.getCoordsFromName(loc,'to',loc_text)} latlong={navigation.getParam('booking_data_to_latlong', set_destination_latlong)} loc_from_text={false} loc_to_text={this.state.form_to_text} placeholder='Enter drop-off location' />*/}
-                  {distance ?(
+                  {true ?(
+                  // {distance ?(
                     <Form>
                       <View
                         style={{
@@ -1085,8 +1087,11 @@ class MapContainer extends React.Component {
                 // )
               }
 
-              { this.state.can_book == false && this.state.is_finish_check_booking_status == true &&
+                                      
+            { this.state.can_book == false && can_book == false && this.state.is_finish_check_booking_status == true &&
               // { true &&
+              // THIS CHECKS IF NAA PASYAY PENDING BOOKING
+
 
               <BottomDrawer
                 containerHeight={500}
