@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, KeyboardAvoidingView, Alert } from 'react-native';
+import { Image, View, KeyboardAvoidingView, Alert, TouchableOpacity } from 'react-native';
 import { Button, Text, Input, Form, Item, Label, DatePicker,Thumbnail, Left, Body } from 'native-base';
 import MapInput from './MapInput';
 import MyMapView from './MyMapView';
@@ -82,7 +82,8 @@ class MapContainer extends React.Component {
         set_destination_long: this.props.set_destination_long,
         form_from_text: null,
         booking_details_ready:null,
-        form_to_text: null
+        form_to_text: null,
+        textValue: "On the way to Pick-up Location"
         // pinned_latitude: 0,
         // pinned_longitude: 0
     };
@@ -318,6 +319,7 @@ class MapContainer extends React.Component {
       console.log(`Encountered error: ${err}`);
     });
   }
+
 
   riderGetCurrentLocation(){
     // geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]); // FUNCTION PARAMETER
@@ -682,6 +684,13 @@ class MapContainer extends React.Component {
       // console.log(this.state);
   }
 
+  // testChange = () =>{
+  //     this.setState({
+  //         textValue: 'test',
+  //
+  //     })
+  // }
+
   bookNow(e, from, to){
     const { state } = this;
     // const { navigation } = this.props;
@@ -723,12 +732,40 @@ class MapContainer extends React.Component {
         // console.log(state.form_from_latlong);
     }
   }
+  async testfunction(id){
+      alert();
+       // const data = JSON.parse(await AsyncStorage.getItem('userData'));
 
-  // testfunction(){
-  //   // const { state } = this;
-  //   this.props.navigate('Payment');
-  //   // alert('asd');
-  // }
+       // console.log('ididididi');
+       // console.log(id);
+
+
+      fetch(Helpers.api_url+'update_location_status/'+id+'/pending', {
+           method: 'GET',
+           headers: {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+           }
+
+      }).then( (response) => {
+          console.log("response XCFXFXDFFXD");
+          console.log(response);
+          // return response.json();
+      }).then( (response) => {
+          console.log("22222response XCFXFXDFFXD");
+          console.log(response);
+          // return response.json();
+      });
+       // .then((responseJson) => {
+       //   console.log('getting API');
+       //   console.log(responseJson);
+       // }).catch((error) => {
+       //
+       //   console.log('JOren Error');
+       //   // console.error(error);
+       // });
+
+  }
 
   setDate(newDate) {
     // console.log('setting');
@@ -769,6 +806,70 @@ class MapContainer extends React.Component {
 
       return time24;
   };
+
+  testfunction1 = (id) => {
+      console.log("XDD");
+        console.log(Helpers.api_url+'update_location_status/'+id+'/pending');
+          fetch(Helpers.api_url+'update_location_status/'+id+'/pending', {
+               method: 'GET',
+               headers: {
+                 'Accept': 'application/json',
+                 'Content-Type': 'application/json',
+               }
+
+          }).then( (response) => {
+              console.log("response XCFXFXDFFXD");
+              console.log(response);
+              // return response.json();
+          }).then( (response) => {
+              console.log("22222response XCFXFXDFFXD");
+              console.log(response);
+              // return response.json();
+          });
+
+  };
+
+  changFunction = (id) => {
+      // console.log(this.state.login_id);
+      // console.log("XDD");
+      console.log('test');
+      console.log(this.state.textValue);
+
+      let  status = "";
+
+      if(this.state.textValue == "On the way to Pick-up Location"){
+          this.setState({textValue:'On the way to Drop-Off'});
+          status = "inprogress";
+          console.log('pick up');
+      }else if (this.state.textValue == 'On the way to Drop-Off') {
+          console.log('drop off');
+          this.setState({textValue:'Ride Completed'});
+          status = "completed";
+      }
+
+      console.log('status');
+      console.log(status);
+
+        console.log(Helpers.api_url+'update_location_status/'+id+'/inprogress');
+          fetch(Helpers.api_url+'update_location_status/'+id+'/'+status, {
+               method: 'GET',
+               headers: {
+                 'Accept': 'application/json',
+                 'Content-Type': 'application/json',
+               }
+
+          }).then( (response) => {
+              console.log("response XCFXFXDFFXD");
+              console.log(response);
+              // return response.json();
+          }).then( (response) => {
+              console.log("22222response XCFXFXDFFXD");
+              console.log(response);
+              // return response.json();
+          });
+
+           //this.setState({textValue:'On the way tp Drop-Off'});
+  }
 
   handleDatePicked = date => {
     // console.log("A date has been picked: ", date);
@@ -828,7 +929,7 @@ class MapContainer extends React.Component {
         if(this.state.form_to_text !== null)
           this.locationDestRef.setAddressText(this.state.form_to_text);
     }
-    console.log('xxxxxxxxxxxxxxxxx');
+    console.log('XDXDXDXDXDXDXd');
     console.log(this.state);
     // console.log(this.state.booking_details);
     const marker1 = this.state.is_user_type_ready ? this.state.user_data != 3 ? this.state.testlocation ? this.state.testlocation : null :null:null;
@@ -1005,6 +1106,11 @@ class MapContainer extends React.Component {
                     <Text>
                     {this.state.booking_details.dropoff_location}
                     </Text>
+					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
+                    }
+					<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.changFunction(this.state.login_id)} >
+                        <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </BottomDrawer>
