@@ -83,7 +83,8 @@ class MapContainer extends React.Component {
         form_from_text: null,
         booking_details_ready:null,
         form_to_text: null,
-        textValue: "On the way to Pick-up Location"
+        textValue: "On the way to Pick-up Location",
+        disabledBotton: false
         // pinned_latitude: 0,
         // pinned_longitude: 0
     };
@@ -501,11 +502,24 @@ class MapContainer extends React.Component {
        console.log(responseJson);
         if(responseJson.num_of_active_booking > 0){
           // msg = responseJson.msg;
+          console.log(responseJson.booking_details.booking_status);
+          let textVal = '';
+          if(responseJson.booking_details.booking_status == "pending"){
+               textVal = "On the way to pick up location";
+          }else if (responseJson.booking_details.booking_status == "inprogress") {
+               textVal = "On the way to drop off location";
+          }else if(responseJson.booking_details.booking_status == "completed"){
+               textVal = "Ride completed";
+          }
+
+          console.log("textVal");
+          console.log(textVal);
 
           this.setState({
             can_book:false,
             driver_details:responseJson.driver_details,
             booking_details:responseJson.booking_details,
+             textValue: textVal
           });
 // this.state.user.user_type_id
           console.log('LOEDDEDDDD2');
@@ -526,7 +540,7 @@ class MapContainer extends React.Component {
 
      }).catch((error) => {
        console.log('NOT getting API');
-       // console.error(error);
+        console.error(error);
      });
 
      this.setState({
@@ -832,18 +846,20 @@ class MapContainer extends React.Component {
   changFunction = (id) => {
       // console.log(this.state.login_id);
       // console.log("XDD");
-      console.log('test');
+
+      console.log('disable');
+       this.setState({disabledBotton: 'true'});
+      console.log(this.state.disabledBotton);
+      console.log('testssss');
       console.log(this.state.textValue);
 
       let  status = "";
 
-      if(this.state.textValue == "On the way to Pick-up Location"){
-          this.setState({textValue:'On the way to Drop-Off'});
+      if(this.state.textValue == "On the way to pick up location"){
           status = "inprogress";
           console.log('pick up');
-      }else if (this.state.textValue == 'On the way to Drop-Off') {
+      }else if (this.state.textValue == "On the way to drop off location") {
           console.log('drop off');
-          this.setState({textValue:'Ride Completed'});
           status = "completed";
       }
 
@@ -861,6 +877,13 @@ class MapContainer extends React.Component {
           }).then( (response) => {
               console.log("response XCFXFXDFFXD");
               console.log(response);
+               // this.setState({textValue:'On the way to Drop-Off'});
+
+               if(this.state.textValue == "On the way to pick up location"){
+                   this.setState({textValue:'On the way to drop off location'});
+               }else if (this.state.textValue == 'On the way to drop off location') {
+                   this.setState({textValue:'Ride Completed'});
+               }
               // return response.json();
           }).then( (response) => {
               console.log("22222response XCFXFXDFFXD");
@@ -869,6 +892,9 @@ class MapContainer extends React.Component {
           });
 
            //this.setState({textValue:'On the way tp Drop-Off'});
+           console.log('enable');
+           this.setState({disabledBotton: false});
+           console.log(this.state.disabledBotton);
   }
 
   handleDatePicked = date => {
@@ -1108,7 +1134,7 @@ class MapContainer extends React.Component {
                     </Text>
 					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
                     }
-					<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.changFunction(this.state.login_id)} >
+					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.changFunction(this.state.login_id)} >
                         <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
                     </TouchableOpacity>
                   </View>
