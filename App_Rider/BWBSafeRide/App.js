@@ -310,7 +310,6 @@ const loader =
 //     )
 //   }
 // }
-
 export default class App extends Component<Props> {
 
   constructor(props) {
@@ -320,7 +319,6 @@ export default class App extends Component<Props> {
         isLogged: false,
         userType:"rider",
       }
-
       // this.ref = firebase.firestore().collection('books');
       // this.Save = this.Save.bind(this);
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, View, KeyboardAvoidingView, Alert } from 'react-native';
-import { Button, Text, Input, Form, Item, Label, DatePicker,Thumbnail, Left, Body } from 'native-base';
+import { Button, Text, Input, Form, Item, Label, DatePicker, Thumbnail, Left, Body, Spinner } from 'native-base';
 import MapInput from './MapInput';
 import MyMapView from './MyMapView';
 import { getLocation } from './getLocation';
@@ -13,7 +13,27 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from 'react-native-geolocation-service';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import firebase from './common/Firebase';
-// import Geolocation from "@react-native-community/geolocation";
+import CommonProgressBar from './common/CommonProgressBar.js';
+
+//import Geolocation from "@react-native-community/geolocation";
+
+// redux 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { sampleFunction } from '../actions/index.js';
+// I included ang "index.js" para di malibog
+
+var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
+
+
+PushNotification.localNotification({
+  foreground: false, // BOOLEAN: If the notification was received in foreground or not
+  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+  message: 'Booking Updates', // STRING: The notification message
+  data: {}, // OBJECT: The push data
+});
+
+
 
 const TAB_BAR_HEIGHT = 80;
 const DRAWER_HEIGHT_SMALL = 300;
@@ -80,10 +100,12 @@ class MapContainer extends React.Component {
         set_destination_lat: this.props.set_destination_lat,
         set_destination_long: this.props.set_destination_long,
         form_from_text: null,
-        form_to_text: null
+        form_to_text: null,
+        loading_bar: false
         // pinned_latitude: 0,
         // pinned_longitude: 0
     };
+
 
     // componentWillReceiveProps(nextProps, nextState){
     //     const {navigation} = this.props;
@@ -172,11 +194,14 @@ class MapContainer extends React.Component {
     // console.error(JSON.parse(AsyncStorage.getItem('userData')));
 
     this.ref = firebase.firestore().collection('driver_location_logs');
+    this.ref_bookings_status = firebase.firestore().collection('bookings_status');
 
-      // console.log('LOEDDEDDDD1');
-
+    console.log('this.ref');
+    console.log(this.ref);
+    console.log('this.ref_bookings_status');
+    console.log(this.ref_bookings_status);
+    // console.log('LOEDDEDDDD1');
     // Alert.alert("Watch Position");
-
     Geolocation.getCurrentPosition(
       position => {
         const initialPosition = JSON.stringify(position);
@@ -313,20 +338,20 @@ class MapContainer extends React.Component {
     //   });
     // });
 
-    this.ref.doc(this.state.booking_details.booking_id).onSnapshot(docSnapshot => {
-      console.log(`Received doc snapshot:`);
-      console.log(docSnapshot);
+    // this.ref.doc(this.state.booking_details.booking_id).onSnapshot(docSnapshot => {
+    //   console.log(`Received doc snapshot:`);
+    //   console.log(docSnapshot);
 
-        this.setState({
-          testlocation: docSnapshot.data(),
-        });
-          // this.setState({
-          //   testlocation: doc.data(),
-          // });
-      // ...
-    }, err => {
-      console.log(`Encountered error: ${err}`);
-    });
+    //     this.setState({
+    //       testlocation: docSnapshot.data(),
+    //     });
+    //       // this.setState({
+    //       //   testlocation: doc.data(),
+    //       // });
+    //   // ...
+    // }, err => {
+    //   console.log(`Encountered error: ${err}`);
+    // });
   }
 
   riderGetCurrentLocation(){
@@ -462,9 +487,9 @@ class MapContainer extends React.Component {
 
                // console.error(data);
 
-               this.setState({login_id: data.login_id});
-               console.log(Helpers.ci_url+'booking/user_boonotifyChangeking_status/'+data.login_id);
-               // console.log('XDXDXDXD');
+             this.setState({ login_id: data.login_id });
+            console.log('Getting Boking Status');
+            console.log(Helpers.ci_url + 'booking/rider_booking_status/' + data.login_id);
 
              fetch(Helpers.ci_url+'booking/rider_booking_status/'+data.login_id, {
                method: 'GET',
@@ -475,36 +500,82 @@ class MapContainer extends React.Component {
               }).then((response) => response.json())
                 .then((responseJson) => {
                   console.log('getting API');
-                  // console.error(responseJson);
+                  // console.log(responseJson);
 
-                   // console.error(responseJson.num_of_active_booking);
-                   if(responseJson.num_of_active_booking > 0){
-                     // msg = responseJson.msg;
-                     console.log('if');
+                  if (responseJson.num_of_active_booking > 0) {
+                    let prepare_driver_details;
+                    if (responseJson.driver_details) {
+                      prepare_driver_details = responseJson.driver_details;
+                    } else {
+                       prepare_driver_details = [];
+                    }
 
-                     this.setState({
-                       can_book:false,
-                       driver_details:responseJson.driver_details,
-                       booking_details:responseJson.booking_details,
-                     });
+                    // get_realtime_booking_status = (id) => {
+                    //   console.log(`getting freee:`);
+                    // console.log(responseJson.booking_details.booking_id);
 
-                   }else{
-                     console.log('else');
-                     this.setState({
-                       can_book:true,
-                       driver_details:[],
-                       booking_details:[],
-                     });
+                    this.setState({
+                      can_book: false,
+                      driver_details: prepare_driver_details,
+                      booking_details: responseJson.booking_details,
+                    });
+                    
+                    this.ref_bookings_status.doc(responseJson.booking_details.booking_id).onSnapshot(docSnapshot => {
+                      PushNotification.localNotification({
+                        foreground: false, // BOOLEAN: If the notification was received in foreground or not
+                        userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+                        message: 'Booking Updates', // STRING: The notification message
+                        data: {}, // OBJECT: The push data
+                      });
 
-                   }
+
+                      // this.setState({
+                      //   booking_status: docSnapshot.data().booking_id,
+                      // });
+                      let data = docSnapshot.data();
+                      console.log("docSnapshot.data()");
+                      console.log(data.booking_status);
+                      // console.log(this.state.booking_status);
+
+                      let can_book=false;
+                      const alter_booking_details = this.state.booking_details;
+                      alter_booking_details.booking_status = data.booking_status;
+                      if (data.booking_status=="completed"){
+
+                        can_book=true;
+                      }
+                      this.setState({
+                        can_book: can_book,
+                        // driver_details: prepare_driver_details,
+                        booking_details: alter_booking_details,
+                      });
+                      
+                      }, err => {
+                        console.log(`Encountered error: ${err}`);
+                      });
+
+                    // };
+
+
+                  } else {
+                    this.setState({
+                      can_book: true,
+                      driver_details: [],
+                      booking_details: [],
+                    });
+
+
+                  }
+                  
                 }).catch((error) => {
                   console.log('NOT getting API');
-                  // console.error(error);
+                  console.error(error);
                 });
 
                 this.setState({
                  is_finish_check_booking_status:true,
                });
+
            }
         }
     });
@@ -635,7 +706,6 @@ class MapContainer extends React.Component {
         set_destination_lat: loc.lat,
         set_destination_long: loc.lng
       });
-
     }
   }
 
@@ -658,6 +728,10 @@ class MapContainer extends React.Component {
   }
 
   bookNow(e, from, to){
+    // alert(12);
+    // this.props.sampleFunction('', '');
+    
+
     const { state } = this;
     // const { navigation } = this.props;
 
@@ -765,9 +839,46 @@ class MapContainer extends React.Component {
     this.setState({ isDateTimePickerVisible: true });
   };
 
+  // get_realtime_booking_status = (id) => {
+  //   console.log(`getting freee:`);
+
+  //   this.ref_bookings_status.doc(id).onSnapshot(docSnapshot => {
+  //     console.log(`Received doc snapshot:`);
+  //     console.log(docSnapshot.data());
+
+  //       // this.setState({
+  //       //   testlocation: docSnapshot.data(),
+  //       // });
+  //       // this.setState({
+  //       //   testlocation: doc.data(),
+  //       // });
+  //       // ...
+  //     }, err => {
+  //       console.log(`Encountered error: ${err}`);
+  //     });
+
+
+  // };
+
   render() {
-    // console.log("MY STATUS");
-    // console.log(this.state);
+    // if (this.state.loading_bar) {
+    //   return (
+
+    // <CommonProgressBar />
+    //   )
+    // }
+
+    // return (
+    //   <View>
+    //     <Button onPress={this.get_realtime_booking_status}>
+    //       <Spinner />
+    //     </Button>
+    //   </View>
+    // )
+    
+    console.log("MY STATUS");
+    console.log(this.state);
+    console.log("MY STATUS");
     // console.log(this.props);
     // console.log("getting NEW PROPS");
     const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;
@@ -808,6 +919,8 @@ class MapContainer extends React.Component {
     }
     console.log('STATE BEFORE RENDER');
     console.log(this.state);
+    // console.log('PROPS  BEFORE RENDER');
+    // console.log(this.props);
     // console.log(this.state.booking_details);
     const marker1 = this.state.is_user_type_ready ? this.state.user != 3 ? this.state.testlocation ? this.state.testlocation : null :null:null;
     // console.log(this.props);
@@ -838,8 +951,8 @@ class MapContainer extends React.Component {
               pinned_stat={this.state.pinned_stat}
               navigation={this.props.navigation}
             />
-            { this.state.can_book == true && this.state.is_finish_check_booking_status == true &&
-
+            {this.state.can_book == true && this.state.is_finish_check_booking_status == true &&
+          //  { true &&
               <BottomDrawer
                 containerHeight={ window_height - 15 }
                 offset={0}
@@ -847,6 +960,7 @@ class MapContainer extends React.Component {
                 // downDisplay={0.5}
                 backgroundColor='rgba(255, 0, 0, 0)'
               >
+
                 <View style={{
                   zIndex:1,
                   position: 'absolute',
@@ -1027,7 +1141,9 @@ class MapContainer extends React.Component {
                     />
 
                  </KeyboardAvoidingView>
-                  {/*<MapInput notifyChange={(loc,loc_text) => this.getCoordsFromName(loc,'to',loc_text)} latlong={navigation.getParam('booking_data_to_latlong', set_destination_latlong)} loc_from_text={false} loc_to_text={this.state.form_to_text} placeholder='Enter drop-off location' />*/}
+                  {
+                  /*<MapInput notifyChange={(loc,loc_text) => this.getCoordsFromName(loc,'to',loc_text)} latlong={navigation.getParam('booking_data_to_latlong', set_destination_latlong)} loc_from_text={false} loc_to_text={this.state.form_to_text} placeholder='Enter drop-off location' />*/
+                  }
                   {true ?(
                   // {distance ?(
                     <Form>
@@ -1073,11 +1189,14 @@ class MapContainer extends React.Component {
                               />
                               </View>
                         </View>
-                      <Button style={{marginTop: 30}} onPress={(e) => this.bookNow(e, navigation.getParam('booking_data_from_text', null) !== null ? navigation.getParam('booking_data_from_text', null) : this.state.form_from_text, navigation.getParam('booking_data_to_text', null) ? navigation.getParam('booking_data_to_text', null) : this.state.form_to_text)}>
+                      <Button 
+                      style={{marginTop: 30}} 
+                      onPress={(e) => this.bookNow(e, navigation.getParam('booking_data_from_text', null) !== null ? navigation.getParam('booking_data_from_text', null) : this.state.form_from_text, navigation.getParam('booking_data_to_text', null) ? navigation.getParam('booking_data_to_text', null) : this.state.form_to_text)}
+                      >
                         <Text style={{
                           width:'100%',
                           textAlign: 'center',
-                        }}>Book Now</Text>
+                        }}>Book Now2</Text>
                       </Button>
                     </Form>
                     ) : null}
@@ -1086,12 +1205,11 @@ class MapContainer extends React.Component {
               </BottomDrawer>
                 // )
               }
-
-                                      
-            { this.state.can_book == false && can_book == false && this.state.is_finish_check_booking_status == true &&
-              // { true &&
-              // THIS CHECKS IF NAA PASYAY PENDING BOOKING
-
+                       
+            { this.state.can_book == false && this.state.is_finish_check_booking_status == true &&
+            // THIS CHECKS IF NAA PASYAY PENDING BOOKING
+              //{ true &&
+              //&& can_book == false 
 
               <BottomDrawer
                 containerHeight={500}
@@ -1100,6 +1218,7 @@ class MapContainer extends React.Component {
                 // downDisplay={0.5}
                 backgroundColor='rgba(255, 0, 0, 0)'
               >
+
                 <View style={{
                   zIndex:1,
                   position: 'absolute',
@@ -1186,7 +1305,11 @@ class MapContainer extends React.Component {
                         <Text note>
                         {"Your driver"}
                         </Text>
-                        <Text>{this.state.driver_details.first_name} {this.state.driver_details.last_name}</Text>
+                        <Text>
+                          {
+                              !this.state.driver_details.first_name ? "Not Yet Available." : this.state.driver_details.first_name+" "+this.state.driver_details.last_name
+                      }
+                          </Text>
                         <Text>{this.state.driver_details.email}</Text>
                       </>
                     // ):(
@@ -1232,4 +1355,14 @@ class MapContainer extends React.Component {
   }
 }
 
-export default MapContainer;
+// export default MapContainer;
+function mapStateToProps(state) {
+  return {
+  }
+}
+function mapActionsToDispatch(dispatch) {
+  return bindActionCreators({
+    sampleFunction: sampleFunction,
+  }, dispatch)
+}
+export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);
