@@ -50,7 +50,6 @@ export default class LoginView extends Component {
       const { username }  = this.state;
       const { password }  = this.state;
     {/*Alert.alert("Alert", "Button pressed: "+viewId);*/}
-
     if(viewId == "LoginSubmit"){
         fetch('http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/api/login_rider', {
       method: 'POST',
@@ -59,10 +58,8 @@ export default class LoginView extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-
         username: username,
         password: password
-
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -80,7 +77,6 @@ export default class LoginView extends Component {
         else{
           Alert.alert(responseJson.msg);
         }
-
       }).catch((error) => {
         console.error(error);
       });
@@ -98,7 +94,6 @@ export default class LoginView extends Component {
 
   async setData(responseJson) {
     try {
-
        await AsyncStorage.setItem('userData', JSON.stringify(responseJson));
     } catch (error) {
       console.log("Something went wrong", error);
