@@ -25,6 +25,16 @@ import { sampleFunction } from '../actions/index.js';
 
 var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
 
+
+PushNotification.localNotification({
+  foreground: false, // BOOLEAN: If the notification was received in foreground or not
+  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+  message: 'Booking Updates', // STRING: The notification message
+  data: {}, // OBJECT: The push data
+});
+
+
+
 const TAB_BAR_HEIGHT = 80;
 const DRAWER_HEIGHT_SMALL = 300;
 const DRAWER_HEIGHT_BIG = 500;
