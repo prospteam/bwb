@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, View, KeyboardAvoidingView, Alert, TouchableOpacity } from 'react-native';
-import { Button, Text, Input, Form, Item, Label, DatePicker,Thumbnail, Left, Body } from 'native-base';
+import { Button, Text, Input, Form, Item, Label, DatePicker,Thumbnail, Left, Body, Spinner } from 'native-base';
 import MapInput from './MapInput';
 import MyMapView from './MyMapView';
 import { getLocation } from './getLocation';
@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from 'react-native-geolocation-service';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import firebase from './common/Firebase';
+import CommonProgressBar from './common/CommonProgressBar';
 // import Geolocation from "@react-native-community/geolocation";
 
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
@@ -84,7 +85,8 @@ class MapContainer extends React.Component {
         booking_details_ready:null,
         form_to_text: null,
         textValue: "On the way to Pick-up Location",
-        disabledBotton: false
+        disabledBotton: false,
+        loadingBar: ''
         // pinned_latitude: 0,
         // pinned_longitude: 0
     };
@@ -164,6 +166,7 @@ class MapContainer extends React.Component {
     // console.error(JSON.parse(AsyncStorage.getItem('userData')));
 
     this.ref = firebase.firestore().collection('driver_location_logs');
+    this.ref_bookings_status = firebase.firestore().collection('bookings_status');
 
       // console.log('LOEDDEDDDD1');
 
@@ -846,12 +849,13 @@ class MapContainer extends React.Component {
   changFunction = (id) => {
       // console.log(this.state.login_id);
       // console.log("XDD");
-
-      console.log('disable');
-       this.setState({disabledBotton: 'true'});
+       this.setState({disabledBotton: true});
       console.log(this.state.disabledBotton);
       console.log('testssss');
       console.log(this.state.textValue);
+
+      console.log('id');
+      console.log(this.state.booking_details.booking_id);
 
       let  status = "";
 
@@ -860,6 +864,8 @@ class MapContainer extends React.Component {
           console.log('pick up');
       }else if (this.state.textValue == "On the way to drop off location") {
           console.log('drop off');
+          status = "completed";
+      }else if (this.state.textValue == "Ride Complete"){
           status = "completed";
       }
 
@@ -875,16 +881,52 @@ class MapContainer extends React.Component {
                }
 
           }).then( (response) => {
-              console.log("response XCFXFXDFFXD");
+              console.log("response YYYYYY");
               console.log(response);
                // this.setState({textValue:'On the way to Drop-Off'});
 
                if(this.state.textValue == "On the way to pick up location"){
                    this.setState({textValue:'On the way to drop off location'});
+                   this.setState({disabledBotton: false});
                }else if (this.state.textValue == 'On the way to drop off location') {
-                   this.setState({textValue:'Ride Completed'});
+                   this.setState({textValue:'Ride Complete'});
+                   this.setState({disabledBotton: false});
+               }else if (this.state.textValue == 'Ride Complete') {
+                   this.setState({disabledBotton: false});
+                   this.props.navigation.navigate("Bookings");
                }
+
+
+
+                 const ref_single = this.ref_bookings_status.doc(id);
+                 ref_single.get()
+                   .then((docSnapshot) => {
+                       // if (this.state.login_id) {
+                         if (docSnapshot.exists) {
+                             console.log("Naa unta peru wala diay: ");
+                             ref_single.update({
+                               booking_status:status,
+                             })
+                             .catch(function(error) {
+                                 console.error("Error adding document: ", error);
+                             });
+
+                         } else {
+                           ref_single.set({
+                             booking_status:status,
+                           })
+                           .catch(function(error) {
+                               console.error("Error adding document: ", error);
+                           });
+                         }
+                       // }
+
+                 });
+
+
               // return response.json();
+              // console.log('disable false');
+              // console.log(this.state.disabledBotton);
           }).then( (response) => {
               console.log("22222response XCFXFXDFFXD");
               console.log(response);
@@ -892,9 +934,9 @@ class MapContainer extends React.Component {
           });
 
            //this.setState({textValue:'On the way tp Drop-Off'});
-           console.log('enable');
-           this.setState({disabledBotton: false});
-           console.log(this.state.disabledBotton);
+           // console.log('enable');
+           // this.setState({disabledBotton: false});
+           // console.log(this.state.disabledBotton);
   }
 
   handleDatePicked = date => {
@@ -917,6 +959,7 @@ class MapContainer extends React.Component {
   };
 
   render() {
+
     // console.log("MY STATUS");
     // console.log(this.state);
     // console.log(this.props);
@@ -962,6 +1005,7 @@ class MapContainer extends React.Component {
     // console.log(this.props);
 
     return (
+
       <View style={{ flex: 1,  backgroundColor:'red'}}>
         {this.state.region.latitude ? (
           <View style={{ flex: 1, backgroundColor:'blue' }}>
@@ -1134,8 +1178,14 @@ class MapContainer extends React.Component {
                     </Text>
 					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
                     }
-					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.changFunction(this.state.login_id)} >
-                        <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
+					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20, height:70}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
+                        {this.state.disabledBotton?(
+                            <Spinner />
+                        ):(
+                            <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
+                        )
+
+                        }
                     </TouchableOpacity>
                   </View>
                 </View>
