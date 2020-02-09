@@ -13,7 +13,6 @@ import { Container, Content, StyleProvider } from 'native-base';
 import { createDrawerNavigator, createAppContainer, DrawerItems, DrawerNavigation } from 'react-navigation';
 import AsyncStorage, { useAsyncStorage } from '@react-native-community/async-storage';
 
-
 // My Imports
 import getTheme from './native-base-theme/components';
 import material from './native-base-theme/variables/material';
@@ -40,7 +39,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 // MY IMPORTS
 // import Routes from './Routes';
-import allReducers from './redux/reducers/index.js';
+import allReducers from './src/redux/reducers/index.js';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillUpdate is deprecated',

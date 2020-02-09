@@ -6,6 +6,8 @@ import PayPal from 'react-native-paypal-wrapper';
 import Helpers from '../../Helpers';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import firebase from './common/Firebase';
+
 export default class Payment extends Component {
 
     static navigationOptions = {
@@ -87,20 +89,39 @@ export default class Payment extends Component {
                   dropoff_latlong: param.form_to_latlong.latitude+":"+param.form_to_latlong.longitude
                 },
               })
-            // }).then((responseJson) => {
-              // console.log(responseJson);
-              // Alert.alert(responseJson);
-               // if(responseJson.response === 'success'){
-               //      // this.setData(responseJson.data);
-               //      // Actions.dashboard();
-               //      // this.props.navigation.navigate('Dashboard');
-               //  } else{
-               //    Alert.alert(JSON.stringify(responseJson.msg));
-               //  }
-              // }).catch((error) => console.error(error));
           }).then((response) => response.json())
             .then((responseJson) => {
+				
             console.log(responseJson);
+				
+			var now = new Date().getTime();
+			
+			this.ref_bookings_status = firebase.firestore().collection('watch_new_pending');
+			
+			// SAVE 
+			const ref_single = this.ref_bookings_status.doc("last_pending");
+			ref_single.get().then((docSnapshot) => {
+					  if (docSnapshot.exists) {
+						  ref_single.update({
+						  "timestamp":now,
+						  })
+						  .catch(function(error) {
+							  console.error("Error adding document: ", error);
+						  });
+					  } else {
+						console.log("yesA")
+						ref_single.set({
+						  "timestamp":now,
+						})
+						.catch(function(error) {
+							console.error("Error adding document: ", error);
+						});
+					}
+			  });
+			  
+            Alert.alert("Booking successfully paid.");
+            this.props.navigation.navigate('Dashboard',{params:{can_book:'true'}});
+
             // Alert.alert(responseJson);
              // if(responseJson.response === 'success'){
              //      // this.setData(responseJson.data);
@@ -114,14 +135,10 @@ export default class Payment extends Component {
             });
             // Alert.alert("Booking successfully paid.");
             // this.props.navigation.navigate('Dashboard',{params:{asd:'aaaa'}});
-
-            Alert.alert("Booking successfully paid.");
-            this.props.navigation.navigate('Dashboard',{params:{can_book:'true'}});
-
         }else{
           Alert.alert("Error processing the payment.");
         }
-      }).catch(error => JSON.parse(JSON.stringify(error)));
+      }).catch(error => console.log(JSON.parse(JSON.stringify(error))));
     }
 
     processStripe(){

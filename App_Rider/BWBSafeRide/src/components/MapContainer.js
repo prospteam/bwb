@@ -25,13 +25,12 @@ import { sampleFunction } from '../actions/index.js';
 
 var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
 
-
-PushNotification.localNotification({
-  foreground: false, // BOOLEAN: If the notification was received in foreground or not
-  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-  message: 'Booking Updates', // STRING: The notification message
-  data: {}, // OBJECT: The push data
-});
+// PushNotification.localNotification({
+  // foreground: false, // BOOLEAN: If the notification was received in foreground or not
+  // userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+  // message: 'Booking Updates', // STRING: The notification message
+  // data: {}, // OBJECT: The push data
+// });
 
 
 
@@ -184,6 +183,11 @@ class MapContainer extends React.Component {
                 }
             }
         }
+		if(this.props.can_book){
+			
+			this.checkBookingStatus();
+		}
+		
     }
 
   watchID: ?number = null;
@@ -227,12 +231,13 @@ class MapContainer extends React.Component {
       },
       (error) => console.log(JSON.stringify(error))
       );
+	  
   }
 
 
 
   componentDidMount() {
-
+	  
       // Alert.alert(this.state.form_from_text);
 
 
@@ -500,7 +505,7 @@ class MapContainer extends React.Component {
               }).then((response) => response.json())
                 .then((responseJson) => {
                   console.log('getting API');
-                  // console.log(responseJson);
+                  console.log(responseJson);
 
                   if (responseJson.num_of_active_booking > 0) {
                     let prepare_driver_details;
@@ -519,42 +524,49 @@ class MapContainer extends React.Component {
                       driver_details: prepare_driver_details,
                       booking_details: responseJson.booking_details,
                     });
-                    
-                    this.ref_bookings_status.doc(responseJson.booking_details.booking_id).onSnapshot(docSnapshot => {
-                      PushNotification.localNotification({
-                        foreground: false, // BOOLEAN: If the notification was received in foreground or not
-                        userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-                        message: 'Booking Updates', // STRING: The notification message
-                        data: {}, // OBJECT: The push data
-                      });
+					
+                    const usersRef = this.ref_bookings_status.doc(String(Number(responseJson.booking_details.booking_id)));
+					usersRef.get()
+					  .then((docSnapshot) => {
+						if (docSnapshot.exists) {
+						  usersRef.onSnapshot((doc) => {
+							  PushNotification.localNotification({
+								foreground: false, // BOOLEAN: If the notification was received in foreground or not
+								userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+								message: 'Updates On Your Bookings', // STRING: The notification message
+								data: {}, // OBJECT: The push data
+							  });
+							  // this.setState({
+							  //   booking_status: docSnapshot.data().booking_id,
+							  // });
+							  let data = doc.data();
+							  console.log("docSnapshot.data()");
+							  console.log(doc);
+							  // console.log(this.state.booking_status);
+								if(data.booking_status){
+								  let can_book=false;
+								  const alter_booking_details = this.state.booking_details;
+								  alter_booking_details.booking_status = data.booking_status;
+								  if (data.booking_status=="completed"){
 
-
-                      // this.setState({
-                      //   booking_status: docSnapshot.data().booking_id,
-                      // });
-                      let data = docSnapshot.data();
-                      console.log("docSnapshot.data()");
-                      console.log(data.booking_status);
-                      // console.log(this.state.booking_status);
-
-                      let can_book=false;
-                      const alter_booking_details = this.state.booking_details;
-                      alter_booking_details.booking_status = data.booking_status;
-                      if (data.booking_status=="completed"){
-
-                        can_book=true;
-                      }
-                      this.setState({
-                        can_book: can_book,
-                        // driver_details: prepare_driver_details,
-                        booking_details: alter_booking_details,
-                      });
-                      
-                      }, err => {
-                        console.log(`Encountered error: ${err}`);
-                      });
-
-                    // };
+									can_book=true;
+								  }
+								  this.setState({
+									can_book: can_book,
+									// driver_details: prepare_driver_details,
+									booking_details: alter_booking_details,
+									});
+								}
+						  }, err => {
+							console.log(`Encountered error: ${err}`);
+						  });
+						} else {
+						  usersRef.set({
+							  "booking_status":responseJson.booking_details.booking_status
+						  });
+						}
+					});
+					
 
 
                   } else {
@@ -856,14 +868,11 @@ class MapContainer extends React.Component {
   //     }, err => {
   //       console.log(`Encountered error: ${err}`);
   //     });
-
-
   // };
 
   render() {
     // if (this.state.loading_bar) {
     //   return (
-
     // <CommonProgressBar />
     //   )
     // }
@@ -1196,7 +1205,7 @@ class MapContainer extends React.Component {
                         <Text style={{
                           width:'100%',
                           textAlign: 'center',
-                        }}>Book Now2</Text>
+                        }}>Book Now</Text>
                       </Button>
                     </Form>
                     ) : null}

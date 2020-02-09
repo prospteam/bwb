@@ -16,10 +16,14 @@ import {
 import { Icon, Header, Left, Right, Button } from 'native-base';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import AsyncStorage from '@react-native-community/async-storage';
+
 import Helpers from '../../Helpers';
 import Modal from "react-native-modal";
+import firebase from './common/Firebase';
 
 var Spinner = require('react-native-spinkit');
+var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
+
 
 export default class Bookings extends Component {
     static navigationOptions = {
@@ -47,6 +51,7 @@ export default class Bookings extends Component {
 
 		this.state = {
 			isLoading: true,
+			isLoading: true,
 		   listType: 'Pending',
 		   details: [],
 		   user: [],
@@ -61,6 +66,31 @@ export default class Bookings extends Component {
 		Array(20).fill('').forEach((_, i) => {
 			this.rowSwipeAnimatedValues[`${i}`] = new Animated.Value(0);
 		});
+		
+	// LISTEN watch_new_pending
+	var on_start = new Date().getTime();
+    this.ref_bookings_status = firebase.firestore().collection('watch_new_pending');
+    this.ref_bookings_status.doc('last_pending').onSnapshot(docSnapshot => {
+	  let response=docSnapshot.data();
+	  if(response.timestamp>on_start){
+		
+		this.displayBookings();
+		alert("THIS IS NEW");
+		PushNotification.localNotification({
+		  foreground: false, // BOOLEAN: If the notification was received in foreground or not
+		  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+		  message: 'There is new pending bookings.', // STRING: The notification message
+		  data: {}, // OBJECT: The push data
+		});
+	  }else{
+		// console.log("THIS IS OLD");
+	  }
+    }, err => {
+      // console.log(`Encountered error: ${err}`);
+	  alert('Please check your internet connection for realtime updates');
+    });
+	
+	
 	}
 
 	async componentDidMount(){
@@ -241,7 +271,67 @@ export default class Bookings extends Component {
 		this.rowSwipeAnimatedValues[key].setValue(Math.abs(value));
 	}
 
+	// asd = () => {
+		// RETREIVE
+		// this.ref_bookings_status.doc("28")
+		// .get().then((docSnapshot) => {
+			// console.log(docSnapshot.data())
+          // });
+		  
+		// SAVE 
+        // const ref_single = this.ref_bookings_status.doc("29");
+		// ref_single.get().then((docSnapshot) => {
+                  // if (docSnapshot.exists) {
+					  
+						// console.log("NAA NA")
+                  // } else {
+					// console.log("yesA")
+                    // ref_single.set({
+                      // "status":"asd",
+                    // })
+                    // .catch(function(error) {
+                        // console.error("Error adding document: ", error);
+                    // });
+                // }
+          // });
+		  
+		  
+		// UPDATE 
+        // const ref_single = this.ref_bookings_status.doc("29");
+		// ref_single.get().then((docSnapshot) => {
+                  // if (docSnapshot.exists) {
+                      // ref_single.update({
+                      // "status":"bablalba",
+                      // })
+                      // .catch(function(error) {
+                          // console.error("Error adding document: ", error);
+                      // });
+                  // } else {
+						// console.log("Wala")
+                // }
+          // });
+		  
+		// DELETE 
+        // const ref_single = this.ref_bookings_status.doc("29");
+		// ref_single.delete().then(function() {
+			// console.log("Document successfully deleted!");
+		// }).catch(function(error) {
+			// console.error("Error removing document: ", error);
+		// });
+		  
+		  
+		  
+	// }
+	
 	render() {
+		
+		// return (
+			// <Button onPress = {() => this.asd()}>
+				// <Text>
+				// XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
+				// </Text>
+			// </Button>
+		// )
 
 			const { isLoading } = this.state;
 
