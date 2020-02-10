@@ -164,8 +164,8 @@ const MyMapView = (props) => {
                 </MapView.Callout>
                 </MapView.Marker>}
           <MapViewDirections
-            origin={props.form_from}
-            destination={props.form_to}
+            origin={props.form_from?props.form_from:{}}
+            destination={props.form_to?props.form_to:{}}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={5}
             strokeColor="#4372AA"

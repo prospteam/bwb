@@ -998,8 +998,11 @@ class MapContainer extends React.Component {
         if(this.state.form_to_text !== null)
           this.locationDestRef.setAddressText(this.state.form_to_text);
     }
-    console.log('XDXDXDXDXDXDXd');
+    console.log('finding location');
     console.log(this.state);
+    console.log(this.state.booking_details.pickup_latlong);
+    console.log(this.state.booking_details.dropoff_latlong);
+    console.log('finding last');
     // console.log(this.state.booking_details);
     const marker1 = this.state.is_user_type_ready ? this.state.user_data != 3 ? this.state.testlocation ? this.state.testlocation : null :null:null;
     // console.log(this.props);
@@ -1016,9 +1019,32 @@ class MapContainer extends React.Component {
               my_longitude_as_rider={this.state.my_longitude_as_rider}
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
-              // viewed_region={this.state.viewed_region}
+              viewed_region={this.state.viewed_region}
               form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
               form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
+              form_from={this.state.booking_details.pickup_latlong ?
+                 ({
+                    latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
+                    longitude: Number(this.state.booking_details.pickup_latlong.split(":")[1]), // Michigan Long
+                  })
+                  : ({
+                    latitude: 44.3148, // Michigan Lat
+                    longitude: -84.506836, // Michigan Long
+                  }) }
+              // form_to= {this.state.booking_details.dropoff_latlong ? this.state.booking_details.dropoff_latlong :  0}
+              // form_from={{
+              //   latitude: 44.3148, // Michigan Lat
+              //   longitude: -84.506836, // Michigan Long
+              // }}
+              form_to= {this.state.booking_details.dropoff_latlong ?
+                ({
+                   latitude: Number(this.state.booking_details.dropoff_latlong.split(":")[0]), // Michigan Lat
+                   longitude: Number(this.state.booking_details.dropoff_latlong.split(":")[1]), // Michigan Long
+                 })
+                 : ({
+                   latitude: 44.3148, // Michigan Lat
+                   longitude: -84.506836, // Michigan Long
+                 }) }
               selectedLatLong={this.state.selectedLatLong}
               // onRegionChange={reg => this.onMapRegionChange(reg)}
               getData={params => this.getDataFromMap(params)}
