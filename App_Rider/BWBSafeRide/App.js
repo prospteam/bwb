@@ -29,6 +29,7 @@ import Routes from './src/components/Routes';
 import DriverProfile from './src/components/DriverProfile';
 import Bookings from './src/components/Bookings';
 import PinnedLocations from './src/components/PinnedLocations';
+import Sample from './src/components/Sample';
 // import * as TripHistory from './src/components/Bookings';
 import companyLogosm from './src/assets/images/main_logo-sm.png';
 
@@ -38,9 +39,10 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
+
 // MY IMPORTS
 // import Routes from './Routes';
-import allReducers from './redux/reducers/index.js';
+import allReducers from './src/redux/reducers/index.js';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillUpdate is deprecated',
@@ -72,7 +74,6 @@ console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed'];
 //       message: 'My Notification Message', // STRING: The notification message
 //       data: {}, // OBJECT: The push data
 // });
-
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -447,6 +448,10 @@ export default class App extends Component<Props> {
   }
 
   render() {
+
+    return (
+      <Sample></Sample>
+    )
     // console.log(this.state.userType);
     // console.log('Getting');
     // console.log(AsyncStorage.setItem('userData', true));
