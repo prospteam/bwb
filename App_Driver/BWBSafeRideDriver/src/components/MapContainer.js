@@ -84,7 +84,7 @@ class MapContainer extends React.Component {
         form_from_text: null,
         booking_details_ready:null,
         form_to_text: null,
-        textValue: "On the way to Pick-up Location",
+        textValue: "Going to Pick-up Location",
         disabledBotton: false,
         loadingBar: ''
         // pinned_latitude: 0,
@@ -185,7 +185,8 @@ class MapContainer extends React.Component {
     this.watchID = Geolocation.watchPosition((position) => {
       //const lastPosition = JSON.stringify(position);
       //this.setState({lastPosition});
-
+      console.log("position pdatedddssd");
+      console.log(position);
         this.setState({
             region: {
               latitude: position.coords.latitude,
@@ -508,9 +509,9 @@ class MapContainer extends React.Component {
           console.log(responseJson.booking_details.booking_status);
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
-               textVal = "On the way to pick up location";
+               textVal = "Going to pick up location";
           }else if (responseJson.booking_details.booking_status == "inprogress") {
-               textVal = "On the way to drop off location";
+               textVal = "Going to drop off location";
           }else if(responseJson.booking_details.booking_status == "completed"){
                textVal = "Ride completed";
           }
@@ -859,10 +860,10 @@ class MapContainer extends React.Component {
 
       let  status = "";
 
-      if(this.state.textValue == "On the way to pick up location"){
+      if(this.state.textValue == "Going to pick up location"){
           status = "inprogress";
           console.log('pick up');
-      }else if (this.state.textValue == "On the way to drop off location") {
+      }else if (this.state.textValue == "Going to drop off location") {
           console.log('drop off');
           status = "completed";
       }else if (this.state.textValue == "Ride Complete"){
@@ -885,10 +886,10 @@ class MapContainer extends React.Component {
               console.log(response);
                // this.setState({textValue:'On the way to Drop-Off'});
 
-               if(this.state.textValue == "On the way to pick up location"){
-                   this.setState({textValue:'On the way to drop off location'});
+               if(this.state.textValue == "Going to pick up location"){
+                   this.setState({textValue:'Going to drop off location'});
                    this.setState({disabledBotton: false});
-               }else if (this.state.textValue == 'On the way to drop off location') {
+               }else if (this.state.textValue == 'Going to drop off location') {
                    this.setState({textValue:'Ride Complete'});
                    this.setState({disabledBotton: false});
                }else if (this.state.textValue == 'Ride Complete') {
@@ -1204,9 +1205,11 @@ class MapContainer extends React.Component {
                     </Text>
 					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
                     }
-					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20, height:70}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
+					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 20, paddingHorizontal: 48, height:70,marginTop:25, position:"relative",textAlign:"center",alignItems:"center"}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
+                        {/* {true?( */}
                         {this.state.disabledBotton?(
-                            <Spinner />
+                            <View style={{position:'relative',top:-28}}><Spinner /></View>
+                            
                         ):(
                             <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
                         )

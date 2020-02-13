@@ -63,11 +63,18 @@ const MyMapView = (props) => {
         //   longitudeDelta: 0.0,
         // }}
         >
+            {/* {(props.region.latitude)&&<MapView.Marker
+            coordinate={{latitude:props.region.latitude, longitude: props.region.longitude}}
+            >
+          <Icon type="FontAwesome5" name="car-side"></Icon>
+            </MapView.Marker>} */}
+            
           {(props.form_from) && <MapView.Marker
                coordinate={props.form_from}
                title={"Pickup Location"}
                description={props.geocode_name}
                pinColor='#45A163'
+              
             >
             <MapView.Callout tooltip={true}
                 style={{backgroundColor: '#d3a04c'}}
