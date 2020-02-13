@@ -84,7 +84,7 @@ class MapContainer extends React.Component {
         form_from_text: null,
         booking_details_ready:null,
         form_to_text: null,
-        textValue: "On the way to Pick-up Location",
+        textValue: "Going to Pick-up Location",
         disabledBotton: false,
         loadingBar: ''
         // pinned_latitude: 0,
@@ -185,7 +185,8 @@ class MapContainer extends React.Component {
     this.watchID = Geolocation.watchPosition((position) => {
       //const lastPosition = JSON.stringify(position);
       //this.setState({lastPosition});
-
+      console.log("position pdatedddssd");
+      console.log(position);
         this.setState({
             region: {
               latitude: position.coords.latitude,
@@ -508,9 +509,9 @@ class MapContainer extends React.Component {
           console.log(responseJson.booking_details.booking_status);
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
-               textVal = "On the way to pick up location";
+               textVal = "Going to pick up location";
           }else if (responseJson.booking_details.booking_status == "inprogress") {
-               textVal = "On the way to drop off location";
+               textVal = "Going to drop off location";
           }else if(responseJson.booking_details.booking_status == "completed"){
                textVal = "Ride completed";
           }
@@ -859,10 +860,10 @@ class MapContainer extends React.Component {
 
       let  status = "";
 
-      if(this.state.textValue == "On the way to pick up location"){
+      if(this.state.textValue == "Going to pick up location"){
           status = "inprogress";
           console.log('pick up');
-      }else if (this.state.textValue == "On the way to drop off location") {
+      }else if (this.state.textValue == "Going to drop off location") {
           console.log('drop off');
           status = "completed";
       }else if (this.state.textValue == "Ride Complete"){
@@ -885,10 +886,10 @@ class MapContainer extends React.Component {
               console.log(response);
                // this.setState({textValue:'On the way to Drop-Off'});
 
-               if(this.state.textValue == "On the way to pick up location"){
-                   this.setState({textValue:'On the way to drop off location'});
+               if(this.state.textValue == "Going to pick up location"){
+                   this.setState({textValue:'Going to drop off location'});
                    this.setState({disabledBotton: false});
-               }else if (this.state.textValue == 'On the way to drop off location') {
+               }else if (this.state.textValue == 'Going to drop off location') {
                    this.setState({textValue:'Ride Complete'});
                    this.setState({disabledBotton: false});
                }else if (this.state.textValue == 'Ride Complete') {
@@ -998,8 +999,11 @@ class MapContainer extends React.Component {
         if(this.state.form_to_text !== null)
           this.locationDestRef.setAddressText(this.state.form_to_text);
     }
-    console.log('XDXDXDXDXDXDXd');
+    console.log('finding location');
     console.log(this.state);
+    console.log(this.state.booking_details.pickup_latlong);
+    console.log(this.state.booking_details.dropoff_latlong);
+    console.log('finding last');
     // console.log(this.state.booking_details);
     const marker1 = this.state.is_user_type_ready ? this.state.user_data != 3 ? this.state.testlocation ? this.state.testlocation : null :null:null;
     // console.log(this.props);
@@ -1016,9 +1020,32 @@ class MapContainer extends React.Component {
               my_longitude_as_rider={this.state.my_longitude_as_rider}
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
-              // viewed_region={this.state.viewed_region}
+              viewed_region={this.state.viewed_region}
               form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
               form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
+              form_from={this.state.booking_details.pickup_latlong ?
+                 ({
+                    latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
+                    longitude: Number(this.state.booking_details.pickup_latlong.split(":")[1]), // Michigan Long
+                  })
+                  : ({
+                    latitude: 44.3148, // Michigan Lat
+                    longitude: -84.506836, // Michigan Long
+                  }) }
+              // form_to= {this.state.booking_details.dropoff_latlong ? this.state.booking_details.dropoff_latlong :  0}
+              // form_from={{
+              //   latitude: 44.3148, // Michigan Lat
+              //   longitude: -84.506836, // Michigan Long
+              // }}
+              form_to= {this.state.booking_details.dropoff_latlong ?
+                ({
+                   latitude: Number(this.state.booking_details.dropoff_latlong.split(":")[0]), // Michigan Lat
+                   longitude: Number(this.state.booking_details.dropoff_latlong.split(":")[1]), // Michigan Long
+                 })
+                 : ({
+                   latitude: 44.3148, // Michigan Lat
+                   longitude: -84.506836, // Michigan Long
+                 }) }
               selectedLatLong={this.state.selectedLatLong}
               // onRegionChange={reg => this.onMapRegionChange(reg)}
               getData={params => this.getDataFromMap(params)}
@@ -1176,17 +1203,18 @@ class MapContainer extends React.Component {
                     <Text>
                     {this.state.booking_details.dropoff_location}
                     </Text>
-                      {
-                        //<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
-                      }
-                        <TouchableOpacity disabled={this.state.disabledBotton} style={{ marginTop: 20,backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20, height:70}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
-                      {this.state.disabledBotton?(
-                          <Spinner />
-                      ):(
-                          <Text style={{color:'#d3a04c',marginTop:7,textAlign:'center'}}>{this.state.textValue}</Text>
-                      )
+					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
+                    }
+					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 20, paddingHorizontal: 48, height:70,marginTop:25, position:"relative",textAlign:"center",alignItems:"center"}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
+                        {/* {true?( */}
+                        {this.state.disabledBotton?(
+                            <View style={{position:'relative',top:-28}}><Spinner /></View>
+                            
+                        ):(
+                            <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
+                        )
 
-                      }
+                        }
                     </TouchableOpacity>
                   </View>
                 </View>
