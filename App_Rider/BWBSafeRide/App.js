@@ -448,12 +448,11 @@ export default class App extends Component<Props> {
   }
 
   render() {
-
-    return (
-      <Sample></Sample>
-    )
-    // console.log(this.state.userType);
-    // console.log('Getting');
+    // return (
+    //   <Sample></Sample>
+    // )
+    // console.log('APP STATE BEFORE RENDER');
+    // console.log(this.state);
     // console.log(AsyncStorage.setItem('userData', true));
     const { isLogged, isLoading } = this.state;
 
@@ -464,7 +463,6 @@ export default class App extends Component<Props> {
     //     </View>
     //     );
     // }
-
 
     // if(isLogged === false){
       // return (

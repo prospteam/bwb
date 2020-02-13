@@ -1176,16 +1176,17 @@ class MapContainer extends React.Component {
                     <Text>
                     {this.state.booking_details.dropoff_location}
                     </Text>
-					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
-                    }
-					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20, height:70}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
-                        {this.state.disabledBotton?(
-                            <Spinner />
-                        ):(
-                            <Text style={{color: '#d3a04c'}}>{this.state.textValue}</Text>
-                        )
+                      {
+                        //<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
+                      }
+                        <TouchableOpacity disabled={this.state.disabledBotton} style={{ marginTop: 20,backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20, height:70}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
+                      {this.state.disabledBotton?(
+                          <Spinner />
+                      ):(
+                          <Text style={{color:'#d3a04c',marginTop:7,textAlign:'center'}}>{this.state.textValue}</Text>
+                      )
 
-                        }
+                      }
                     </TouchableOpacity>
                   </View>
                 </View>
