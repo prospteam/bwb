@@ -492,7 +492,7 @@ class MapContainer extends React.Component {
     this.setState({login_id: data.login_id});
     console.log(Helpers.ci_url+'booking/user_boonotifyChangeking_status/'+data.login_id);
     console.log(Helpers.ci_url+'booking/user_booking_status/'+data.login_id);
-    // console.log('XDXDXDXD');
+    console.log('checkBookingStatus');
 
   fetch(Helpers.ci_url+'booking/user_booking_status/'+data.login_id, {
     method: 'GET',
@@ -511,7 +511,13 @@ class MapContainer extends React.Component {
           if(responseJson.booking_details.booking_status == "pending"){
                textVal = "Going to pick up location";
           }else if (responseJson.booking_details.booking_status == "inprogress") {
+			  if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
+				  
+               textVal = "Ride completed";
+			  }else{
                textVal = "Going to drop off location";
+				  
+			  }
           }else if(responseJson.booking_details.booking_status == "completed"){
                textVal = "Ride completed";
           }
@@ -544,7 +550,8 @@ class MapContainer extends React.Component {
 
      }).catch((error) => {
        console.log('NOT getting API');
-        console.error(error);
+		// console.error(error);
+		Alert.alert('Not Able to connect to server');
      });
 
      this.setState({
@@ -859,22 +866,26 @@ class MapContainer extends React.Component {
       console.log(this.state.booking_details.booking_id);
 
       let  status = "";
+      let  additional_field_driver_status = "";
 
       if(this.state.textValue == "Going to pick up location"){
           status = "inprogress";
+          additional_field_driver_status = "going_pick";
           console.log('pick up');
       }else if (this.state.textValue == "Going to drop off location") {
           console.log('drop off');
-          status = "completed";
+          status = "inprogress";
+          additional_field_driver_status = "going_drop";
       }else if (this.state.textValue == "Ride Complete"){
           status = "completed";
+          additional_field_driver_status = "completed";
       }
 
-      console.log('status');
+      console.log('statusxxxxx');
       console.log(status);
+      console.log(Helpers.api_url+'update_location_status/'+id+'/'+status+'/'+additional_field_driver_status);
 
-        console.log(Helpers.api_url+'update_location_status/'+id+'/inprogress');
-          fetch(Helpers.api_url+'update_location_status/'+id+'/'+status, {
+          fetch(Helpers.api_url+'update_location_status/'+id+'/'+status+'/'+additional_field_driver_status, {
                method: 'GET',
                headers: {
                  'Accept': 'application/json',
@@ -897,40 +908,40 @@ class MapContainer extends React.Component {
                    this.props.navigation.navigate("Bookings");
                }
 
-
-
-                 const ref_single = this.ref_bookings_status.doc(id);
+                 const ref_single = this.ref_bookings_status.doc(id+"");
                  ref_single.get()
                    .then((docSnapshot) => {
                        // if (this.state.login_id) {
                          if (docSnapshot.exists) {
                              console.log("Naa unta peru wala diay: ");
                              ref_single.update({
-                               booking_status:status,
+                               "booking_status":status,
+                               "additional_field_driver_status":additional_field_driver_status,
                              })
                              .catch(function(error) {
                                  console.error("Error adding document: ", error);
                              });
-
                          } else {
                            ref_single.set({
-                             booking_status:status,
+                               "booking_status":status,
+                               "additional_field_driver_status":additional_field_driver_status,
                            })
                            .catch(function(error) {
                                console.error("Error adding document: ", error);
                            });
                          }
                        // }
-
                  });
-
-
               // return response.json();
               // console.log('disable false');
               // console.log(this.state.disabledBotton);
           }).then( (response) => {
               console.log("22222response XCFXFXDFFXD");
               console.log(response);
+              // return response.json();
+          }).catch( (err) => {
+              console.log("22222response errrr");
+              console.log(err);
               // return response.json();
           });
 
@@ -1000,7 +1011,7 @@ class MapContainer extends React.Component {
           this.locationDestRef.setAddressText(this.state.form_to_text);
     }
     console.log('finding location');
-    console.log(this.state);
+    // console.log(this.state);
     console.log(this.state.booking_details.pickup_latlong);
     console.log(this.state.booking_details.dropoff_latlong);
     console.log('finding last');
@@ -1205,7 +1216,7 @@ class MapContainer extends React.Component {
                     </Text>
 					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
                     }
-					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 20, paddingHorizontal: 48, height:70,marginTop:25, position:"relative",textAlign:"center",alignItems:"center"}} onPress={() => this.changFunction(this.state.booking_details.booking_id)} >
+					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 20, paddingHorizontal: 48, height:70,marginTop:25, position:"relative",textAlign:"center",alignItems:"center"}} onPress={() => this.changFunction(Number(this.state.booking_details.booking_id))} >
                         {/* {true?( */}
                         {this.state.disabledBotton?(
                             <View style={{position:'relative',top:-28}}><Spinner /></View>

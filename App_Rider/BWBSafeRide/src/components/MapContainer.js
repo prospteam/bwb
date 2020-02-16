@@ -473,19 +473,14 @@ class MapContainer extends React.Component {
   }
 
   checkBookingStatus() {
-
     // Alert.alert('hello');
-
     // const data = JSON.parse(await AsyncStorage.getItem('userData'));
-
     AsyncStorage.getItem("userData", (errs, result) => {
       if (!errs) {
         if (result !== null) {
           // this.setState({activeID:result});
           let data = JSON.parse(result);
-
           // console.error(data);
-
           this.setState({ login_id: data.login_id });
           console.log('Getting Boking Status');
           console.log(Helpers.ci_url + 'booking/rider_booking_status/' + data.login_id);
@@ -523,44 +518,68 @@ class MapContainer extends React.Component {
                 usersRef.get()
                   .then((docSnapshot) => {
                     if (docSnapshot.exists) {
-                      usersRef.onSnapshot((doc) => {
-                        PushNotification.localNotification({
-                          foreground: false, // BOOLEAN: If the notification was received in foreground or not
-                          userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-                          message: 'Updates On Your Bookings', // STRING: The notification message
-                          data: {}, // OBJECT: The push data
-                        });
-                        // this.setState({
-                        //   booking_status: docSnapshot.data().booking_id,
-                        // });
-                        let data = doc.data();
-                        console.log("docSnapshot.data()");
-                        console.log(doc);
-                        // console.log(this.state.booking_status);
-                        if (data.booking_status) {
-                          let can_book = false;
-                          const alter_booking_details = this.state.booking_details;
-                          alter_booking_details.booking_status = data.booking_status;
-                          if (data.booking_status == "completed") {
-
-                            can_book = true;
-                          }
-                          this.setState({
-                            can_book: can_book,
-                            // driver_details: prepare_driver_details,
-                            booking_details: alter_booking_details,
-                          });
-                        }
-                      }, err => {
-                        console.log(`Encountered error: ${err}`);
+                      usersRef.update({
+                        "booking_status": responseJson.booking_details.booking_status,
+						// "additional_field_driver_status":docSnapshot_data.additional_field_driver_status
                       });
                     } else {
                       usersRef.set({
-                        "booking_status": responseJson.booking_details.booking_status
+                        "booking_status": responseJson.booking_details.booking_status,
+						// "additional_field_driver_status":docSnapshot_data.additional_field_driver_status
                       });
                     }
+					let docSnapshot_data=docSnapshot.data();
+					console.log("docSnapshot_data");
+					console.log(docSnapshot_data);
+					let push_notif_message = "Updates On Your Bookings";
+					
+				  usersRef.onSnapshot((doc) => {
+					  docSnapshot_data=doc.data();
+					console.log("docSnapshot_data2");
+					console.log(docSnapshot_data);
+                    // if (doc.exists) {
+						if(docSnapshot_data.additional_field_driver_status){
+							if(docSnapshot_data.additional_field_driver_status=="going_pick"){
+								push_notif_message = "Driver is on the way on your location";
+							}else if(docSnapshot_data.additional_field_driver_status=="going_drop"){
+								push_notif_message = "Going to drop location";
+							}else if(docSnapshot_data.additional_field_driver_status=="completed"){
+								push_notif_message = "Booking complete, Thank you for using the service";
+							}
+							
+						}
+                    // }
+					PushNotification.localNotification({
+					  foreground: false, // BOOLEAN: If the notification was received in foreground or not
+					  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+					  message: push_notif_message, // STRING: The notification message
+					  data: {}, // OBJECT: The push data
+					});
+					// this.setState({
+					//   booking_status: docSnapshot.data().booking_id,
+					// });
+					let data = doc.data();
+					console.log("docSnapshot.data()");
+					console.log(doc);
+					// console.log(this.state.booking_status);
+					if (data.booking_status) {
+					  let can_book = false;
+					  const alter_booking_details = this.state.booking_details;
+					  alter_booking_details.booking_status = data.booking_status;
+					  if (data.booking_status == "completed") {
+						can_book = true;
+					  }
+					  this.setState({
+						can_book: can_book,
+						// driver_details: prepare_driver_details,
+						booking_details: alter_booking_details,
+					  });
+					}
+				  }, err => {
+					console.log(`Encountered error: ${err}`);
+				  });
+					
                   });
-
 
 
               } else {
