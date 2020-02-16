@@ -524,7 +524,8 @@ class MapContainer extends React.Component {
                       });
                     } else {
                       usersRef.set({
-                        "booking_status": responseJson.booking_details.booking_status,
+                        "booking_status": "",
+						// "booking_status": responseJson.booking_details.booking_status,
 						// "additional_field_driver_status":docSnapshot_data.additional_field_driver_status
                       });
                     }
