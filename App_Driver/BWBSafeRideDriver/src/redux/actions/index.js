@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
-import firebase from "../firestore.js";
+import firebase from "../../components/common/Firebase.js";
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -9,6 +9,13 @@ const geolib = require('geolib');
 export function getDatas(type_, result) {
     return {
         type: type_,
+        payload: result
+    }
+}
+export function sampleFunction(result) {
+    // alert(2222);
+    return {
+        type: "COUNTER_CHANGE",
         payload: result
     }
 }
@@ -22,20 +29,20 @@ export function getDatasThunk(type_, url_, where = null) {
             for (var i = 0; i < Object.keys(sampelState).length; i++) {
                 bodyFormdata.append(Object.keys(sampelState)[i], sampelState[Object.keys(sampelState)[i]]);
             }
-            axios({
-                method: 'post',
-                url: url_,
-                data: bodyFormdata,
-                config: { headers: { 'Content-Type': 'multipart/form-data' } }
+            // axios({
+            //     method: 'post',
+            //     url: url_,
+            //     data: bodyFormdata,
+            //     config: { headers: { 'Content-Type': 'multipart/form-data' } }
 
-            })
-                .then(function (result) {
+            // })
+            //     .then(function (result) {
               
-                    dispatch(getDatas(type_, result.data));
-                })
-                .catch((error) => {
-                    console.error(error, "HEHEHE ERRORR")
-                });
+            //         dispatch(getDatas(type_, result.data));
+            //     })
+            //     .catch((error) => {
+            //         console.error(error, "HEHEHE ERRORR")
+            //     });
         } else {
             fetch(url_).then(res => res.json()).then(res => {
                 dispatch(getDatas(type_, res));
@@ -100,14 +107,14 @@ export function set_TRUE_FALSE(type_, data) {
 
 export function get_data(url, parameter = {}, state) {
     return (dispatch) => {
-        axios({
-            method: 'post',
-            url: url,
-            data: parameter,
-            config: { headers: { 'Content-Type': 'multipart/form-data' } }
-        }).then((res) => {
-            dispatch({ type: 'GET_DATA', payload: { state: state, data: data } });
-        });
+        // axios({
+        //     method: 'post',
+        //     url: url,
+        //     data: parameter,
+        //     config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        // }).then((res) => {
+        //     dispatch({ type: 'GET_DATA', payload: { state: state, data: data } });
+        // });
     }
 }
 

@@ -21,6 +21,7 @@ export default class TripHistory extends Component {
         }
     }
 
+
     componentDidMount(){
 
         AsyncStorage.getItem("userData", (errs,result) => {
@@ -32,18 +33,28 @@ export default class TripHistory extends Component {
                    this.setState({userid: res.login_id});
 
                    const data = {
-                       user_id: this.state.userid
+                       driver_id: this.state.userid
                    }
 
-                   fetch(Helpers.api_url+'get_ride_history',{
+                   fetch(Helpers.api_url+'get_driver_history',{
                        method: 'POST',
                        headers: {
                            'Accept': 'application/json',
                            'Content-Type': 'application/json'
                        },
                        body: JSON.stringify(data)
-                   }).then((response) => response.json())
+                   }).then((response) => {
+                        console.log("response");
+                        console.log(response);
+                       return response.json()
+                    })
                    .then((res) => {
+
+                    console.log('data');
+                    console.log(data);
+
+                    console.log('res');
+                    console.log(res);
 
                        if(res.response === 'success'){
                           this.setState({trip_history: res.data});
@@ -105,7 +116,13 @@ export default class TripHistory extends Component {
         });
     }
 
+    
+
+
     render() {
+
+        console.log('State History');
+        console.log(this.state);
         return (
             <Container>
             <Header>
