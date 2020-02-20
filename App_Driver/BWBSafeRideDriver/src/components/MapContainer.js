@@ -1179,8 +1179,8 @@ class MapContainer extends React.Component {
                           // {this.state.is_user_type_ready?('Where are you goingxxx?'):('asd')}
                         }
                         </Text>
-                        <Text>{this.state.driver_details.first_name} {this.state.driver_details.last_name}</Text>
-                        <Text>{this.state.driver_details.email}</Text>
+                        <Text>{this.state.rider_details.first_name} {this.state.rider_details.last_name}</Text>
+                        <Text>{this.state.rider_details.email}</Text>
                       </>
                     // ):(
                     //   <>

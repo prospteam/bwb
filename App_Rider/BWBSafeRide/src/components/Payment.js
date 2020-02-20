@@ -185,10 +185,10 @@ export default class Payment extends Component {
                       </View>
 
                       <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
-                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Travel Distance </Text><Text style={{padding: 5, fontSize: 14}}>{params.distance}</Text>
+                        <Text style={{backgroundColor: '#e3e3e3', padding: 5}}>Travel Distance </Text><Text style={{padding: 5, fontSize: 14}}>{params.distance} mi</Text>
                       </View>
                       <View style={{borderWidth: 2, borderColor: '#1c1b22', marginBottom: 5}}>
-                        <Text style={{ backgroundColor: '#e3e3e3', padding: 5 }}>Base Fare </Text><Text style={{ padding: 5, fontSize: 14 }}>{params.baseFare}</Text>
+                        <Text style={{ backgroundColor: '#e3e3e3', padding: 5 }}>Base Fare </Text><Text style={{ padding: 5, fontSize: 14 }}>$ {params.baseFare}</Text>
                       </View>
                         <View style={{backgroundColor: '#1c1b22', padding: 10, marginBottom: 5}}><Text style={{color: '#d3a04c'}}>$ {params.payByDistance.toFixed(2)}</Text></View>
                       

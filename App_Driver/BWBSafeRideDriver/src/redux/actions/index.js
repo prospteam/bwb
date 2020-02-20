@@ -15,9 +15,12 @@ export function getDatas(type_, result) {
 
 export function getDatasThunk(type_, url_, where = null) {
     return function (dispatch, getState) {
+        
         let bodyFormdata = new FormData();
         let sampelState = {}
+
         sampelState = where;
+
         if (where !== null) {
             for (var i = 0; i < Object.keys(sampelState).length; i++) {
                 bodyFormdata.append(Object.keys(sampelState)[i], sampelState[Object.keys(sampelState)[i]]);
@@ -29,13 +32,13 @@ export function getDatasThunk(type_, url_, where = null) {
                 config: { headers: { 'Content-Type': 'multipart/form-data' } }
 
             })
-                .then(function (result) {
-              
-                    dispatch(getDatas(type_, result.data));
-                })
-                .catch((error) => {
-                    console.error(error, "HEHEHE ERRORR")
-                });
+            .then(function (result) {
+            
+                dispatch(getDatas(type_, result.data));
+            })
+            .catch((error) => {
+                console.error(error, "HEHEHE ERRORR")
+            });
         } else {
             fetch(url_).then(res => res.json()).then(res => {
                 dispatch(getDatas(type_, res));
