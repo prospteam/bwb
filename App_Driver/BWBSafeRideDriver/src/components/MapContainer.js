@@ -16,6 +16,13 @@ import firebase from './common/Firebase';
 import CommonProgressBar from './common/CommonProgressBar';
 // import Geolocation from "@react-native-community/geolocation";
 
+
+// redux 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { sampleFunction } from '../redux/actions/index.js';
+// I included ang "index.js" para di malibog
+
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
 
 const TAB_BAR_HEIGHT = 80;
@@ -163,6 +170,8 @@ class MapContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log('cjheclomng props');
+    console.log(props);
     // console.error(JSON.parse(AsyncStorage.getItem('userData')));
 
     this.ref = firebase.firestore().collection('driver_location_logs');
@@ -186,7 +195,9 @@ class MapContainer extends React.Component {
       //const lastPosition = JSON.stringify(position);
       //this.setState({lastPosition});
       console.log("position pdatedddssd");
-      console.log(position);
+      console.log(position.coords);
+      props.sampleFunction(position.coords);
+
         this.setState({
             region: {
               latitude: position.coords.latitude,
@@ -217,7 +228,7 @@ class MapContainer extends React.Component {
       //     this.locationDestRef.setAddressText(this.props.navigation.getParam('booking_data_to_text', this.state.form_to_text));
       // }
 
-          // this.driverSendLocation();
+           //this.driverSendLocation();
 
     // if (this.state.booking_details) {
 
@@ -343,6 +354,8 @@ class MapContainer extends React.Component {
   }
 
   driverSendLocation(){
+    geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]);
+    
     const watchId = Geolocation.watchPosition(
       pos => {
         console.log("GETTINGS");
@@ -1216,7 +1229,7 @@ class MapContainer extends React.Component {
                     </Text>
 					{//<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={() => this.testfunction1(1)}>
                     }
-					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 20, paddingHorizontal: 48, height:70,marginTop:25, position:"relative",textAlign:"center",alignItems:"center"}} onPress={() => this.changFunction(Number(this.state.booking_details.booking_id))} >
+					<TouchableOpacity disabled={this.state.disabledBotton} style={{backgroundColor: '#1c1b22', paddingVertical: 15, paddingHorizontal: 48, height:70,marginTop:25, position:"relative",textAlign:"center",alignItems:"center"}} onPress={() => this.changFunction(Number(this.state.booking_details.booking_id))} >
                         {/* {true?( */}
                         {this.state.disabledBotton?(
                             <View style={{position:'relative',top:-28}}><Spinner /></View>
@@ -1240,4 +1253,17 @@ class MapContainer extends React.Component {
   }
 }
 
-export default MapContainer;
+// export default MapContainer;
+
+// export default MapContainer;
+function mapStateToProps(state) {
+  return {
+    count:state.count.count,
+  }
+}
+function mapActionsToDispatch(dispatch) {
+  return bindActionCreators({
+    sampleFunction: sampleFunction,
+  }, dispatch)
+}
+export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);

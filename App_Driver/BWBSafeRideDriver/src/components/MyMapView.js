@@ -10,6 +10,14 @@ let { width, height } = Dimensions.get('window');
 const destination = {latitude: 37.771707, longitude: 123.4053769};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 
+
+// redux 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { sampleFunction } from '../redux/actions/index.js';
+// I included ang "index.js" para di malibog
+
+
 // this.mapView = null;
 
 const MyMapView = (props) => {
@@ -63,11 +71,11 @@ const MyMapView = (props) => {
         //   longitudeDelta: 0.0,
         // }}
         >
-            {/* {(props.region.latitude)&&<MapView.Marker
-            coordinate={{latitude:props.region.latitude, longitude: props.region.longitude}}
+            {(props.count.latitude)&&<MapView.Marker
+            coordinate={{latitude:props.count.latitude, longitude: props.count.longitude}}
             >
           <Icon type="FontAwesome5" name="car-side"></Icon>
-            </MapView.Marker>} */}
+            </MapView.Marker>}
             
           {(props.form_from) && <MapView.Marker
                coordinate={props.form_from}
@@ -197,4 +205,19 @@ const MyMapView = (props) => {
     </MapView>
   )
 }
-export default MyMapView;
+// export default MyMapView;
+
+// export default MapContainer;
+
+// export default MapContainer;
+function mapStateToProps(state) {
+  return {
+    count:state.count.count,
+  }
+}
+function mapActionsToDispatch(dispatch) {
+  return bindActionCreators({
+    sampleFunction: sampleFunction,
+  }, dispatch)
+}
+export default connect(mapStateToProps, mapActionsToDispatch)(MyMapView);
