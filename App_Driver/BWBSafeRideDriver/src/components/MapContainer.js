@@ -984,6 +984,9 @@ class MapContainer extends React.Component {
   };
 
   render() {
+    // if (true){
+    //   <CommonProgressBar/>
+    // }
 
     // console.log("MY STATUS");
     // console.log(this.state);

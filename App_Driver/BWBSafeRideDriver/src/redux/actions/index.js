@@ -105,9 +105,6 @@ export function set_TRUE_FALSE(type_, data) {
     }
 }
 
-
-
-
 export function get_data(url, parameter = {}, state) {
     return (dispatch) => {
         // axios({
@@ -130,15 +127,15 @@ export function call_Firestore(type, collection, collection_id, status) {
                     riderId: '',
                     date: ''
                 })
-                    .then(function () {
-                        dispatch({ type: 'SET_TRUE_OR_FALSE', state: 'isLoggedIn' });
-                        if (status === 1) {
-                            dispatch({ type: 'SET_DATA', payload: { state: 'onlinestatus', value: 'NOT AVAILABLE' } });
-                        }
-                    })
-                    .catch(function (error) {
-                        console.error("Error removing document: ", error);
-                    });
+                .then(function () {
+                    dispatch({ type: 'SET_TRUE_OR_FALSE', state: 'isLoggedIn' });
+                    if (status === 1) {
+                        dispatch({ type: 'SET_DATA', payload: { state: 'onlinestatus', value: 'NOT AVAILABLE' } });
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Error removing document: ", error);
+                });
             }
         default:
             return null;

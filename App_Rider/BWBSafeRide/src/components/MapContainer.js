@@ -69,7 +69,7 @@ class MapContainer extends React.Component {
 
   state = {
     testlocation: null,
-    is_finish_check_booking_status: true,
+    is_finish_check_booking_status: false,
     is_user_type_ready: true,
     user: null,
     driver_details: [],
@@ -590,18 +590,14 @@ class MapContainer extends React.Component {
                   booking_details: [],
                 });
 
-
               }
-
             }).catch((error) => {
               console.log('NOT getting API');
               console.error(error);
             });
-
           this.setState({
             is_finish_check_booking_status: true,
           });
-
         }
       }
     });
@@ -887,11 +883,13 @@ class MapContainer extends React.Component {
   // };
 
   render() {
-    // if (true) {
-    //   return (
-    // <CommonProgressBar />
-    //   )
-    // }
+    if (!this.state.is_finish_check_booking_status) {
+      return (
+        <CommonProgressBar />
+      )
+    }
+
+
     // return (
     //   <View>
     //     <Button onPress={this.get_realtime_booking_status}>
