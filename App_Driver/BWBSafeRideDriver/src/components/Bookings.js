@@ -13,6 +13,12 @@ import {
 	Alert
 } from 'react-native';
 
+import {
+	SCLAlert,
+	SCLAlertButton
+  } from 'react-native-scl-alert';
+   
+
 import { Icon, Header, Left, Right, Button } from 'native-base';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -60,6 +66,7 @@ export default class Bookings extends Component {
 		   listViewData_r: [],
 		   listViewData_c: [],
 		   sectionListData: Array(5).fill('').map((_,i) => ({title: `title${i + 1}`, data: [...Array(5).fill('').map((_, j) => ({key: `${i}.${j}`, text: `item #${j}`}))]})),
+		   show: false
 	   };
 
 		this.rowSwipeAnimatedValues = {};
@@ -204,7 +211,7 @@ export default class Bookings extends Component {
 		 })
 	   }).then((response) => response.json())
 		 .then((responseJson) => {
-			 Alert.alert(JSON.stringify(responseJson.msg)+"2");
+			 Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
 
 			 if(JSON.stringify(responseJson.reserve_button) !== ''){
@@ -231,7 +238,7 @@ export default class Bookings extends Component {
 		 })
 	   }).then((response) => response.json())
 		 .then((responseJson) => {
-			 Alert.alert(JSON.stringify(responseJson.msg)+"3");
+			 Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
 
 		 }).catch((error) => {
@@ -261,6 +268,14 @@ export default class Bookings extends Component {
 		newData[section].data.splice(prevIndex, 1);
 		this.setState({sectionListData: newData});
 	}
+
+	handleOpen = () => {
+		this.setState({ show: true })
+	  }
+	 
+	  handleClose = () => {
+		this.setState({ show: false })
+	  }
 
 	onRowDidOpen = (rowKey, rowMap) => {
 		console.log('This row opened', rowKey);
@@ -408,6 +423,7 @@ export default class Bookings extends Component {
 					{
 						this.state.listType === 'Pending' &&
 						<Text>(Pending customer bookings)</Text>
+						
 					}
 					{
 						this.state.listType === 'Reserved' &&
@@ -533,6 +549,7 @@ export default class Bookings extends Component {
 								<Text style={styles.backTextWhite}>Reserve</Text>
 							</TouchableOpacity>
 						</View>
+						
 					)}
 					leftOpenValue={75}
 					rightOpenValue={-75}
@@ -583,7 +600,7 @@ export default class Bookings extends Component {
 								</Animated.View>
 							</TouchableOpacity>
 								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.updateBooking(data.item.id) }>
-									<Text style={styles.backTextWhite}>{this.state.reserve_button}</Text>
+									<Text style={styles.backTextWhite}>Complete</Text>
 								</TouchableOpacity>
 							</View>
 						)}
