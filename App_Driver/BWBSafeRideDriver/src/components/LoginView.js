@@ -11,6 +11,11 @@ import {
   ImageBackground
 } from 'react-native';
 
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert'
+
 import {Actions} from 'react-native-router-flux';
 import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -26,8 +31,20 @@ export default class LoginView extends Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      show: false,
+      theme: '',
+      title: '',
+      subtitle: ''
     }
+  }
+
+  handleOpen = () => {
+    this.setState({ show: true })
+  }
+ 
+  handleClose = () => {
+    this.setState({ show: false })
   }
 
   componentDidMount(){
@@ -41,6 +58,7 @@ export default class LoginView extends Component {
   onClickListener = (viewId) => {
       const { username }  = this.state;
       const { password }  = this.state;
+      this.setState({ show: true })
     {/*Alert.alert("Alert", "Button pressed: "+viewId);*/}
 
     if(viewId == "LoginSubmit"){
@@ -67,7 +85,11 @@ export default class LoginView extends Component {
             this.props.navigation.navigate('Dashboard');
         }
         else{
-          Alert.alert(JSON.stringify(responseJson.msg));
+          console.log('SCL alert');
+          const subtitle_value = JSON.stringify(responseJson.msg);
+          console.log(subtitle_value);
+          this.setState({ subtitle: subtitle_value });
+          //Alert.alert(JSON.stringify(responseJson.msg));
         }
 
       }).catch((error) => {
@@ -118,6 +140,21 @@ export default class LoginView extends Component {
               underlineColorAndroid='transparent'
               onChangeText={(username) => this.setState({username})}/>
         </View>
+
+        <View>
+        {/* <Button title="Show" onPress={this.handleOpen} /> */}
+        <SCLAlert
+          show={this.state.show}
+          onRequestClose={this.handleClose}
+          theme="warning"
+          title="asdf"
+          subtitle="asdfff"
+          
+        >
+          <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
+          <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton>
+        </SCLAlert>
+      </View>
 
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={passwordIcon}/>
