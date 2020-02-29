@@ -461,7 +461,6 @@ export default class App extends Component<Props> {
     //     );
     // }
 
-
     // if(isLogged === false){
     // return (
     //   <StyleProvider style={getTheme(material)}>

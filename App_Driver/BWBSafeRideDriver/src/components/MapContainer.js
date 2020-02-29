@@ -20,7 +20,7 @@ import CommonProgressBar from './common/CommonProgressBar';
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { sampleFunction } from '../redux/actions/index.js';
+import { DRIVER_LOCATION_CHANGE } from '../redux/actions/index.js';
 // I included ang "index.js" para di malibog
 
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
@@ -65,6 +65,7 @@ class MapContainer extends React.Component {
         is_user_type_ready:false,
         user_data:null,
         driver_details:[],
+        rider_details:[],
         distance:0,
         duration:0,
         my_latitude:0,
@@ -196,7 +197,7 @@ class MapContainer extends React.Component {
       //this.setState({lastPosition});
       console.log("position pdatedddssd");
       console.log(position.coords);
-      props.sampleFunction(position.coords);
+      props.DRIVER_LOCATION_CHANGE(position.coords);
 
         this.setState({
             region: {
@@ -503,7 +504,7 @@ class MapContainer extends React.Component {
     //   //     height:500
     //   //   });
     this.setState({login_id: data.login_id});
-    console.log(Helpers.ci_url+'booking/user_boonotifyChangeking_status/'+data.login_id);
+    // console.log(Helpers.ci_url+'booking/user_boonotifyChangeking_status/'+data.login_id);
     console.log(Helpers.ci_url+'booking/user_booking_status/'+data.login_id);
     console.log('checkBookingStatus');
 
@@ -540,6 +541,7 @@ class MapContainer extends React.Component {
 
           this.setState({
             can_book:false,
+            rider_details:responseJson.rider_details,
             driver_details:responseJson.driver_details,
             booking_details:responseJson.booking_details,
              textValue: textVal
@@ -988,8 +990,8 @@ class MapContainer extends React.Component {
     //   <CommonProgressBar/>
     // }
 
-    // console.log("MY STATUS");
-    // console.log(this.state);
+    console.log("MY STATUS");
+    console.log(this.state.booking_details);
     // console.log(this.props);
     // console.log("getting NEW PROPS");
     const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;
@@ -1056,8 +1058,10 @@ class MapContainer extends React.Component {
                     longitude: Number(this.state.booking_details.pickup_latlong.split(":")[1]), // Michigan Long
                   })
                   : ({
-                    latitude: 44.3148, // Michigan Lat
-                    longitude: -84.506836, // Michigan Long
+                    latitude: 0, // Michigan Lat
+                    longitude: 1, // Michigan Long
+                    // latitude: 44.3148, // Michigan Lat
+                    // longitude: -84.506836, // Michigan Long
                   }) }
               // form_to= {this.state.booking_details.dropoff_latlong ? this.state.booking_details.dropoff_latlong :  0}
               // form_from={{
@@ -1070,8 +1074,10 @@ class MapContainer extends React.Component {
                    longitude: Number(this.state.booking_details.dropoff_latlong.split(":")[1]), // Michigan Long
                  })
                  : ({
-                   latitude: 44.3148, // Michigan Lat
-                   longitude: -84.506836, // Michigan Long
+                   latitude: 0, // Michigan Lat
+                   longitude: 1, // Michigan Long
+                   // latitude: 44.3148, // Michigan Lat
+                   // longitude: -84.506836, // Michigan Long
                  }) }
               selectedLatLong={this.state.selectedLatLong}
               // onRegionChange={reg => this.onMapRegionChange(reg)}
@@ -1195,8 +1201,13 @@ class MapContainer extends React.Component {
                           // {this.state.is_user_type_ready?('Where are you goingxxx?'):('asd')}
                         }
                         </Text>
-                        <Text>{this.state.rider_details.first_name} {this.state.rider_details.last_name}</Text>
-                        <Text>{this.state.rider_details.email}</Text>
+                        <Text>
+							{this.state.rider_details?this.state.rider_details.first_name:"No Data Found"} 
+							{this.state.rider_details?this.state.rider_details.last_name:""} 
+						</Text>
+                        <Text>
+							{this.state.rider_details?this.state.rider_details.email:""} 
+						</Text>
                       </>
                     // ):(
                     //   <>
@@ -1261,12 +1272,12 @@ class MapContainer extends React.Component {
 // export default MapContainer;
 function mapStateToProps(state) {
   return {
-    count:state.count.count,
+    driver_location:state.driver_location.driver_location,
   }
 }
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
-    sampleFunction: sampleFunction,
+    DRIVER_LOCATION_CHANGE: DRIVER_LOCATION_CHANGE,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);
