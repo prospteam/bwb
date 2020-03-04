@@ -41,6 +41,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 // import Routes from './Routes';
 import allReducers from './src/redux/reducers/index.js';
 
+import CommonProgressBar from './src/components/common/CommonProgressBar';
+import MyAlertSCL from './src/my_library/MyAlertSCL';
+
 YellowBox.ignoreWarnings([
   'Warning: componentWillUpdate is deprecated',
   'Warning: componentWillMount is deprecated',
@@ -272,7 +275,6 @@ const MyAppDriver = createAppContainer(MyDrawerNavigatorDriver);
 
 type Props = {};
 
-
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
@@ -284,34 +286,10 @@ const persistedReducer = persistReducer(persistConfig, allReducers);
 const store = createStore(persistedReducer, applyMiddleware(thunk));
 const persistor = persistStore(store);
 
-const loader =
-  <View style={{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: undefined,
-    height: undefined
-  }}>
-    <Spinner type="WanderingCubes" color="#c1191c" size={80} />
-  </View>
-
-// export default class App extends Component {
-//   constructor(props) {
-//     super(props);
-//   }
-//   render() {
-//     return (
-//       <Provider store={store}>
-//         <PersistGate loading={loader} persistor={persistor}>
-//           <Routes />
-//         </PersistGate>
-//       </Provider>
-//     )
-//   }
-// }
+const loader = 
+  <MyAlertSCL/>
 
 export default class App extends Component<Props> {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -477,12 +455,13 @@ export default class App extends Component<Props> {
       <Provider store={store}>
         <PersistGate loading={loader} persistor={persistor}>
           <StyleProvider style={getTheme(material)}>
+            <MyAppDriver />
             {
-              this.state.userType == "rider" ?
-                (<MyAppRider />)
-                : this.state.userType == "driver" ?
-                  (<MyAppDriver />)
-                  : (<MyApp />)
+              // this.state.userType == "rider" ?
+              //  (<MyAppRider />)
+              //  : this.state.userType == "driver" ?
+              //    (<MyAppDriver />)
+              //    : (<MyApp />)
             }
           </StyleProvider>
         </PersistGate>

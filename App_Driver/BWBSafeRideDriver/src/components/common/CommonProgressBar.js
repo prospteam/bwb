@@ -19,15 +19,16 @@ var Spinner = require('react-native-spinkit');
 class CommonProgressBar extends Component {
   render() {
     return(
-      <Modal onRequestClose={() => null}>
-        <View style={{ flex: 1, backgroundColor: '#dcdcdc', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ borderRadius: 10, backgroundColor: 'white', padding: 25 ,alignItems: 'center'}}>
-            <Text style={{ fontSize: 20, fontWeight: '200' }}>Loading {"\n"}</Text>
-
-            <Spinner type="9CubeGrid" color="#d3a04c" />
+      <View>
+        <Modal onRequestClose={() => null}>
+          <View style={{ flex: 1, backgroundColor: '#dcdcdc', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ borderRadius: 10, backgroundColor: 'white', padding: 25 ,alignItems: 'center'}}>
+              <Text style={{ fontSize: 20, fontWeight: '200' }}>Loading {"\n"}</Text>
+              <Spinner type="9CubeGrid" color="#d3a04c" />
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      </View>
     );
   }
 }
