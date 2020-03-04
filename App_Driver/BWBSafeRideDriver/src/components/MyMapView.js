@@ -10,23 +10,19 @@ let { width, height } = Dimensions.get('window');
 const destination = {latitude: 37.771707, longitude: 123.4053769};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 
-
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { sampleFunction } from '../redux/actions/index.js';
 // I included ang "index.js" para di malibog
 
-
 // this.mapView = null;
-
 const MyMapView = (props) => {
     // Alert.alert('hello');
   console.log('MyMapView Rendering-start');
   console.log(props);
   console.log('MyMapView Rendering-end');
   // height = (props.height)?props.height+300:height;
-
 
   // const origin = {
   //     latitude: props.region.latitude,
