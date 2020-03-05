@@ -93,7 +93,8 @@ class MapContainer extends React.Component {
         form_to_text: null,
         textValue: "Going to Pick-up Location",
         disabledBotton: false,
-        loadingBar: ''
+        loadingBar: '',
+        rider_details: []
         // pinned_latitude: 0,
         // pinned_longitude: 0
     };
@@ -120,8 +121,6 @@ class MapContainer extends React.Component {
                   this.setState({geocode_long: navigation.getParam('booking_data_from_latlong', null).longitude});
             }
         }
-
-
         if(prevProps.set_destination_lat !== this.props.set_destination_lat) {
             fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.props.set_destination_lat + ',' + this.props.set_destination_long + '&key=' + GOOGLE_MAPS_APIKEY)
                 .then((response) => response.json())
@@ -513,8 +512,11 @@ class MapContainer extends React.Component {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     }
-   }).then((response) => response.json())
-     .then((responseJson) => {
+   }).then((response) => {
+     console.log("responseXD");
+     console.log(response);
+     return response;
+   }).then((responseJson) => {
        console.log('getting API');
        console.log(responseJson);
         if(responseJson.num_of_active_booking > 0){
@@ -525,29 +527,23 @@ class MapContainer extends React.Component {
                textVal = "Going to pick up location";
           }else if (responseJson.booking_details.booking_status == "inprogress") {
 			  if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
-				  
                textVal = "Ride completed";
 			  }else{
                textVal = "Going to drop off location";
-				  
 			  }
           }else if(responseJson.booking_details.booking_status == "completed"){
                textVal = "Ride completed";
           }
-
           console.log("textVal");
           console.log(textVal);
-
           this.setState({
             can_book:false,
             driver_details:responseJson.driver_details,
             booking_details:responseJson.booking_details,
              textValue: textVal
           });
-// this.state.user.user_type_id
+          // this.state.user.user_type_id
           console.log('LOEDDEDDDD2');
-          // this.ref.onSnapshot(this.driverLocationListener);
-
         }else{
           console.log('LOEDDEDDDD444444444');
           this.setState({
@@ -556,20 +552,21 @@ class MapContainer extends React.Component {
             booking_details:[],
           });
         }
-
         this.setState({
           booking_details_ready:true,
         });
-
-     }).catch((error) => {
-       console.log('NOT getting API');
-		// console.error(error);
-		Alert.alert('Not Able to connect to server');
-     });
-
-     this.setState({
-      is_finish_check_booking_status:true,
+       this.setState({
+         is_finish_check_booking_status: true,
+       });
+    }).catch((error) => {
+      console.log('NOT getting API');
+		  // console.error(error);
+      Alert.alert('Not Able to connect to server');
+      this.setState({
+        is_finish_check_booking_status: false,
+      });
     });
+
     // this.setState({ region });
     // console.log('GETTING DSISTSATNCEEEEEEEE');
     // console.log(params);

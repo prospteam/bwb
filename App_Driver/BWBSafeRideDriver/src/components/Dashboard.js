@@ -123,25 +123,32 @@ export default class Dashboard extends Component {
          driver_id: data.user_id,
          status_name: JSON.stringify(this.state.switchValue)
        })
-     }).then((response) => response.json())
-       .then((responseJson) => {
-
-           if(responseJson.response === 'success'){
-               msg = responseJson.msg;
-               Alert.alert(msg);
-           }
-
+      }).then((response) => {
+        if (response.status == 200) {
+          // VALIDATION IF ANY
+          return response.json();
+        } else {
+          alert('Error on connecting to server.');
+        }
+      }).then((responseJson) => {
+        if (responseJson){
+          if (responseJson.response === 'success') {
+            msg = responseJson.msg;
+            Alert.alert(msg);
+          }
+        }
        }).catch((error) => {
          console.error(error);
+         console.error("toggleSwitch");
        });
 
   }
 
   async getDriverStatus(){
       const data = JSON.parse(await AsyncStorage.getItem('userData'));
-
       this.setState({ user_type: data['user_type_id'] });
-
+      console.log("getDriverStatus");
+      console.log(Helpers.api_url + 'get_driver_status');
       fetch(Helpers.api_url+'get_driver_status', {
        method: 'POST',
        headers: {
@@ -151,24 +158,32 @@ export default class Dashboard extends Component {
        body: JSON.stringify({
          driver_id: data.user_id
        })
-     }).then((response) => response.json())
-       .then((responseJson) => {
-
-           if(responseJson.status === 'true'){
-               this.setState({ switchValue: true });
-           }else{
-               this.setState({ switchValue: false });
-           }
-
-       }).catch((error) => {
-         console.error(error);
-       });
-
+     }).then((response) => {
+      if (response.status == 200){
+        // VALIDATION IF ANY
+        return response.json();
+      }else{
+        alert('Error on connecting to server.');
+      }
+     }).then((responseJson) => {
+      //  console.log("responseJsonXDXDXD");
+      //  console.log(responseJson);
+       if (responseJson){
+         if (responseJson.status === 'true') {
+           this.setState({ switchValue: true });
+         } else {
+           this.setState({ switchValue: false });
+         }
+        }
+      }).catch((error) => {
+        console.error(error);
+        console.log("getDriverStatus");
+      });
   }
 
   componentDidMount() {
 
-      this.getDriverStatus();
+    this.getDriverStatus();
 
     var that = this;
 

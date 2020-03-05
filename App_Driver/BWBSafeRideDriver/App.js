@@ -464,6 +464,7 @@ export default class App extends Component<Props> {
               //    : (<MyApp />)
             }
           </StyleProvider>
+          <MyAlertSCL />
         </PersistGate>
       </Provider>
     );
