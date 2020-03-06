@@ -21,7 +21,7 @@ import {
 class MyAlertSCL extends Component {
 
     state = {
-        show: false
+        show: true,
     }
 
     handleClose = () => {
@@ -29,13 +29,16 @@ class MyAlertSCL extends Component {
     }
     
     render() {
+        console.log("this.propsxx");
+        console.log(this.props);
+        
         return (
             <SCLAlert
                 show={this.state.show}
                 onRequestClose={this.handleClose}
                 theme="info"
-                title="Info"
-                subtitle="You can setup the colors using the theme prop"
+                title={this.props.alert_title}
+                subtitle={this.props.alert_message}
             >
                 <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
                 <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton>

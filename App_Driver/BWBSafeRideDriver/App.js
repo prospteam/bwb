@@ -295,7 +295,8 @@ export default class App extends Component<Props> {
     this.state = {
       isLoading: true,
       isLogged: false,
-      userType: "rider",
+      alert_message: "message",
+      alert_title: "title",
     }
 
     // this.ref = firebase.firestore().collection('books');
@@ -453,7 +454,11 @@ export default class App extends Component<Props> {
 
     return (
       <Provider store={store}>
-        <PersistGate loading={loader} persistor={persistor}>
+        <PersistGate loading={loader} persistor={persistor}>  
+          <MyAlertSCL
+            alert_message={this.state.alert_message}
+            alert_title={this.state.alert_title}
+           />
           <StyleProvider style={getTheme(material)}>
             <MyAppDriver />
             {
@@ -464,7 +469,6 @@ export default class App extends Component<Props> {
               //    : (<MyApp />)
             }
           </StyleProvider>
-          <MyAlertSCL />
         </PersistGate>
       </Provider>
     );
