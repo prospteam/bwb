@@ -74,8 +74,10 @@ export default class Bookings extends Component {
 	}
 
 	async displayBookings() {
+		console.log('url');
+		console.log(Helpers.api_url+'get_rider_bookings');
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
-	 fetch(Helpers.api_url+'get_bookings', {
+	 fetch(Helpers.api_url+'get_rider_bookings', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -86,19 +88,28 @@ export default class Bookings extends Component {
       })
     }).then((response) => response.json())
       .then((responseJson) => {
+		  console.log(responseJson.data.response);
+		  console.log("responseJsonXDXD");
 
 		// console.error( responseJson.data.map(Object.values).map((_,i) => ({key: `${i}`, text: `Date: ${_[2]} - From: ${_[3]} - To: ${_[4]}`})) );
 		// console.error(responseJson.data.map(Object.values).map((_,i) => ({key: `${i}`, text: `${_}`})));
 		// const val = ["Booking 1", "Booking 2", "Booking 3", "Booking 4"];
 		// console.error(val.map((_,i) => ({key: `${i}`, text: `${_}`})));
 
-		if(responseJson.response === 'success'){
+		if(responseJson.data.response === 'success'){
+			console.log('data');
+			console.log(data);
+				
 			this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 							listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 							listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
 			});
+			console.log('sakto');
+			console.log('test');
+			console.log(responseJson);
+			console.log(this.state);
 		}else{
-			if (responseJson.response === 'error') {
+			if (responseJson.data.response === 'error') {
 				// this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 				// 				listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 				// 				listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
@@ -114,8 +125,9 @@ export default class Bookings extends Component {
 	}
 
 	displayBookDetails(id){
-
-		fetch(Helpers.api_url+'get_booking_detail', {
+		console.log('displayBooking');
+		console.log(Helpers.api_url+'get_booking_rider');
+		fetch(Helpers.api_url+'get_booking_rider', {
 		 method: 'POST',
 		 headers: {
 		   'Accept': 'application/json',
@@ -346,15 +358,7 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-											transform: [
-												{
-													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
-														inputRange: [45, 90],
-														outputRange: [0, 1],
-														extrapolate: 'clamp',
-													}),
-												}
-											],
+											
 										}
 									]}
 								>
