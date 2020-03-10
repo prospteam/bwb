@@ -51,9 +51,9 @@ export default class Bookings extends Component {
 		   details: [],
 		   user: [],
 		   reserve_button: 'Start',
-		   listViewData_p: '[]',
-		   listViewData_r: '[]',
-		   listViewData_c: '[]',
+		   listViewData_p: [],
+		   listViewData_r: [],
+		   listViewData_c: [],
 		   sectionListData: Array(5).fill('').map((_,i) => ({title: `title${i + 1}`, data: [...Array(5).fill('').map((_, j) => ({key: `${i}.${j}`, text: `item #${j}`}))]})),
 	   };
 
@@ -100,14 +100,10 @@ export default class Bookings extends Component {
 			console.log('data');
 			console.log(data);
 				
-			this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
-							listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
-							listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
+			this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[3]}`})),
+							listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[3]}`})),
+							listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[3]}`}))
 			});
-			console.log('sakto');
-			console.log('test');
-			console.log(responseJson);
-			console.log(this.state);
 		}else{
 			if (responseJson.data.response === 'error') {
 				// this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
