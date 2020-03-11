@@ -112,6 +112,12 @@ export default class Bookings extends Component {
 
 	async displayBookings() {
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
+
+		console.log('datasssd');
+		console.log(data);
+
+		console.log('url');
+		console.log(Helpers.api_url+'get_bookings');
 	 fetch(Helpers.api_url+'get_bookings', {
       method: 'POST',
       headers: {
@@ -119,7 +125,7 @@ export default class Bookings extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-		  driver_id: data.user_id
+		  driver_id: data.login_id
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -131,7 +137,7 @@ export default class Bookings extends Component {
 		console.log("responseJson");
 		console.log(responseJson);
 		console.log("responseJson Pending");
-		console.log(responseJson.data.data_pending);
+		console.log(responseJson.data);
 		//console.log(responseJson.data.data_pending[0].booking_id);
 		// if(true){
 		if(responseJson.data.response == 'success'){

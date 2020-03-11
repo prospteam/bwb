@@ -77,6 +77,9 @@ export default class Bookings extends Component {
 		console.log('url');
 		console.log(Helpers.api_url+'get_rider_bookings');
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
+
+		console.log('dataaassss');
+		console.log(data);
 	 fetch(Helpers.api_url+'get_rider_bookings', {
       method: 'POST',
       headers: {
@@ -84,7 +87,7 @@ export default class Bookings extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-		  driver_id: data.user_id
+		  rider_id: data.login_id
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -122,8 +125,9 @@ export default class Bookings extends Component {
 
 	displayBookDetails(id){
 		console.log('displayBooking');
-		console.log(Helpers.api_url+'get_booking_rider');
-		fetch(Helpers.api_url+'get_booking_rider', {
+		console.log(id);
+		console.log(Helpers.api_url+'get_booking_detail');
+		fetch(Helpers.api_url+'get_booking_detail', {
 		 method: 'POST',
 		 headers: {
 		   'Accept': 'application/json',
