@@ -15,9 +15,12 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <!-- <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyCsCARtyDaiIeDtGY0r3jz4pT4YwiR41Fw"/> -->
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCsCARtyDaiIeDtGY0r3jz4pT4YwiR41Fw"/>
+        android:value="AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4"/>
       <!-- <meta-data
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDNiQ_vrw3zB6pM_s2nNC-0mohwlWi6wGo"/> -->

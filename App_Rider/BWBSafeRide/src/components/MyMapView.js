@@ -19,7 +19,6 @@ const MyMapView = (props) => {
   console.log('MyMapView Rendering-end');
   // height = (props.height)?props.height+300:height;
 
-
   // const origin = {
   //     latitude: props.region.latitude,
   //     longitude: props.region.longitude
@@ -48,6 +47,7 @@ const MyMapView = (props) => {
           latitudeDelta: props.region.latitudeDelta,
           longitudeDelta: props.region.longitudeDelta,
         }}
+
         showsUserLocation={true}
         // ref={c => this.mapView = c}
         // onRegionChangeComplete={(reg) => props.onRegionChange(reg)}

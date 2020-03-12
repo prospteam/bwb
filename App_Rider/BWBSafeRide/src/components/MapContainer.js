@@ -755,7 +755,6 @@ class MapContainer extends React.Component {
     // alert(12);
     // this.props.sampleFunction('', '');
 
-
     const { state } = this;
     // const { navigation } = this.props;
 
@@ -883,11 +882,11 @@ class MapContainer extends React.Component {
   // };
 
   render() {
-    if (!this.state.is_finish_check_booking_status) {
-      return (
-        <CommonProgressBar />
-      )
-    }
+    // if (!this.state.is_finish_check_booking_status) {
+    //   return (
+    //     <CommonProgressBar />
+    //   )
+    // }
 
 
     // return (
@@ -897,9 +896,9 @@ class MapContainer extends React.Component {
     //     </Button>
     //   </View>
     // )
-    console.log("MY STATUS");
+    console.log("MY STATUS start");
     console.log(this.state);
-    console.log("MY STATUS");
+    console.log("MY STATUS end");
     // console.log(this.props);
     // console.log("getting NEW PROPS");
     const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;
@@ -948,7 +947,8 @@ class MapContainer extends React.Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: 'red' }}>
-        {this.state.region.latitude ? (
+        {
+        this.state.region.latitude ? (
           <View style={{ flex: 1, backgroundColor: 'blue' }}>
             <MyMapView
               my_latitude={this.state.my_latitude}
@@ -1370,7 +1370,8 @@ class MapContainer extends React.Component {
               </BottomDrawer>
             }
           </View>
-        ) : null}
+        ) : null
+        }
       </View>
     );
   }
