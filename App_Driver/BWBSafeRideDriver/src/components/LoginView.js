@@ -86,9 +86,8 @@ export default class LoginView extends Component {
             this.props.navigation.navigate('Dashboard');
         }
         else{
-          console.log('SCL alert');
+          //Error message alert
           const subtitle_value = JSON.stringify(responseJson.msg);
-          console.log(subtitle_value);
           this.setState({ subtitle: subtitle_value });
           //Alert.alert(JSON.stringify(responseJson.msg));
         }
@@ -143,19 +142,17 @@ export default class LoginView extends Component {
         </View>
 
         <View>
-        {/* <Button title="Show" onPress={this.handleOpen} /> */}
-        <SCLAlert
-          show={this.state.show}
-          onRequestClose={this.handleClose}
-          theme="warning"
-          title="asdf"
-          subtitle="asdfff"
-          
-        >
-          <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
-          <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton>
-        </SCLAlert>
-      </View>
+          <SCLAlert
+            show={this.state.show}
+            onRequestClose={this.handleClose}
+            theme="warning"
+            title="Error!"
+            subtitle = {this.state.subtitle}
+            >
+            <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
+            <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton>
+          </SCLAlert>
+        </View>
 
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={passwordIcon}/>

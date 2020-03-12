@@ -57,9 +57,9 @@ export default class Bookings extends Component {
 		   details: [],
 		   user: [],
 		   reserve_button: 'Start',
-		   listViewData_p: '[]',
-		   listViewData_r: '[]',
-		   listViewData_c: '[]',
+		   listViewData_p: [],
+		   listViewData_r: [],
+		   listViewData_c: [],
 		   sectionListData: Array(5).fill('').map((_,i) => ({title: `title${i + 1}`, data: [...Array(5).fill('').map((_, j) => ({key: `${i}.${j}`, text: `item #${j}`}))]})),
 	   
 
@@ -87,31 +87,41 @@ export default class Bookings extends Component {
 	}
 
 	async displayBookings() {
+		console.log('url');
+		console.log(Helpers.api_url+'get_rider_bookings');
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
-	 fetch(Helpers.api_url+'get_bookings', {
+
+		console.log('dataaassss');
+		console.log(data);
+	 fetch(Helpers.api_url+'get_rider_bookings', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-		  driver_id: data.user_id
+		  rider_id: data.login_id
       })
     }).then((response) => response.json())
       .then((responseJson) => {
+		  console.log(responseJson.data.response);
+		  console.log("responseJsonXDXD");
 
 		// console.error( responseJson.data.map(Object.values).map((_,i) => ({key: `${i}`, text: `Date: ${_[2]} - From: ${_[3]} - To: ${_[4]}`})) );
 		// console.error(responseJson.data.map(Object.values).map((_,i) => ({key: `${i}`, text: `${_}`})));
 		// const val = ["Booking 1", "Booking 2", "Booking 3", "Booking 4"];
 		// console.error(val.map((_,i) => ({key: `${i}`, text: `${_}`})));
 
-		if(responseJson.response === 'success'){
-			this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
-							listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
-							listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
+		if(responseJson.data.response === 'success'){
+			console.log('data');
+			console.log(data);
+				
+			this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[3]}`})),
+							listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[3]}`})),
+							listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[3]}`}))
 			});
 		}else{
-			if (responseJson.response === 'error') {
+			if (responseJson.data.response === 'error') {
 				// this.setState({listViewData_p: responseJson.data.data_pending.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 				// 				listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 				// 				listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
@@ -134,7 +144,9 @@ export default class Bookings extends Component {
 	}
 
 	displayBookDetails(id){
-
+		console.log('displayBooking');
+		console.log(id);
+		console.log(Helpers.api_url+'get_booking_detail');
 		fetch(Helpers.api_url+'get_booking_detail', {
 		 method: 'POST',
 		 headers: {
@@ -373,15 +385,7 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-											transform: [
-												{
-													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
-														inputRange: [45, 90],
-														outputRange: [0, 1],
-														extrapolate: 'clamp',
-													}),
-												}
-											],
+											
 										}
 									]}
 								>
