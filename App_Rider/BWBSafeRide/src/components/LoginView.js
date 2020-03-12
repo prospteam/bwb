@@ -19,6 +19,7 @@ import usernameIcon from '../assets/images/icons8-username-filled-50.png';
 import passwordIcon from '../assets/images/icons8-lock-filled-50.png';
 import companyLogo from '../assets/images/main_logo.png';
 import backgroundImg from '../assets/images/mobile-bg.jpg';
+import RNRestart from 'react-native-restart'; 
 
 import {
   SCLAlert,
@@ -84,6 +85,7 @@ constructor(props) {
             this.props.navigation.navigate('Dashboard', {
                 login_success: true
             });
+            RNRestart.Restart();
         }
         else{
           // Alert.alert(responseJson.msg);

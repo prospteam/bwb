@@ -318,6 +318,7 @@ export default class Dashboard extends Component {
                if (result === null) {
                    // console.error(result);
                    this.props.navigation.navigate('Logout');
+                  
                }else{
                    this.setState({userData: result});
                    this.setState({ user_type: result.user_type_id });
