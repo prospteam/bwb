@@ -8,6 +8,11 @@ import MapContainer from './MapContainer';
 import Helpers from '../../Helpers';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert';
+
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 // const LATITUDE = 37.771707;
@@ -40,7 +45,6 @@ export async function requestLocationPermission()
     console.warn(err)
   }
 }
-
 
 LocationServicesDialogBox.checkLocationServicesIsEnabled({
     message: "<h2 style='color: #0af13e'>Use Location?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
@@ -101,17 +105,28 @@ export default class Dashboard extends Component {
           longitude: 37.771707,
           latitude: -122.4053769,
           switchValue: false,
-          user_type: null
+          user_type: null,
+          
+          scl_alert: {
+            show: false,
+            title: "title",
+            message: "message",
+          },
       }
 
   }
 
-  toggleSwitch = async () => {
-
+  toggleSwitch = async (event) => {
       const data = JSON.parse(await AsyncStorage.getItem('userData'));
 
       let msg = '';
-      this.setState({ switchValue: !this.state.switchValue });
+      // this.setState({ switchValue: !this.state.switchValue });
+      this.setState({ switchValue: event });
+
+      console.log("this.state.switchValue");
+      console.log(event);
+      console.log(this.state.switchValue);
+      AsyncStorage.setItem('is_available', JSON.stringify(event));
 
       fetch(Helpers.api_url+'update_driver_status', {
        method: 'POST',
@@ -128,20 +143,35 @@ export default class Dashboard extends Component {
           // VALIDATION IF ANY
           return response.json();
         } else {
-          alert('Error on connecting to server.');
+          // alert('Error on connecting to server.');
+
+          this.setState({
+            scl_alert: {
+              show: true,
+              title: "Alert",
+              message: "Error on connecting to server",
+            }
+          });
         }
       }).then((responseJson) => {
         if (responseJson){
           if (responseJson.response === 'success') {
             msg = responseJson.msg;
-            Alert.alert(msg);
+            // Alert.alert(msg);
+
+            this.setState({
+              scl_alert: {
+                show: true,
+                title: "Alert",
+                message: msg,
+              }
+            });
           }
         }
        }).catch((error) => {
          console.error(error);
          console.error("toggleSwitch");
        });
-
   }
 
   async getDriverStatus(){
@@ -163,7 +193,15 @@ export default class Dashboard extends Component {
         // VALIDATION IF ANY
         return response.json();
       }else{
-        alert('Error on connecting to server.');
+        // alert('Error on connecting to server.');
+
+        this.setState({
+          scl_alert: {
+            show: true,
+            title: "Alert",
+            message: "Error on connecting to server",
+          }
+        });
       }
      }).then((responseJson) => {
       //  console.log("responseJsonXDXDXD");
@@ -362,22 +400,33 @@ export default class Dashboard extends Component {
 
       console.log(this.props);
 
-
       return (
         <Container>
           <Header>
-           <Left style={{ flexDirection: 'row' }}>
-            <Icon onPress={() => this.props.navigation.openDrawer()} name="md-menu" style={{ color: '#d3a04c', marginRight: 15 }} />
-           </Left>
-           <Right>
-             {this.state.user_type === '3' && <View style={{flexDirection: 'row'}}><Text style={{color: '#d3a04c'}}>I am available  </Text><Switch onValueChange = {this.toggleSwitch} value={this.state.switchValue} trackColor={{false: '#c1191c', true: "#32CD32"}} thumbColor={'#d3a04c'} /></View> }
-           </Right>
+            <Left style={{ flexDirection: 'row' }}>
+              <Icon onPress={() => this.props.navigation.openDrawer()} name="md-menu" style={{ color: '#d3a04c', marginRight: 15 }} />
+            </Left>
+            <Right>
+              {this.state.user_type === '3' && <View style={{ flexDirection: 'row' }}><Text style={{ color: '#d3a04c' }}>I am available  </Text><Switch onValueChange={(value) => this.toggleSwitch(value)} value={this.state.switchValue} trackColor={{false: '#c1191c', true: "#32CD32"}} thumbColor={'#d3a04c'} /></View> }
+            </Right>
           </Header>
           <Content Styles={{position:'relative'}}>
             <View style={styles.container}>
             {
                 <MapContainer navigation={this.props.navigation} {...params} pinned_latitude={navigation.getParam('pinned_loc_lat', 0)} pinned_longitude={navigation.getParam('pinned_loc_long', 0)} pinned_stat={navigation.getParam('pinned_stat', true)} window_height={height} set_destination_lat={navigation.getParam('latitude', 0)} set_destination_long={navigation.getParam('longitude', 0)} />
               }
+
+              <SCLAlert
+                // show={true}
+                show={this.state.scl_alert.show}
+                onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+                theme="info"
+                title={this.state.scl_alert.title}
+                subtitle={this.state.scl_alert.message}
+              >
+                <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+              </SCLAlert>
+              
             </View>
           </Content>
           {
@@ -401,3 +450,5 @@ const styles = StyleSheet.create({
 
   },
 });
+
+

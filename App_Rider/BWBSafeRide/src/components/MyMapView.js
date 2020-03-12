@@ -48,7 +48,6 @@ const MyMapView = (props) => {
           latitudeDelta: props.region.latitudeDelta,
           longitudeDelta: props.region.longitudeDelta,
         }}
-
         showsUserLocation={true}
         // ref={c => this.mapView = c}
         // onRegionChangeComplete={(reg) => props.onRegionChange(reg)}

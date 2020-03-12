@@ -10,19 +10,15 @@ let { width, height } = Dimensions.get('window');
 const destination = {latitude: 37.771707, longitude: 123.4053769};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 
-// redux 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { sampleFunction } from '../redux/actions/index.js';
-// I included ang "index.js" para di malibog
-
 // this.mapView = null;
+
 const MyMapView = (props) => {
     // Alert.alert('hello');
   console.log('MyMapView Rendering-start');
   console.log(props);
   console.log('MyMapView Rendering-end');
   // height = (props.height)?props.height+300:height;
+
 
   // const origin = {
   //     latitude: props.region.latitude,
@@ -67,18 +63,11 @@ const MyMapView = (props) => {
         //   longitudeDelta: 0.0,
         // }}
         >
-            {(props.count.latitude)&&<MapView.Marker
-            coordinate={{latitude:props.count.latitude, longitude: props.count.longitude}}
-            >
-          <Icon type="FontAwesome5" name="car-side"></Icon>
-            </MapView.Marker>}
-            
           {(props.form_from) && <MapView.Marker
                coordinate={props.form_from}
                title={"Pickup Location"}
                description={props.geocode_name}
                pinColor='#45A163'
-              
             >
             <MapView.Callout tooltip={true}
                 style={{backgroundColor: '#d3a04c'}}
@@ -89,6 +78,7 @@ const MyMapView = (props) => {
                               longitude: props.geocode_long,
                               login_id: props.login_id
                           }
+
                           // Alert.alert(props.geocode_name+":"+props.geocode_lat);
                             // Alert.alert(data.location_name);
                             fetch(Helpers.api_url+'save_location', {
@@ -100,18 +90,14 @@ const MyMapView = (props) => {
                                  body: JSON.stringify(data)
                                }).then((response) => response.json())
                                  .then((res) => {
-                                    // Alert.alert(res.msg);
-                                   this.setState({
-                                     scl_alert: {
-                                       show: true,
-                                       title: "Alert",
-                                       message: res.msg,
-                                     }
-                                   });
+                                    Alert.alert(res.msg);
+
                                  }).catch((error) => {
                                    console.error(error);
                                  });
+
                             // const api = url()+'api/save_location';
+
                            //  fetch(api, {
                            //   method: 'POST',
                            //   headers: {
@@ -178,8 +164,8 @@ const MyMapView = (props) => {
                 </MapView.Callout>
                 </MapView.Marker>}
           <MapViewDirections
-            origin={props.form_from?props.form_from:{}}
-            destination={props.form_to?props.form_to:{}}
+            origin={props.form_from}
+            destination={props.form_to}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={5}
             strokeColor="#4372AA"
@@ -204,19 +190,4 @@ const MyMapView = (props) => {
     </MapView>
   )
 }
-// export default MyMapView;
-
-// export default MapContainer;
-
-// export default MapContainer;
-function mapStateToProps(state) {
-  return {
-    count:state.count.count,
-  }
-}
-function mapActionsToDispatch(dispatch) {
-  return bindActionCreators({
-    sampleFunction: sampleFunction,
-  }, dispatch)
-}
-export default connect(mapStateToProps, mapActionsToDispatch)(MyMapView);
+export default MyMapView;

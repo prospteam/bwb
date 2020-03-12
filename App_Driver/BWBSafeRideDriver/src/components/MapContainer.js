@@ -16,6 +16,10 @@ import firebase from './common/Firebase';
 import CommonProgressBar from './common/CommonProgressBar';
 // import Geolocation from "@react-native-community/geolocation";
 
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert';
 
 // redux 
 import { connect } from 'react-redux';
@@ -94,9 +98,15 @@ class MapContainer extends React.Component {
         textValue: "Going to Pick-up Location",
         disabledBotton: false,
         loadingBar: '',
-        rider_details: []
+        rider_details: [],
         // pinned_latitude: 0,
         // pinned_longitude: 0
+        
+        scl_alert: {
+          show: false,
+          title: "title",
+          message: "message",
+        },
     };
 
     componentWillReceiveProps(nextProps, nextState){
@@ -561,7 +571,16 @@ class MapContainer extends React.Component {
     }).catch((error) => {
       console.log('NOT getting API');
 		  // console.error(error);
-      Alert.alert('Not Able to connect to server');
+      // Alert.alert('Not Able to connect to server');
+
+      this.setState({
+        scl_alert: {
+          show: true,
+          title: "Alert",
+          message: "Error on connecting to server",
+        }
+      });
+
       this.setState({
         is_finish_check_booking_status: false,
       });
@@ -737,9 +756,23 @@ class MapContainer extends React.Component {
     let payByDistance = baseFare*(state.distance+1);
 
     if(typeof(state.chosenDate) === 'undefined'){
-        Alert.alert('Please select date of pickup.');
+      // Alert.alert('Please select date of pickup.');
+      this.setState({
+        scl_alert: {
+          show: true,
+          title: "Alert",
+          message: "Please select date of pickup",
+        }
+      });
     }else if(typeof(state.chosenTime) === 'undefined'){
-        Alert.alert('Please select time of pickup.');
+        // Alert.alert('Please select time of pickup.');
+      this.setState({
+        scl_alert: {
+          show: true,
+          title: "Alert",
+          message: "Please select time of pickup",
+        }
+      });
     }else{
         const formData = {
           // chosenDate:state.chosenDate.toString().substr(4, 12),
@@ -768,7 +801,7 @@ class MapContainer extends React.Component {
     }
   }
   async testfunction(id){
-      alert();
+      // alert();
        // const data = JSON.parse(await AsyncStorage.getItem('userData'));
 
        // console.log('ididididi');
@@ -1248,6 +1281,16 @@ class MapContainer extends React.Component {
             }
           </View>
         ) : null}
+        <SCLAlert
+          // show={true}
+          show={this.state.scl_alert.show}
+          onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+          theme="info"
+          title={this.state.scl_alert.title}
+          subtitle={this.state.scl_alert.message}
+        >
+          <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+        </SCLAlert>
       </View>
     );
   }

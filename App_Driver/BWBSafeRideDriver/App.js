@@ -42,7 +42,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import allReducers from './src/redux/reducers/index.js';
 
 import CommonProgressBar from './src/components/common/CommonProgressBar';
-import MyAlertSCL from './src/my_library/MyAlertSCL';
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillUpdate is deprecated',
@@ -287,7 +290,7 @@ const store = createStore(persistedReducer, applyMiddleware(thunk));
 const persistor = persistStore(store);
 
 const loader = 
-  <MyAlertSCL/>
+  <CommonProgressBar/>
 
 export default class App extends Component<Props> {
   constructor(props) {
@@ -295,8 +298,11 @@ export default class App extends Component<Props> {
     this.state = {
       isLoading: true,
       isLogged: false,
-      alert_message: "message",
-      alert_title: "title",
+      scl_alert: {
+        show: false,
+        title: "title",
+        message: "message",
+      },
     }
 
     // this.ref = firebase.firestore().collection('books');
@@ -451,14 +457,21 @@ export default class App extends Component<Props> {
     //
     // this.state.userType?<MyApp />:<MyAppRider />;
     // <MyApp />
-
+    
     return (
       <Provider store={store}>
-        <PersistGate loading={loader} persistor={persistor}>  
-          <MyAlertSCL
-            alert_message={this.state.alert_message}
-            alert_title={this.state.alert_title}
-           />
+        <PersistGate loading={loader} persistor={persistor}>
+          <SCLAlert
+            // show={true}
+            show={this.state.scl_alert.show}
+            onRequestClose={() => { this.setState({ scl_alert: { show: false} }) }}
+            theme="info"
+            title={this.state.scl_alert.title}
+            subtitle={this.state.scl_alert.message}
+          >
+            <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>Done</SCLAlertButton>
+            <SCLAlertButton theme="default" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>Cancel</SCLAlertButton>
+          </SCLAlert>
           <StyleProvider style={getTheme(material)}>
             <MyAppDriver />
             {

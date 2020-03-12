@@ -35,7 +35,8 @@ export default class LoginView extends Component {
       show: false,
       theme: '',
       title: '',
-      subtitle: ''
+      subtitle: '',
+      
     }
   }
 

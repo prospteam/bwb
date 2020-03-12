@@ -13,6 +13,12 @@ import {
 	Alert
 } from 'react-native';
 
+import {
+	SCLAlert,
+	SCLAlertButton
+} from 'react-native-scl-alert';
+
+
 import { Icon, Header, Left, Right, Button } from 'native-base';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -55,7 +61,14 @@ export default class Bookings extends Component {
 		   listViewData_r: '[]',
 		   listViewData_c: '[]',
 		   sectionListData: Array(5).fill('').map((_,i) => ({title: `title${i + 1}`, data: [...Array(5).fill('').map((_, j) => ({key: `${i}.${j}`, text: `item #${j}`}))]})),
-	   };
+	   
+
+			scl_alert: {
+				show: false,
+				title: "title",
+				message: "message",
+			},
+		};
 
 		this.rowSwipeAnimatedValues = {};
 		Array(20).fill('').forEach((_, i) => {
@@ -103,7 +116,14 @@ export default class Bookings extends Component {
 				// 				listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 				// 				listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
 			}
-			Alert.alert(responseJson.response+"1");
+
+			// this.setState({
+			// 	scl_alert: {
+			// 		show: true,
+			// 		title: "Alert",
+			// 		message: responseJson.response,
+			// 	}
+			// });
 		}
 
 		// console.error(this.state.listViewData);
@@ -142,7 +162,14 @@ export default class Bookings extends Component {
 				  this.setState({ isModalVisible: !this.state.isModalVisible });
 
 	          }else{
-				   Alert.alert("No data available.");
+				//    Alert.alert("No data available.");
+				 this.setState({
+					 scl_alert: {
+						 show: true,
+						 title: "Alert",
+						 message: "No data available",
+					 }
+				 });
 			  }
 		 }).catch((error) => {
 		   console.error(error);
@@ -165,7 +192,7 @@ export default class Bookings extends Component {
 		 })
 	   }).then((response) => response.json())
 		 .then((responseJson) => {
-			 Alert.alert(JSON.stringify(responseJson.msg)+"2");
+			//  Alert.alert(JSON.stringify(responseJson.msg)+"2");
 			 this.displayBookings();
 
 			 if(JSON.stringify(responseJson.reserve_button) !== ''){
@@ -508,6 +535,15 @@ export default class Bookings extends Component {
 								</Animated.View>
 								</TouchableOpacity>
 
+								<SCLAlert
+									show={this.state.scl_alert.show}
+									onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+									theme="info"
+									title={this.state.scl_alert.title}
+									subtitle={this.state.scl_alert.message}
+								>
+									<SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+								</SCLAlert>
 							</View>
 						)}
 						leftOpenValue={75}

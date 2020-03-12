@@ -20,16 +20,27 @@ import passwordIcon from '../assets/images/icons8-lock-filled-50.png';
 import companyLogo from '../assets/images/main_logo.png';
 import backgroundImg from '../assets/images/mobile-bg.jpg';
 
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert';
+
 export default class LoginView extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-      login_id: null
-    }
+constructor(props) {
+  super(props);
+  this.state = {
+    username: '',
+    password: '',
+    login_id: null,
+    
+      scl_alert: {
+      show: false,
+      title: "title",
+      message: "message",
+    },
   }
+}
 
   componentDidMount(){
      this.getData();
@@ -38,7 +49,7 @@ export default class LoginView extends Component {
   componentDidUpdate(prevProps, prevState){
       if(prevState.login_id !== this.state.login_id){
           this.onClickListener('LoginSubmit');
-          Alert.alert(this.state.login_id);
+          // Alert.alert(this.state.login_id);
       }
   }
 
@@ -75,7 +86,14 @@ export default class LoginView extends Component {
             });
         }
         else{
-          Alert.alert(responseJson.msg);
+          // Alert.alert(responseJson.msg);
+          this.setState({
+            scl_alert: {
+              show: true,
+              title: "Alert",
+              message: responseJson.msg,
+            }
+          });
         }
       }).catch((error) => {
         console.error(error);
@@ -132,6 +150,16 @@ export default class LoginView extends Component {
               secureTextEntry={true}
               underlineColorAndroid='transparent'
               onChangeText={(password) => this.setState({password})}/>
+
+            <SCLAlert
+              show={this.state.scl_alert.show}
+              onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+              theme="info"
+              title={this.state.scl_alert.title}
+              subtitle={this.state.scl_alert.message}
+            >
+              <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+            </SCLAlert>
         </View>
 
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onClickListener('LoginSubmit')}>
