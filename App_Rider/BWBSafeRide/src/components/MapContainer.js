@@ -958,9 +958,24 @@ class MapContainer extends React.Component {
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
               // viewed_region={this.state.viewed_region}
-              form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
-              form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
-              selectedLatLong={this.state.selectedLatLong}
+              form_from={this.state.booking_details.pickup_latlong ?
+                ({
+                   latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
+                   longitude: Number(this.state.booking_details.pickup_latlong.split(":")[1]), // Michigan Long
+                 })
+                 : ({
+                   latitude: 44.3148, // Michigan Lat
+                   longitude: -84.506836, // Michigan Long
+                 }) }
+              form_to= {this.state.booking_details.dropoff_latlong ?
+              ({
+                  latitude: Number(this.state.booking_details.dropoff_latlong.split(":")[0]), // Michigan Lat
+                  longitude: Number(this.state.booking_details.dropoff_latlong.split(":")[1]), // Michigan Long
+                })
+                : ({
+                  latitude: 44.3148, // Michigan Lat
+                  longitude: -84.506836, // Michigan Long
+                }) }
               // onRegionChange={reg => this.onMapRegionChange(reg)}
               getData={params => this.getDataFromMap(params)}
               geocode_name={navigation.getParam('booking_data_from_text', null) !== null ? navigation.getParam('booking_data_from_text', null) : this.state.geocode_name}
