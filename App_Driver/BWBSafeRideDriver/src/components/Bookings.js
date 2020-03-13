@@ -649,7 +649,6 @@ export default class Bookings extends Component {
 						onSwipeValueChange={this.onSwipeValueChange}
 					/>
 				}
-
 				{
 					this.state.listType === 'Completed' &&
 					<SwipeListView
@@ -671,7 +670,6 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-
 											transform: [
 												{
 													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
@@ -692,7 +690,6 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-
 											transform: [
 												{
 													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
