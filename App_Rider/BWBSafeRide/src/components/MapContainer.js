@@ -957,7 +957,7 @@ class MapContainer extends React.Component {
               my_longitude_as_rider={this.state.my_longitude_as_rider}
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
-              // viewed_region={this.state.viewed_region}
+              //viewed_region={this.state.viewed_region}
               form_from={this.state.booking_details.pickup_latlong ?
                 ({
                    latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
