@@ -472,10 +472,10 @@ class MapContainer extends React.Component {
       })
   }
 
-  checkBookingStatus() {
+  async checkBookingStatus() {
     // Alert.alert('hello');
     // const data = JSON.parse(await AsyncStorage.getItem('userData'));
-    AsyncStorage.getItem("userData", (errs, result) => {
+    await AsyncStorage.getItem("userData", (errs, result) => {
       if (!errs) {
         if (result !== null) {
           // this.setState({activeID:result});
@@ -595,6 +595,7 @@ class MapContainer extends React.Component {
               console.log('NOT getting API');
               console.error(error);
             });
+			
           this.setState({
             is_finish_check_booking_status: true,
           });
@@ -883,12 +884,7 @@ class MapContainer extends React.Component {
   // };
 
   render() {
-    if (!this.state.is_finish_check_booking_status) {
-      return (
-        <CommonProgressBar />
-      )
-    }
-
+	  
 
     // return (
     //   <View>
@@ -900,6 +896,13 @@ class MapContainer extends React.Component {
     console.log("MY STATUS");
     console.log(this.state);
     console.log("MY STATUS");
+	
+    // if (!this.state.is_finish_check_booking_status) {
+      // return (
+        // <CommonProgressBar />
+      // )
+    // }
+
     // console.log(this.props);
     // console.log("getting NEW PROPS");
     const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;

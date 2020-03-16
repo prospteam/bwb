@@ -479,12 +479,13 @@ export default class App extends Component<Props> {
         <Provider store={store}>
           <PersistGate loading={loader} persistor={persistor}>
             <StyleProvider style={getTheme(material)}>
+				<MyAppRider />
               {
-                this.state.userType=="rider"?
-                (<MyAppRider />)
-                :this.state.userType=="driver"?
-                (<MyAppDriver />)
-                :(<MyApp />)
+                // this.state.userType=="rider"?
+                // (<MyAppRider />)
+                // :this.state.userType=="driver"?
+                // (<MyAppDriver />)
+                // :(<MyApp />)
               }
             </StyleProvider>
           </PersistGate>
