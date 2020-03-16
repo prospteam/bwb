@@ -16,6 +16,10 @@ import firebase from './common/Firebase';
 import CommonProgressBar from './common/CommonProgressBar';
 // import Geolocation from "@react-native-community/geolocation";
 
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert';
 
 // redux 
 import { connect } from 'react-redux';
@@ -94,9 +98,16 @@ class MapContainer extends React.Component {
         form_to_text: null,
         textValue: "Going to Pick-up Location",
         disabledBotton: false,
-        loadingBar: ''
+        loadingBar: '',
+        rider_details: [],
         // pinned_latitude: 0,
         // pinned_longitude: 0
+        
+        scl_alert: {
+          show: false,
+          title: "title",
+          message: "message",
+        },
     };
 
     componentWillReceiveProps(nextProps, nextState){
@@ -121,8 +132,6 @@ class MapContainer extends React.Component {
                   this.setState({geocode_long: navigation.getParam('booking_data_from_latlong', null).longitude});
             }
         }
-
-
         if(prevProps.set_destination_lat !== this.props.set_destination_lat) {
             fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + this.props.set_destination_lat + ',' + this.props.set_destination_long + '&key=' + GOOGLE_MAPS_APIKEY)
                 .then((response) => response.json())
@@ -514,8 +523,11 @@ class MapContainer extends React.Component {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     }
-   }).then((response) => response.json())
-     .then((responseJson) => {
+   }).then((response) => {
+     console.log("responseXD");
+     console.log(response);
+     return response.json();
+   }).then((responseJson) => {
        console.log('getting API');
        console.log(responseJson);
         if(responseJson.num_of_active_booking > 0){
@@ -524,32 +536,27 @@ class MapContainer extends React.Component {
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
                textVal = "Going to pick up location";
-          }else if (responseJson.booking_details.booking_status == "inprogress") {
-			  if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
-				  
-               textVal = "Ride completed";
-			  }else{
-               textVal = "Going to drop off location";
-				  
-			  }
+          }else if (responseJson.booking_details.booking_status == "reserved") {
+            if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
+                  textVal = "Ride completed";
+            }else{
+                  textVal = "Going to drop off location";
+            }
           }else if(responseJson.booking_details.booking_status == "completed"){
                textVal = "Ride completed";
           }
-
           console.log("textVal");
           console.log(textVal);
-
           this.setState({
             can_book:false,
             rider_details:responseJson.rider_details,
             driver_details:responseJson.driver_details,
             booking_details:responseJson.booking_details,
+            rider_details: responseJson.rider_details,
              textValue: textVal
           });
-// this.state.user.user_type_id
+          // this.state.user.user_type_id
           console.log('LOEDDEDDDD2');
-          // this.ref.onSnapshot(this.driverLocationListener);
-
         }else{
           console.log('LOEDDEDDDD444444444');
           this.setState({
@@ -558,19 +565,27 @@ class MapContainer extends React.Component {
             booking_details:[],
           });
         }
-
         this.setState({
           booking_details_ready:true,
         });
+       this.setState({
+         is_finish_check_booking_status: true,
+       });
+    }).catch((error) => {
+      console.log('NOT getting API');
+		  // console.error(error);
+      // Alert.alert('Not Able to connect to server');
+      this.setState({
+        scl_alert: {
+          show: true,
+          title: "Alert",
+          message: "Error on connecting to server",
+        }
+      });
 
-     }).catch((error) => {
-       console.log('NOT getting API');
-		// console.error(error);
-		Alert.alert('Not Able to connect to server');
-     });
-
-     this.setState({
-      is_finish_check_booking_status:true,
+      this.setState({
+        is_finish_check_booking_status: false,
+      });
     });
     // this.setState({ region });
     // console.log('GETTING DSISTSATNCEEEEEEEE');
@@ -582,7 +597,6 @@ class MapContainer extends React.Component {
     //   });
       // console.log(this.state);
   }
-
   initMyLocation() {
     getLocation().then(data => {
       console.log('GET LOCATION');
@@ -598,10 +612,8 @@ class MapContainer extends React.Component {
         my_latitude: data.latitude,
         my_longitude: data.longitude,
       });
-
         this.setState({ geocode_lat: data.latitude });
         this.setState({ geocode_long: data.longitude });
-
       // return data;
     })
     .catch(err => {
@@ -610,10 +622,8 @@ class MapContainer extends React.Component {
   }
 
   updateState(location) {
-
       // this.setState({pinned_latitude: 0});
       // this.setState({pinned_longitude: 0});
-
       // const {pinned_lat, pinned_long} = this.props;
       //
       // this.updateState({
@@ -631,7 +641,6 @@ class MapContainer extends React.Component {
       //     longitudeDelta: longDelta,
       //   },
       // });
-
       this.reverseGeocode(location.latitude, location.longitude);
   }
 
@@ -742,9 +751,23 @@ class MapContainer extends React.Component {
     let payByDistance = baseFare*(state.distance+1);
 
     if(typeof(state.chosenDate) === 'undefined'){
-        Alert.alert('Please select date of pickup.');
+      // Alert.alert('Please select date of pickup.');
+      this.setState({
+        scl_alert: {
+          show: true,
+          title: "Alert",
+          message: "Please select date of pickup",
+        }
+      });
     }else if(typeof(state.chosenTime) === 'undefined'){
-        Alert.alert('Please select time of pickup.');
+        // Alert.alert('Please select time of pickup.');
+      this.setState({
+        scl_alert: {
+          show: true,
+          title: "Alert",
+          message: "Please select time of pickup",
+        }
+      });
     }else{
         const formData = {
           // chosenDate:state.chosenDate.toString().substr(4, 12),
@@ -773,7 +796,7 @@ class MapContainer extends React.Component {
     }
   }
   async testfunction(id){
-      alert();
+      // alert();
        // const data = JSON.parse(await AsyncStorage.getItem('userData'));
 
        // console.log('ididididi');
@@ -911,7 +934,6 @@ class MapContainer extends React.Component {
               console.log("response YYYYYY");
               console.log(response);
                // this.setState({textValue:'On the way to Drop-Off'});
-
                if(this.state.textValue == "Going to pick up location"){
                    this.setState({textValue:'Going to drop off location'});
                    this.setState({disabledBotton: false});
@@ -991,11 +1013,7 @@ class MapContainer extends React.Component {
     // }
 
     console.log("MY STATUS");
-    console.log(this.state.booking_details);
     // console.log(this.props);
-    // console.log("getting NEW PROPS");
-    const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;
-    // console.log('MapContainer Rendered');
     const { distance, duration } = this.state;
 
     console.log('boooooooooooking container');
@@ -1006,8 +1024,6 @@ class MapContainer extends React.Component {
         latitude: this.state.set_destination_lat,
         longitude: this.state.set_destination_long
     }
-
-
     // Alert.alert(navigation.getParam('booking_data_from_text', null));
 
     if(navigation.getParam('booking_data_from_text', null) !== null){
@@ -1015,7 +1031,6 @@ class MapContainer extends React.Component {
           console.log("latttttttttttttttttttttttttttttttttiiiiiiiiiiiiiiiiiiii");
           console.log(navigation.getParam('booking_data_from_latlong', null).latitude);
           console.log("latttttttttttttttttttttttttttttttttiiiiiiiiiiiiiiiiiiii");
-
           // this.reverseGeocode(navigation.getParam('booking_data_from_latlong', null).latitude, navigation.getParam('booking_data_from_latlong', null).longitude);
     }else{
         if(this.state.form_from_text !== null)
@@ -1050,8 +1065,8 @@ class MapContainer extends React.Component {
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
               viewed_region={this.state.viewed_region}
-              form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
-              form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
+              // form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
+              // form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
               form_from={this.state.booking_details.pickup_latlong ?
                  ({
                     latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
@@ -1092,7 +1107,7 @@ class MapContainer extends React.Component {
               navigation={this.props.navigation}
             />
             {
-            // true ? null
+            // false ? null
             !this.state.user_data || !this.state.booking_details_ready? null
             // this.state.user_data == false || this.state.booking_details != []? null
             // : (false) ?(
@@ -1139,10 +1154,10 @@ class MapContainer extends React.Component {
                   elevation: 10,
                   backgroundColor:'white',
                 }}>
-                {
-                  // <Button onPress={this.testfunction} >
-                  //   <Text>Click Me!</Text>
-                  // </Button>
+                  {
+                    // <Button onPress={this.testfunction} >
+                    //   <Text>Click Me!</Text>
+                    // </Button>
                   }
                   <Text
                     style={{
@@ -1261,7 +1276,17 @@ class MapContainer extends React.Component {
             )
             }
           </View>
-        ) : null}
+        ) : null} 
+        <SCLAlert
+          // show={true}
+          show={this.state.scl_alert.show}
+          onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+          theme="info"
+          title={this.state.scl_alert.title}
+          subtitle={this.state.scl_alert.message}
+        >
+          <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+        </SCLAlert>
       </View>
     );
   }

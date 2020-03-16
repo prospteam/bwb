@@ -756,7 +756,6 @@ class MapContainer extends React.Component {
     // alert(12);
     // this.props.sampleFunction('', '');
 
-
     const { state } = this;
     // const { navigation } = this.props;
 
@@ -884,7 +883,14 @@ class MapContainer extends React.Component {
   // };
 
   render() {
-	  
+
+   
+    // if (!this.state.is_finish_check_booking_status) {
+    //   return (
+    //     <CommonProgressBar />
+    //   )
+    // }
+
 
     // return (
     //   <View>
@@ -893,9 +899,9 @@ class MapContainer extends React.Component {
     //     </Button>
     //   </View>
     // )
-    console.log("MY STATUS");
+    console.log("MY STATUS start");
     console.log(this.state);
-    console.log("MY STATUS");
+    console.log("MY STATUS end");
 	
     // if (!this.state.is_finish_check_booking_status) {
       // return (
@@ -951,7 +957,8 @@ class MapContainer extends React.Component {
 
     return (
       <View style={{ flex: 1, backgroundColor: 'red' }}>
-        {this.state.region.latitude ? (
+        {
+        this.state.region.latitude ? (
           <View style={{ flex: 1, backgroundColor: 'blue' }}>
             <MyMapView
               my_latitude={this.state.my_latitude}
@@ -960,10 +967,25 @@ class MapContainer extends React.Component {
               my_longitude_as_rider={this.state.my_longitude_as_rider}
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
-              // viewed_region={this.state.viewed_region}
-              form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
-              form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
-              selectedLatLong={this.state.selectedLatLong}
+              //viewed_region={this.state.viewed_region}
+              form_from={this.state.booking_details.pickup_latlong ?
+                ({
+                   latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
+                   longitude: Number(this.state.booking_details.pickup_latlong.split(":")[1]), // Michigan Long
+                 })
+                 : ({
+                   latitude: 44.3148, // Michigan Lat
+                   longitude: -84.506836, // Michigan Long
+                 }) }
+              form_to= {this.state.booking_details.dropoff_latlong ?
+              ({
+                  latitude: Number(this.state.booking_details.dropoff_latlong.split(":")[0]), // Michigan Lat
+                  longitude: Number(this.state.booking_details.dropoff_latlong.split(":")[1]), // Michigan Long
+                })
+                : ({
+                  latitude: 44.3148, // Michigan Lat
+                  longitude: -84.506836, // Michigan Long
+                }) }
               // onRegionChange={reg => this.onMapRegionChange(reg)}
               getData={params => this.getDataFromMap(params)}
               geocode_name={navigation.getParam('booking_data_from_text', null) !== null ? navigation.getParam('booking_data_from_text', null) : this.state.geocode_name}
@@ -1373,7 +1395,8 @@ class MapContainer extends React.Component {
               </BottomDrawer>
             }
           </View>
-        ) : null}
+        ) : null
+        }
       </View>
     );
   }

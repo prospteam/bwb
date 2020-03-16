@@ -8,6 +8,11 @@ import MapContainer from './MapContainer';
 import Helpers from '../../Helpers';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
+import {
+  SCLAlert,
+  SCLAlertButton
+} from 'react-native-scl-alert';
+
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 // const LATITUDE = 37.771707;
@@ -103,7 +108,13 @@ export default class Dashboard extends Component {
           switchValue: false,
           user_type: null,
           userData: null,
-          login_success: this.props.navigation.getParam('login_success', false)
+          login_success: this.props.navigation.getParam('login_success', false),
+          
+          scl_alert: {
+            show: false,
+            title: "title",
+            message: "message",
+          },
       }
   }
 
@@ -129,7 +140,15 @@ export default class Dashboard extends Component {
 
            if(responseJson.response === 'success'){
                msg = responseJson.msg;
-               Alert.alert(msg);
+              //  Alert.alert(msg);
+
+             this.setState({
+               scl_alert: {
+                 show: true,
+                 title: "Alert",
+                 message: msg,
+               }
+             });
            }
 
        }).catch((error) => {
@@ -303,6 +322,7 @@ export default class Dashboard extends Component {
                if (result === null) {
                    // console.error(result);
                    this.props.navigation.navigate('Logout');
+                  
                }else{
                    this.setState({userData: result});
                    this.setState({ user_type: result.user_type_id });
@@ -394,6 +414,15 @@ export default class Dashboard extends Component {
             {
                 <MapContainer navigation={this.props.navigation} {...params} pinned_latitude={navigation.getParam('pinned_loc_lat', 0)} pinned_longitude={navigation.getParam('pinned_loc_long', 0)} pinned_stat={navigation.getParam('pinned_stat', true)} window_height={height} set_destination_lat={navigation.getParam('latitude', 0)} set_destination_long={navigation.getParam('longitude', 0)} />
               }
+              <SCLAlert
+                show={this.state.scl_alert.show}
+                onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+                theme="info"
+                title={this.state.scl_alert.title}
+                subtitle={this.state.scl_alert.message}
+              >
+                <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+              </SCLAlert>
             </View>
           </Content>
           {

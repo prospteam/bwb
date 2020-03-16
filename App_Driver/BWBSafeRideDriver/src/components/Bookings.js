@@ -13,12 +13,6 @@ import {
 	Alert
 } from 'react-native';
 
-import {
-	SCLAlert,
-	SCLAlertButton
-  } from 'react-native-scl-alert';
-   
-
 import { Icon, Header, Left, Right, Button } from 'native-base';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -26,6 +20,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Helpers from '../../Helpers';
 import Modal from "react-native-modal";
 import firebase from './common/Firebase';
+import {
+	SCLAlert,
+	SCLAlertButton
+} from 'react-native-scl-alert';
 
 var Spinner = require('react-native-spinkit');
 var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
@@ -38,11 +36,6 @@ export default class Bookings extends Component {
             <Icon type="FontAwesome" name="clipboard" style={{ fontSize: 19 }} />
         )
     };
-
-	state = {
-		isModalVisible: false
-	};
-
 	toggleModal = () => {
 		this.setState({ isModalVisible: !this.state.isModalVisible });
 	};
@@ -66,8 +59,16 @@ export default class Bookings extends Component {
 		   listViewData_r: [],
 		   listViewData_c: [],
 		   sectionListData: Array(5).fill('').map((_,i) => ({title: `title${i + 1}`, data: [...Array(5).fill('').map((_, j) => ({key: `${i}.${j}`, text: `item #${j}`}))]})),
-		   show: false
-	   };
+
+			isModalVisible: false,
+			scl_alert: {
+				show: false,
+				title: "title",
+				message: "message",
+			},
+		}
+
+
 
 		this.rowSwipeAnimatedValues = {};
 		Array(20).fill('').forEach((_, i) => {
@@ -82,28 +83,45 @@ export default class Bookings extends Component {
 	  if(response.timestamp>on_start){
 		
 		this.displayBookings();
-		alert("THIS IS NEW");
-		PushNotification.localNotification({
-		  foreground: false, // BOOLEAN: If the notification was received in foreground or not
-		  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-		  message: 'There is new pending bookings.', // STRING: The notification message
-		  data: {}, // OBJECT: The push data
+		// alert("THIS IS NEW");
+
+		  AsyncStorage.getItem("is_available").then((value) => {
+				console.log('donevalue');
+				console.log(value);
+				if (value==true){
+					PushNotification.cancelLocalNotifications({ id: '123' });
+					PushNotification.localNotification({
+						id: '123',
+						foreground: false, // BOOLEAN: If the notification was received in foreground or not
+						userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+						message: 'There is new pending bookings.', // STRING: The notification message
+						data: {}, // OBJECT: The push data
+					});
+				}else{
+				}
+		  }).then(res => {
+			//   console.log('doneres');
+			//   console.log(res);
 		});
+
 	  }else{
 		// console.log("THIS IS OLD");
 	  }
     }, err => {
       // console.log(`Encountered error: ${err}`);
-	  alert('Please check your internet connection for realtime updates');
-    });
-	
-	
+	//   alert('Please check your internet connection for realtime updates');
+		this.setState({
+				scl_alert: {
+					show: true,
+					title: "Alert",
+					message: "Please check your internet connection for realtime updates",
+				}
+			});
+		});
 	}
 
 	async componentDidMount(){
-
 		this.setState({ user: JSON.parse(await AsyncStorage.getItem('userData')) });
-
 		this.displayBookings();
 		setTimeout(() => {
 			this.setState({isLoading: false});
@@ -112,6 +130,12 @@ export default class Bookings extends Component {
 
 	async displayBookings() {
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
+
+		console.log('datasssd');
+		console.log(data);
+
+		console.log('url');
+		console.log(Helpers.api_url+'get_bookings');
 	 fetch(Helpers.api_url+'get_bookings', {
       method: 'POST',
       headers: {
@@ -119,7 +143,7 @@ export default class Bookings extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-		  driver_id: data.user_id
+		  driver_id: data.login_id
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -128,10 +152,10 @@ export default class Bookings extends Component {
 		// console.error(responseJson.data.map(Object.values).map((_,i) => ({key: `${i}`, text: `${_}`})));
 		// const val = ["Booking 1", "Booking 2", "Booking 3", "Booking 4"];
 		// console.error(val.map((_,i) => ({key: `${i}`, text: `${_}`})));
-		console.log("responseJson");
-		console.log(responseJson);
-		console.log("responseJson Pending");
-		console.log(responseJson.data.data_pending);
+		// console.log("responseJson");
+		// console.log(responseJson);
+		// console.log("responseJson Pending");
+		// console.log(responseJson.data);
 		//console.log(responseJson.data.data_pending[0].booking_id);
 		// if(true){
 		if(responseJson.data.response == 'success'){
@@ -145,7 +169,15 @@ export default class Bookings extends Component {
 				// 				listViewData_r: responseJson.data.data_reserved.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`})),
 				// 				listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
 			}
-			Alert.alert(responseJson.response+"1");
+			// Alert.alert(responseJson.response+"1");
+
+			  this.setState({
+				  scl_alert: {
+					  show: true,
+					  title: "Alert",
+					  message: "Please check your internet connection for realtime updates",
+				  }
+			  });
 		}
 		// console.error(this.state.listViewData);
 		console.log('Pengding state');
@@ -188,7 +220,15 @@ export default class Bookings extends Component {
 				  this.setState({ isModalVisible: !this.state.isModalVisible });
 
 	          }else{
-				   Alert.alert("No data available.");
+				//    Alert.alert("No data available.");
+
+				 this.setState({
+					 scl_alert: {
+						 show: true,
+						 title: "Alert",
+						 message: "No data available",
+					 }
+				 });
 			  }
 		 }).catch((error) => {
 		   console.error(error);
@@ -196,9 +236,7 @@ export default class Bookings extends Component {
 	}
 
 	async updateBooking(id){
-
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
-
 		fetch(Helpers.api_url+'update_booking_status', {
 		 method: 'POST',
 		 headers: {
@@ -207,17 +245,15 @@ export default class Bookings extends Component {
 		 },
 		 body: JSON.stringify({
    			booking_id: id,
-			driver_id: data.user_id
+			driver_id: data.login_id
 		 })
 	   }).then((response) => response.json())
 		 .then((responseJson) => {
-			 Alert.alert(JSON.stringify(responseJson.msg));
+			//  Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
-
 			 if(JSON.stringify(responseJson.reserve_button) !== ''){
 				 this.setState({ reserve_button: responseJson.reserve_button });
 			 }
-
 		 }).catch((error) => {
 		   console.error(error);
 		 });
@@ -226,7 +262,6 @@ export default class Bookings extends Component {
 	async removeBooking(id){
 
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
-
 		fetch(Helpers.api_url+'remove_booking', {
 		 method: 'POST',
 		 headers: {
@@ -238,12 +273,12 @@ export default class Bookings extends Component {
 		 })
 	   }).then((response) => response.json())
 		 .then((responseJson) => {
-			 Alert.alert(JSON.stringify(responseJson.msg));
+			//  Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
-
 		 }).catch((error) => {
 		   console.error(error);
 		 });
+		 
 	}
 
 	closeRow(rowMap, rowKey) {
@@ -406,24 +441,25 @@ export default class Bookings extends Component {
 
 				<View style={styles.controls}>
 					<View style={styles.switchContainer}>
-						{ ['Pending', 'Reserved', 'Completed'].map( type => (
-							<TouchableOpacity
-								key={type}
-								style={[
-									styles.switch,
-                                    {backgroundColor: this.state.listType === type ? '#d3a04c' : 'white'},
-									{color: this.state.listType === type ? '#fff' : '#ddd'}
-								]}
-								onPress={ () => this.setState({listType: type}) }
-							>
-								<Text>{type}</Text>
-							</TouchableOpacity>
-						))}
+						{ 
+							['Pending', 'Reserved', 'Completed'].map( type => (
+								<TouchableOpacity
+									key={type}
+									style={[
+										styles.switch,
+										{backgroundColor: this.state.listType === type ? '#d3a04c' : 'white'},
+										{color: this.state.listType === type ? '#fff' : '#ddd'}
+									]}
+									onPress={ () => this.setState({listType: type}) }
+								>
+									<Text>{type}</Text>
+								</TouchableOpacity>
+							))
+						}
 					</View>
 					{
 						this.state.listType === 'Pending' &&
 						<Text>(Pending customer bookings)</Text>
-						
 					}
 					{
 						this.state.listType === 'Reserved' &&
@@ -613,7 +649,6 @@ export default class Bookings extends Component {
 						onSwipeValueChange={this.onSwipeValueChange}
 					/>
 				}
-
 				{
 					this.state.listType === 'Completed' &&
 					<SwipeListView
@@ -635,7 +670,6 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-
 											transform: [
 												{
 													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
@@ -656,7 +690,6 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-
 											transform: [
 												{
 													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
@@ -685,6 +718,16 @@ export default class Bookings extends Component {
 					/>
 				}
 
+				<SCLAlert
+					// show={true}
+					show={this.state.scl_alert.show}
+					onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
+					theme="info"
+					title={this.state.scl_alert.title}
+					subtitle={this.state.scl_alert.message}
+				>
+					<SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+				</SCLAlert>
 			</View>
 		);
 	}

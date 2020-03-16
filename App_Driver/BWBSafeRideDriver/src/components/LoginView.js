@@ -24,6 +24,7 @@ import usernameIcon from '../assets/images/icons8-username-filled-50.png';
 import passwordIcon from '../assets/images/icons8-lock-filled-50.png';
 import companyLogo from '../assets/images/main_logo.png';
 import backgroundImg from '../assets/images/mobile-bg.jpg';
+import RNRestart from 'react-native-restart'; 
 
 export default class LoginView extends Component {
 
@@ -35,7 +36,8 @@ export default class LoginView extends Component {
       show: false,
       theme: '',
       title: '',
-      subtitle: ''
+      subtitle: '',
+      
     }
   }
 
@@ -58,7 +60,6 @@ export default class LoginView extends Component {
   onClickListener = (viewId) => {
       const { username }  = this.state;
       const { password }  = this.state;
-      this.setState({ show: true })
     {/*Alert.alert("Alert", "Button pressed: "+viewId);*/}
 
     if(viewId == "LoginSubmit"){
@@ -83,12 +84,12 @@ export default class LoginView extends Component {
             console.log('CAME XDXD');
             // Actions.dashboard();
             this.props.navigation.navigate('Dashboard');
+            RNRestart.Restart();
         }
         else{
-          console.log('SCL alert');
+          //Error message alert
           const subtitle_value = JSON.stringify(responseJson.msg);
-          console.log(subtitle_value);
-          this.setState({ subtitle: subtitle_value });
+          this.setState({ subtitle: subtitle_value, show: true });
           //Alert.alert(JSON.stringify(responseJson.msg));
         }
 
@@ -142,19 +143,16 @@ export default class LoginView extends Component {
         </View>
 
         <View>
-        {/* <Button title="Show" onPress={this.handleOpen} /> */}
-        <SCLAlert
-          show={this.state.show}
-          onRequestClose={this.handleClose}
-          theme="warning"
-          title="asdf"
-          subtitle="asdfff"
-          
-        >
-          <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
-          <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton>
-        </SCLAlert>
-      </View>
+          <SCLAlert
+            show={this.state.show}
+            onRequestClose={this.handleClose}
+            theme="warning"
+            title="Error!"
+            subtitle = {this.state.subtitle}
+            >
+            <SCLAlertButton theme="info" onPress={this.handleClose}>OK</SCLAlertButton>
+          </SCLAlert>
+        </View>
 
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={passwordIcon}/>

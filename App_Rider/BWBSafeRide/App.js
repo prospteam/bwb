@@ -366,15 +366,15 @@ export default class App extends Component<Props> {
         // this.notificationListener();
     // }
 
-  if(TRUE){
-  // if(isLoading){
-  // console.log('CAME HERE');
-    return (
-        <View style={styles.container}>
-          <Spinner type="9CubeGrid" color="#d3a04c" />
-        </View>
-      );
-  }
+  // if(TRUE){
+  // // if(isLoading){
+  // // console.log('CAME HERE');
+  //   return (
+  //       <View style={styles.container}>
+  //         <Spinner type="9CubeGrid" color="#d3a04c" />
+  //       </View>
+  //     );
+  // }
 
   checkSession = async () => {
     let varUserType ="";

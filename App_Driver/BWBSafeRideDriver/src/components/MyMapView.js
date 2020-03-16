@@ -89,7 +89,6 @@ const MyMapView = (props) => {
                               longitude: props.geocode_long,
                               login_id: props.login_id
                           }
-
                           // Alert.alert(props.geocode_name+":"+props.geocode_lat);
                             // Alert.alert(data.location_name);
                             fetch(Helpers.api_url+'save_location', {
@@ -101,14 +100,18 @@ const MyMapView = (props) => {
                                  body: JSON.stringify(data)
                                }).then((response) => response.json())
                                  .then((res) => {
-                                    Alert.alert(res.msg);
-
+                                    // Alert.alert(res.msg);
+                                   this.setState({
+                                     scl_alert: {
+                                       show: true,
+                                       title: "Alert",
+                                       message: res.msg,
+                                     }
+                                   });
                                  }).catch((error) => {
                                    console.error(error);
                                  });
-
                             // const api = url()+'api/save_location';
-
                            //  fetch(api, {
                            //   method: 'POST',
                            //   headers: {

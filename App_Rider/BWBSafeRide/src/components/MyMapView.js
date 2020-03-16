@@ -19,7 +19,6 @@ const MyMapView = (props) => {
   console.log('MyMapView Rendering-end');
   // height = (props.height)?props.height+300:height;
 
-
   // const origin = {
   //     latitude: props.region.latitude,
   //     longitude: props.region.longitude

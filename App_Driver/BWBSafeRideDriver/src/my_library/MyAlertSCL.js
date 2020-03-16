@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, View, Text, ActivityIndicator } from 'react-native';
 var Spinner = require('react-native-spinkit');
-
 import {
     SCLAlert,
     SCLAlertButton
@@ -17,22 +16,32 @@ import {
 //     </View>
 //   </Modal>
 // );
-
-
 // import React, { Component } from 'react';
 
 class MyAlertSCL extends Component {
+
+    state = {
+        show: true,
+    }
+
+    handleClose = () => {
+        this.setState({ show: false });
+    }
+    
     render() {
+        console.log("this.propsxx");
+        console.log(this.props);
+        
         return (
             <SCLAlert
-                show={true}
+                show={this.state.show}
                 onRequestClose={this.handleClose}
                 theme="info"
-                title="Info"
-                subtitle="You can setup the colors using the theme prop"
+                title={this.props.alert_title}
+                subtitle={this.props.alert_message}
             >
-                {/* <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
-                <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton> */}
+                <SCLAlertButton theme="info" onPress={this.handleClose}>Done</SCLAlertButton>
+                <SCLAlertButton theme="default" onPress={this.handleClose}>Cancel</SCLAlertButton>
             </SCLAlert>
         );
     }
