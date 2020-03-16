@@ -525,7 +525,7 @@ class MapContainer extends React.Component {
    }).then((response) => {
      console.log("responseXD");
      console.log(response);
-     return response;
+     return response.json();
    }).then((responseJson) => {
        console.log('getting API');
        console.log(responseJson);
@@ -535,12 +535,12 @@ class MapContainer extends React.Component {
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
                textVal = "Going to pick up location";
-          }else if (responseJson.booking_details.booking_status == "inprogress") {
-			  if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
-               textVal = "Ride completed";
-			  }else{
-               textVal = "Going to drop off location";
-			  }
+          }else if (responseJson.booking_details.booking_status == "reserved") {
+            if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
+                  textVal = "Ride completed";
+            }else{
+                  textVal = "Going to drop off location";
+            }
           }else if(responseJson.booking_details.booking_status == "completed"){
                textVal = "Ride completed";
           }
@@ -550,6 +550,7 @@ class MapContainer extends React.Component {
             can_book:false,
             driver_details:responseJson.driver_details,
             booking_details:responseJson.booking_details,
+            rider_details: responseJson.rider_details,
              textValue: textVal
           });
           // this.state.user.user_type_id
@@ -572,7 +573,6 @@ class MapContainer extends React.Component {
       console.log('NOT getting API');
 		  // console.error(error);
       // Alert.alert('Not Able to connect to server');
-
       this.setState({
         scl_alert: {
           show: true,
@@ -585,7 +585,6 @@ class MapContainer extends React.Component {
         is_finish_check_booking_status: false,
       });
     });
-
     // this.setState({ region });
     // console.log('GETTING DSISTSATNCEEEEEEEE');
     // console.log(params);
@@ -596,7 +595,6 @@ class MapContainer extends React.Component {
     //   });
       // console.log(this.state);
   }
-
   initMyLocation() {
     getLocation().then(data => {
       console.log('GET LOCATION');
@@ -612,10 +610,8 @@ class MapContainer extends React.Component {
         my_latitude: data.latitude,
         my_longitude: data.longitude,
       });
-
         this.setState({ geocode_lat: data.latitude });
         this.setState({ geocode_long: data.longitude });
-
       // return data;
     })
     .catch(err => {
@@ -624,10 +620,8 @@ class MapContainer extends React.Component {
   }
 
   updateState(location) {
-
       // this.setState({pinned_latitude: 0});
       // this.setState({pinned_longitude: 0});
-
       // const {pinned_lat, pinned_long} = this.props;
       //
       // this.updateState({
@@ -645,7 +639,6 @@ class MapContainer extends React.Component {
       //     longitudeDelta: longDelta,
       //   },
       // });
-
       this.reverseGeocode(location.latitude, location.longitude);
   }
 
@@ -939,7 +932,6 @@ class MapContainer extends React.Component {
               console.log("response YYYYYY");
               console.log(response);
                // this.setState({textValue:'On the way to Drop-Off'});
-
                if(this.state.textValue == "Going to pick up location"){
                    this.setState({textValue:'Going to drop off location'});
                    this.setState({disabledBotton: false});
@@ -1018,8 +1010,8 @@ class MapContainer extends React.Component {
     //   <CommonProgressBar/>
     // }
 
-    // console.log("MY STATUS");
-    // console.log(this.state);
+    console.log("MY STATUS");
+    console.log(this.state);
     // console.log(this.props);
     // console.log("getting NEW PROPS");
     const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;
@@ -1034,8 +1026,6 @@ class MapContainer extends React.Component {
         latitude: this.state.set_destination_lat,
         longitude: this.state.set_destination_long
     }
-
-
     // Alert.alert(navigation.getParam('booking_data_from_text', null));
 
     if(navigation.getParam('booking_data_from_text', null) !== null){
@@ -1043,7 +1033,6 @@ class MapContainer extends React.Component {
           console.log("latttttttttttttttttttttttttttttttttiiiiiiiiiiiiiiiiiiii");
           console.log(navigation.getParam('booking_data_from_latlong', null).latitude);
           console.log("latttttttttttttttttttttttttttttttttiiiiiiiiiiiiiiiiiiii");
-
           // this.reverseGeocode(navigation.getParam('booking_data_from_latlong', null).latitude, navigation.getParam('booking_data_from_latlong', null).longitude);
     }else{
         if(this.state.form_from_text !== null)
@@ -1116,7 +1105,7 @@ class MapContainer extends React.Component {
               navigation={this.props.navigation}
             />
             {
-            // true ? null
+            // false ? null
             !this.state.user_data || !this.state.booking_details_ready? null
             // this.state.user_data == false || this.state.booking_details != []? null
             // : (false) ?(
@@ -1163,10 +1152,10 @@ class MapContainer extends React.Component {
                   elevation: 10,
                   backgroundColor:'white',
                 }}>
-                {
-                  // <Button onPress={this.testfunction} >
-                  //   <Text>Click Me!</Text>
-                  // </Button>
+                  {
+                    // <Button onPress={this.testfunction} >
+                    //   <Text>Click Me!</Text>
+                    // </Button>
                   }
                   <Text
                     style={{
@@ -1280,7 +1269,7 @@ class MapContainer extends React.Component {
             )
             }
           </View>
-        ) : null}
+        ) : null} 
         <SCLAlert
           // show={true}
           show={this.state.scl_alert.show}

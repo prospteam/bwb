@@ -139,6 +139,8 @@ export default class Dashboard extends Component {
          status_name: JSON.stringify(this.state.switchValue)
        })
       }).then((response) => {
+        // console.log("update_driver_status");
+        // console.log(response);
         if (response.status == 200) {
           // VALIDATION IF ANY
           return response.json();
@@ -156,14 +158,14 @@ export default class Dashboard extends Component {
       }).then((responseJson) => {
         if (responseJson){
           if (responseJson.response === 'success') {
-            msg = responseJson.msg;
+            // msg = responseJson.msg;
             // Alert.alert(msg);
 
             this.setState({
               scl_alert: {
                 show: true,
                 title: "Alert",
-                message: msg,
+                message: "Availability status updated.",
               }
             });
           }

@@ -236,9 +236,7 @@ export default class Bookings extends Component {
 	}
 
 	async updateBooking(id){
-
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
-
 		fetch(Helpers.api_url+'update_booking_status', {
 		 method: 'POST',
 		 headers: {
@@ -247,17 +245,15 @@ export default class Bookings extends Component {
 		 },
 		 body: JSON.stringify({
    			booking_id: id,
-			driver_id: data.user_id
+			driver_id: data.login_id
 		 })
 	   }).then((response) => response.json())
 		 .then((responseJson) => {
 			//  Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
-
 			 if(JSON.stringify(responseJson.reserve_button) !== ''){
 				 this.setState({ reserve_button: responseJson.reserve_button });
 			 }
-
 		 }).catch((error) => {
 		   console.error(error);
 		 });
@@ -266,7 +262,6 @@ export default class Bookings extends Component {
 	async removeBooking(id){
 
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
-
 		fetch(Helpers.api_url+'remove_booking', {
 		 method: 'POST',
 		 headers: {
@@ -280,10 +275,10 @@ export default class Bookings extends Component {
 		 .then((responseJson) => {
 			//  Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
-
 		 }).catch((error) => {
 		   console.error(error);
 		 });
+		 
 	}
 
 	closeRow(rowMap, rowKey) {
@@ -446,24 +441,25 @@ export default class Bookings extends Component {
 
 				<View style={styles.controls}>
 					<View style={styles.switchContainer}>
-						{ ['Pending', 'Reserved', 'Completed'].map( type => (
-							<TouchableOpacity
-								key={type}
-								style={[
-									styles.switch,
-                                    {backgroundColor: this.state.listType === type ? '#d3a04c' : 'white'},
-									{color: this.state.listType === type ? '#fff' : '#ddd'}
-								]}
-								onPress={ () => this.setState({listType: type}) }
-							>
-								<Text>{type}</Text>
-							</TouchableOpacity>
-						))}
+						{ 
+							['Pending', 'Reserved', 'Completed'].map( type => (
+								<TouchableOpacity
+									key={type}
+									style={[
+										styles.switch,
+										{backgroundColor: this.state.listType === type ? '#d3a04c' : 'white'},
+										{color: this.state.listType === type ? '#fff' : '#ddd'}
+									]}
+									onPress={ () => this.setState({listType: type}) }
+								>
+									<Text>{type}</Text>
+								</TouchableOpacity>
+							))
+						}
 					</View>
 					{
 						this.state.listType === 'Pending' &&
 						<Text>(Pending customer bookings)</Text>
-						
 					}
 					{
 						this.state.listType === 'Reserved' &&
@@ -653,7 +649,6 @@ export default class Bookings extends Component {
 						onSwipeValueChange={this.onSwipeValueChange}
 					/>
 				}
-
 				{
 					this.state.listType === 'Completed' &&
 					<SwipeListView
@@ -675,7 +670,6 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-
 											transform: [
 												{
 													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
@@ -696,7 +690,6 @@ export default class Bookings extends Component {
 									style={[
 										styles.trash,
 										{
-
 											transform: [
 												{
 													scale: this.rowSwipeAnimatedValues[data.item.key].interpolate({
