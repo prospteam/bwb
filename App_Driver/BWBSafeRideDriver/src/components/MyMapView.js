@@ -67,8 +67,8 @@ const MyMapView = (props) => {
         //   longitudeDelta: 0.0,
         // }}
         >
-            {(props.count.latitude)&&<MapView.Marker
-            coordinate={{latitude:props.count.latitude, longitude: props.count.longitude}}
+            {(props.driver_location.latitude)&&<MapView.Marker
+            coordinate={{latitude:props.driver_location.latitude, longitude: props.driver_location.longitude}}
             >
           <Icon type="FontAwesome5" name="car-side"></Icon>
             </MapView.Marker>}
@@ -200,6 +200,32 @@ const MyMapView = (props) => {
               console.log('GOT AN ERROR');
             }}
           />
+		  
+			
+		{props.driver_location.latitude!=0 && <MapViewDirections
+            origin={{latitude:props.driver_location.latitude, longitude: props.driver_location.longitude}}
+            destination={props.form_from?props.form_from:{}}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={5}
+            strokeColor="orange"
+            onReady={result => {
+              props.getData(result)
+              // console.log(`Distance: ${result.distance} km`)
+              // console.log(`Duration: ${result.duration} min.`)
+              // this.mapView.fitToCoordinates(result.coordinates, {
+              //   edgePadding: {
+              //     right: (width / 20),
+              //     bottom: (height / 5),
+              //     left: (width / 20),
+              //     top: (height / 20),
+              //   }
+              // });
+            }}
+            onError={(errorMessage) => {
+              console.log('GOT AN ERROR');
+            }}
+          />}
+          
 
     </MapView>
   )
@@ -211,7 +237,7 @@ const MyMapView = (props) => {
 // export default MapContainer;
 function mapStateToProps(state) {
   return {
-    count:state.count.count,
+    driver_location:state.driver_location.driver_location,
   }
 }
 function mapActionsToDispatch(dispatch) {

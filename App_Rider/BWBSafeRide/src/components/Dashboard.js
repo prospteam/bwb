@@ -314,6 +314,10 @@ export default class Dashboard extends Component {
 
     checkSession(){
         AsyncStorage.getItem("userData", (errs,result) => {
+			
+		console.log("Getting Into This");
+		console.log(errs);
+		console.log(result);
            if (!errs) {
                if (result === null) {
                    // console.error(result);
@@ -323,7 +327,9 @@ export default class Dashboard extends Component {
                    this.setState({userData: result});
                    this.setState({ user_type: result.user_type_id });
                }
-            }
+            }else{
+                   this.props.navigation.navigate('Logout');
+			}
        });
 
         setTimeout(() => {

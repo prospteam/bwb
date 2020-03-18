@@ -472,10 +472,10 @@ class MapContainer extends React.Component {
       })
   }
 
-  checkBookingStatus() {
+  async checkBookingStatus() {
     // Alert.alert('hello');
     // const data = JSON.parse(await AsyncStorage.getItem('userData'));
-    AsyncStorage.getItem("userData", (errs, result) => {
+    await AsyncStorage.getItem("userData", (errs, result) => {
       if (!errs) {
         if (result !== null) {
           // this.setState({activeID:result});
@@ -595,6 +595,7 @@ class MapContainer extends React.Component {
               console.log('NOT getting API');
               console.error(error);
             });
+			
           this.setState({
             is_finish_check_booking_status: true,
           });
@@ -882,6 +883,8 @@ class MapContainer extends React.Component {
   // };
 
   render() {
+
+   
     // if (!this.state.is_finish_check_booking_status) {
     //   return (
     //     <CommonProgressBar />
@@ -899,6 +902,13 @@ class MapContainer extends React.Component {
     console.log("MY STATUS start");
     console.log(this.state);
     console.log("MY STATUS end");
+	
+    // if (!this.state.is_finish_check_booking_status) {
+      // return (
+        // <CommonProgressBar />
+      // )
+    // }
+
     // console.log(this.props);
     // console.log("getting NEW PROPS");
     const { window_height, can_book, pinned_latitude, pinned_longitude, navigation } = this.props;
@@ -957,7 +967,7 @@ class MapContainer extends React.Component {
               my_longitude_as_rider={this.state.my_longitude_as_rider}
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
-              // viewed_region={this.state.viewed_region}
+              //viewed_region={this.state.viewed_region}
               form_from={this.state.booking_details.pickup_latlong ?
                 ({
                    latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
