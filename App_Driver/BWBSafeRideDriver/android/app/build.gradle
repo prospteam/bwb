@@ -148,15 +148,12 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-<<<<<<< HEAD
         }
         release  {
             storeFile file('BWB-Driver.keystore')
             storePassword 'password'
             keyAlias 'BWB-Driver'
             keyPassword 'password'
-=======
->>>>>>> ab8af199c3bcefdd578631f2b948110d7f7c8983
         }
     }
     buildTypes {
@@ -166,12 +163,8 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-<<<<<<< HEAD
             //signingConfig signingConfigs.debug
             signingConfig signingConfigs.release
-=======
-            signingConfig signingConfigs.debug
->>>>>>> ab8af199c3bcefdd578631f2b948110d7f7c8983
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
