@@ -72,8 +72,6 @@ class MapContainer extends React.Component {
         rider_details:[],
         distance:0,
         duration:0,
-        duration_from_driver:0,
-        distance_from_driver:0,
         my_latitude:0,
         my_longitude:0,
         can_book:false,
@@ -348,6 +346,7 @@ class MapContainer extends React.Component {
     });
   }
 
+
   riderGetCurrentLocation(){
     // geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]); // FUNCTION PARAMETER
 
@@ -361,22 +360,22 @@ class MapContainer extends React.Component {
         },
         e => setError(e.message+"ERRRORR NOOOOO")
       );
+
   }
 
   driverSendLocation(){
-    // geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]);
+    geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]);
     
-        console.log("driverSendLocation1");
     const watchId = Geolocation.watchPosition(
       pos => {
+        console.log("GETTINGS");
         // console.log(newCoordinate);
         // setError("");
-        // this.setState({
-          // my_latitude: pos.coords.latitude,
-          // my_longitude: pos.coords.longitude,
-        // });
+        this.setState({
+          my_latitude: pos.coords.latitude,
+          my_longitude: pos.coords.longitude,
+        });
 
-		// let booking_id=(this.state.booking_details.booking_id)?this.state.booking_details.booking_id:0;
         if (this.state.booking_details){
           const ref_single = this.ref.doc(this.state.booking_details.booking_id);
           ref_single.get()
@@ -384,6 +383,8 @@ class MapContainer extends React.Component {
                 if (this.state.login_id) {
                   if (docSnapshot.exists) {
                       ref_single.update({
+                        // booking_id:this.state.booking_details.booking_id,
+                        booking_id:0,
                         driver_id:this.state.login_id,
                         latitude:pos.coords.latitude,
                         longitude:pos.coords.longitude,
@@ -393,6 +394,8 @@ class MapContainer extends React.Component {
                       });
                   } else {
                     ref_single.set({
+                      // booking_id:this.state.booking_details.booking_id,
+                      booking_id:0,
                       driver_id:this.state.login_id,
                       latitude:pos.coords.latitude,
                       longitude:pos.coords.longitude,
@@ -401,8 +404,6 @@ class MapContainer extends React.Component {
                         console.error("Error adding document: ", error);
                     });
                   }
-				  
-					console.log("Broke in");
                 }
               // console.log('ALKSDJASJLDKASJLKDASKDJLAKSJ');
               // console.log(docSnapshot);
@@ -418,6 +419,8 @@ class MapContainer extends React.Component {
               // .catch(function(error) {
               //     console.error("Error adding document: ", error);
               // });
+
+
           });
         }
 
@@ -729,20 +732,6 @@ class MapContainer extends React.Component {
       });
       // console.log(this.state);
   }
-  getDataFromMapDriver(params) {
-    // this.setState({ region });
-    console.log('params getDataFromMapDriver');
-    console.log(params);
-	if(params)
-      this.setState({
-        distance_from_driver:params.distance,
-        duration_from_driver:params.duration,
-        // height:500
-      });
-	  this.driverSendLocation();
-		// additional_field_driver_status USE THIS
-
-  }
 
   // testChange = () =>{
   //     this.setState({
@@ -1019,18 +1008,17 @@ class MapContainer extends React.Component {
   };
 
   render() {
-        const { navigation, can_book } = this.props;
     // if (true){
     //   <CommonProgressBar/>
     // }
 
     console.log("MY STATUS");
-    // console.log(this.state);
+    // console.log(this.props);
     const { distance, duration } = this.state;
 
-    // console.log('boooooooooooking container');
-    // console.log(navigation.getParam('booking_data_from_latlong', null));
-    // console.log('boooooooooooking container');
+    console.log('boooooooooooking container');
+    console.log(navigation.getParam('booking_data_from_latlong', null));
+    console.log('boooooooooooking container');
 
     const set_destination_latlong = {
         latitude: this.state.set_destination_lat,
@@ -1057,8 +1045,8 @@ class MapContainer extends React.Component {
     }
     console.log('finding location');
     // console.log(this.state);
-    // console.log(this.state.booking_details.pickup_latlong);
-    // console.log(this.state.booking_details.dropoff_latlong);
+    console.log(this.state.booking_details.pickup_latlong);
+    console.log(this.state.booking_details.dropoff_latlong);
     console.log('finding last');
     // console.log(this.state.booking_details);
     const marker1 = this.state.is_user_type_ready ? this.state.user_data != 3 ? this.state.testlocation ? this.state.testlocation : null :null:null;
@@ -1109,7 +1097,6 @@ class MapContainer extends React.Component {
               selectedLatLong={this.state.selectedLatLong}
               // onRegionChange={reg => this.onMapRegionChange(reg)}
               getData={params => this.getDataFromMap(params)}
-              getDataDriverLocation={params => this.getDataFromMapDriver(params)}
               geocode_name={this.state.geocode_name}
               geocode_lat={this.state.geocode_lat}
               geocode_long={this.state.geocode_long}
@@ -1236,11 +1223,6 @@ class MapContainer extends React.Component {
                         <Text>
 							{this.state.rider_details?this.state.rider_details.email:""} 
 						</Text>
-                        <Text>
-							{this.state.duration_from_driver?"Estimated to arrive "+this.state.duration_from_driver+" ":""} 
-							{this.state.distance_from_driver?"Estimated distance to distination "+this.state.distance_from_driver+"	":""} 
-						</Text>
-						
                       </>
                     // ):(
                     //   <>

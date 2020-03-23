@@ -375,7 +375,7 @@ export default class Dashboard extends Component {
 		
 		
         console.log('boooooooooooking');
-        console.log(this.props.navigation.getParam('booking_data', null));
+        console.log(navigation.getParam('booking_data', null));
         console.log('boooooooooooking');
 
         let params = false;
@@ -422,16 +422,7 @@ export default class Dashboard extends Component {
           <Content Styles={{position:'relative'}}>
             <View style={styles.container}>
             {
-                <MapContainer 
-					navigation={this.props.navigation} 
-					{...params} 
-					pinned_latitude={this.props.navigation.getParam('pinned_loc_lat', 0)} 
-					pinned_longitude={this.props.navigation.getParam('pinned_loc_long', 0)} 
-					pinned_stat={this.props.navigation.getParam('pinned_stat', true)} 
-					window_height={height} 
-					set_destination_lat={this.props.navigation.getParam('latitude', 0)} 
-					set_destination_long={this.props.navigation.getParam('longitude', 0)} 
-				/>
+                <MapContainer navigation={this.props.navigation} {...params} pinned_latitude={this.props.navigation.getParam('pinned_loc_lat', 0)} pinned_longitude={this.props.navigation.getParam('pinned_loc_long', 0)} pinned_stat={this.props.navigation.getParam('pinned_stat', true)} window_height={height} set_destination_lat={this.props.navigation.getParam('latitude', 0)} set_destination_long={this.props.navigation.getParam('longitude', 0)} />
               }
 
               <SCLAlert
