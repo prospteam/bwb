@@ -20,9 +20,8 @@ import { sampleFunction } from '../redux/actions/index.js';
 const MyMapView = (props) => {
     // Alert.alert('hello');
   console.log('MyMapView Rendering-start');
-  // console.log(props.driver_location);
-  // console.log(props.form_from);
-  console.log('MyMapView Rendering-');
+  console.log(props);
+  console.log('MyMapView Rendering-end');
   // height = (props.height)?props.height+300:height;
 
   // const origin = {
@@ -54,7 +53,7 @@ const MyMapView = (props) => {
           longitudeDelta: props.region.longitudeDelta,
         }}
 
-        // showsUserLocation={true}
+        showsUserLocation={true}
         // ref={c => this.mapView = c}
         // onRegionChangeComplete={(reg) => props.onRegionChange(reg)}
         // initialRegion={{
@@ -198,22 +197,19 @@ const MyMapView = (props) => {
               // });
             }}
             onError={(errorMessage) => {
-              console.log('GOT AN ERROR1');
+              console.log('GOT AN ERROR');
             }}
           />
+		  
 			
-		{
-			props.driver_location.latitude!=0 && <MapViewDirections
+		{props.driver_location.latitude!=0 && <MapViewDirections
             origin={{latitude:props.driver_location.latitude, longitude: props.driver_location.longitude}}
             destination={props.form_from?props.form_from:{}}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={5}
             strokeColor="orange"
             onReady={result => {
-				console.log("Calling getDataDriverLocation")
-				// console.log(result)	
-              props.getDataDriverLocation({distance:result.distance,duration:result.duration})
-			  
+              props.getData(result)
               // console.log(`Distance: ${result.distance} km`)
               // console.log(`Duration: ${result.duration} min.`)
               // this.mapView.fitToCoordinates(result.coordinates, {
@@ -225,9 +221,8 @@ const MyMapView = (props) => {
               //   }
               // });
             }}
-            onError={(errorMessage) => {	
-              console.log(errorMessage);
-              console.log('GOT AN ERROR2');
+            onError={(errorMessage) => {
+              console.log('GOT AN ERROR');
             }}
           />}
           
