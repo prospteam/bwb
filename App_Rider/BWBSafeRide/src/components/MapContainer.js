@@ -199,10 +199,10 @@ class MapContainer extends React.Component {
     this.ref = firebase.firestore().collection('driver_location_logs');
     this.ref_bookings_status = firebase.firestore().collection('bookings_status');
 
-    console.log('this.ref');
-    console.log(this.ref);
-    console.log('this.ref_bookings_status');
-    console.log(this.ref_bookings_status);
+    // console.log('this.ref');
+    // console.log(this.ref);
+    // console.log('this.ref_bookings_status');
+    // console.log(this.ref_bookings_status);
     // console.log('LOEDDEDDDD1');
     // Alert.alert("Watch Position");
     Geolocation.getCurrentPosition(
@@ -248,11 +248,11 @@ class MapContainer extends React.Component {
 
     // this.driverSendLocation();
 
-    // if (this.state.booking_details) {
+    if (this.state.booking_details) {
 
     // this.ref.onSnapshot(this.driverLocationListener);
-
-    // }
+    this.driverLocationListener();
+    }
 
     const { pinned_stat, navigation } = this.props;
     // if(navigation.getParam('booking_data_from_latlong', null) !== null){
@@ -320,10 +320,10 @@ class MapContainer extends React.Component {
     this.checkBookingStatus();
   }
 
-  driverLocationListener = (querySnapShot) => {
+  driverLocationListener = () => {
     // const books = [];
-    // // console.log("FAYR");
-    // // console.log(querySnapShot);
+    // console.log("FAYR");
+    // console.log(querySnapShot);
     // querySnapShot.forEach((doc) => {
     //   console.log("ITEM");
     //   console.log(doc);
@@ -337,20 +337,21 @@ class MapContainer extends React.Component {
     //   });
     // });
 
+    this.ref.doc("35").onSnapshot(docSnapshot => {
     // this.ref.doc(this.state.booking_details.booking_id).onSnapshot(docSnapshot => {
-    //   console.log(`Received doc snapshot:`);
-    //   console.log(docSnapshot);
+      console.log(`Received doc snapshot:`);
+      console.log(docSnapshot.data());
 
-    //     this.setState({
-    //       testlocation: docSnapshot.data(),
-    //     });
-    //       // this.setState({
-    //       //   testlocation: doc.data(),
-    //       // });
-    //   // ...
-    // }, err => {
-    //   console.log(`Encountered error: ${err}`);
-    // });
+        this.setState({
+          driver_location_realtime: docSnapshot.data(),
+        });
+          // this.setState({
+          //   testlocation: doc.data(),
+          // });
+      // ...
+    }, err => {
+      console.log(`Encountered error on driver listener: ${err}`);
+    });
   }
 
   riderGetCurrentLocation() {
@@ -996,6 +997,7 @@ class MapContainer extends React.Component {
               pinned_long={this.props.pinned_longitude}
               pinned_stat={this.state.pinned_stat}
               navigation={this.props.navigation}
+              driver_location_realtime={this.state.driver_location_realtime}
             />
             {this.state.can_book == true && this.state.is_finish_check_booking_status == true &&
               //  { true &&

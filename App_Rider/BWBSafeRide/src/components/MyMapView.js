@@ -186,6 +186,40 @@ const MyMapView = (props) => {
             }}
           />
 
+          
+		{
+			props.driver_location_realtime && <MapViewDirections
+            origin={{
+              latitude:props.driver_location_realtime.latitude, 
+              longitude: props.driver_location_realtime.longitude
+            }}
+            destination={props.form_from?props.form_from:{}}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={5}
+            strokeColor="orange"
+            onReady={result => {
+				// console.log("Calling getDataDriverLocation")
+				// console.log(result)	
+              // props.getDataDriverLocation({distance:result.distance,duration:result.duration})
+			  
+              // console.log(`Distance: ${result.distance} km`)
+              // console.log(`Duration: ${result.duration} min.`)
+              // this.mapView.fitToCoordinates(result.coordinates, {
+              //   edgePadding: {
+              //     right: (width / 20),
+              //     bottom: (height / 5),
+              //     left: (width / 20),
+              //     top: (height / 20),
+              //   }
+              // });
+            }}
+            onError={(errorMessage) => {	
+              console.log(errorMessage);
+              console.log('GOT AN ERROR2');
+            }}
+          />
+          }
+
     </MapView>
   )
 }

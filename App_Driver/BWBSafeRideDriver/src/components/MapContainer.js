@@ -378,7 +378,7 @@ class MapContainer extends React.Component {
 
 		// let booking_id=(this.state.booking_details.booking_id)?this.state.booking_details.booking_id:0;
         if (this.state.booking_details){
-          const ref_single = this.ref.doc(this.state.booking_details.booking_id);
+          const ref_single = this.ref.doc(Number(this.state.booking_details.booking_id));
           ref_single.get()
             .then((docSnapshot) => {
                 if (this.state.login_id) {
