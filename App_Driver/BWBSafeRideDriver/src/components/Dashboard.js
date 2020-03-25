@@ -419,7 +419,7 @@ export default class Dashboard extends Component {
               {this.state.user_type === '3' && <View style={{ flexDirection: 'row' }}><Text style={{ color: '#d3a04c' }}>I am available  </Text><Switch onValueChange={(value) => this.toggleSwitch(value)} value={this.state.switchValue} trackColor={{false: '#c1191c', true: "#32CD32"}} thumbColor={'#d3a04c'} /></View> }
             </Right>
           </Header>
-          <Content Styles={{position:'relative'}}>
+          <Content contentContainerStyle ={{position:'relative',flex: 1 }}>
             <View style={styles.container}>
             {
                 <MapContainer 

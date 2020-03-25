@@ -61,7 +61,20 @@ const MyMapView = (props) => {
         //   latitudeDelta: 0.0,
         //   longitudeDelta: 0.0,
         // }}
-        >
+        > 
+  
+          {
+          (props.driver_location_realtime)&&<MapView.Marker
+            coordinate={{
+              latitude:Number(props.driver_location_realtime.latitude), 
+              longitude:Number(props.driver_location_realtime.longitude)
+            }}
+            >
+              <Icon type="FontAwesome5" name="car-side"></Icon>
+          </MapView.Marker>
+          }
+
+
           {(props.form_from) && <MapView.Marker
                coordinate={props.form_from}
                title={"Pickup Location"}
@@ -119,6 +132,8 @@ const MyMapView = (props) => {
             </MapView.Callout>
             </MapView.Marker>
         }
+
+
             {(props.form_to) && <MapView.Marker
                  coordinate={props.form_to}
                  title={"Drop-off Location"}
@@ -198,20 +213,9 @@ const MyMapView = (props) => {
             strokeWidth={5}
             strokeColor="orange"
             onReady={result => {
-				// console.log("Calling getDataDriverLocation")
-				// console.log(result)	
-              // props.getDataDriverLocation({distance:result.distance,duration:result.duration})
-			  
-              // console.log(`Distance: ${result.distance} km`)
-              // console.log(`Duration: ${result.duration} min.`)
-              // this.mapView.fitToCoordinates(result.coordinates, {
-              //   edgePadding: {
-              //     right: (width / 20),
-              //     bottom: (height / 5),
-              //     left: (width / 20),
-              //     top: (height / 20),
-              //   }
-              // });
+              var duration = (Number(result.distance.toFixed(0))==0)?"Will arrive any time now":result.duration.toFixed(0)+" minute\\s to arrive.";
+              var distance = result.duration.toFixed(2) + " KM from your location.";
+              props.getDataDriverLocation({distance:distance,duration:duration})
             }}
             onError={(errorMessage) => {	
               console.log(errorMessage);

@@ -1236,11 +1236,6 @@ class MapContainer extends React.Component {
                         <Text>
 							{this.state.rider_details?this.state.rider_details.email:""} 
 						</Text>
-                        <Text>
-							{this.state.duration_from_driver?"Estimated to arrive "+this.state.duration_from_driver+" ":""} 
-							{this.state.distance_from_driver?"Estimated distance to distination "+this.state.distance_from_driver+"	":""} 
-						</Text>
-						
                       </>
                     // ):(
                     //   <>
@@ -1251,6 +1246,21 @@ class MapContainer extends React.Component {
                   }
                     </View>
                   </View>
+                  
+                  <View>
+                      <Text>
+                        {
+                          this.state.duration_from_driver?
+                          this.state.duration_from_driver:""
+                        } 
+                      </Text>
+                      <Text>
+                        {
+                          this.state.distance_from_driver?
+                          this.state.distance_from_driver:""
+                        } 
+                      </Text>
+                    </View>
                   <View
                     style={styles.hr}
                   />

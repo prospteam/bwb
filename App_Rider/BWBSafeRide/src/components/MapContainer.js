@@ -82,8 +82,8 @@ class MapContainer extends React.Component {
     region: {
       latitude: 44.3148, // Michigan Lat
       longitude: -84.506836, // Michigan Long
-      latitudeDelta: 3,
-      longitudeDelta: 3,
+      latitudeDelta: 1,
+      longitudeDelta: 1,
     },
     geocode_name: null,
     geocode_lat: null,
@@ -551,7 +551,10 @@ class MapContainer extends React.Component {
 							
 						}
                     // }
+                    
+					PushNotification.cancelLocalNotifications({ id: 'driver_details' });
 					PushNotification.localNotification({
+						id: 'driver_details',
 					  foreground: false, // BOOLEAN: If the notification was received in foreground or not
 					  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
 					  message: push_notif_message, // STRING: The notification message
@@ -751,6 +754,21 @@ class MapContainer extends React.Component {
       height: 500
     });
     // console.log(this.state);
+  }
+  
+  getDataFromMapDriver(params) {
+    // this.setState({ region });
+    // console.log('params getDataFromMapDriver');
+    // console.log(params);
+	if(params)
+      this.setState({
+        distance_from_driver:params.distance,
+        duration_from_driver:params.duration,
+        // height:500
+      });
+	  // this.driverSendLocation();
+		// additional_field_driver_status USE THIS
+
   }
 
   bookNow(e, from, to) {
@@ -957,7 +975,7 @@ class MapContainer extends React.Component {
     // console.log(this.props);
 
     return (
-      <View style={{ flex: 1, backgroundColor: 'red' }}>
+      <View style={{ flex: 1,height:"100%", backgroundColor: 'red' }}>
         {
         this.state.region.latitude ? (
           <View style={{ flex: 1, backgroundColor: 'blue' }}>
@@ -989,6 +1007,7 @@ class MapContainer extends React.Component {
                 }) }
               // onRegionChange={reg => this.onMapRegionChange(reg)}
               getData={params => this.getDataFromMap(params)}
+              getDataDriverLocation={params => this.getDataFromMapDriver(params)}
               geocode_name={navigation.getParam('booking_data_from_text', null) !== null ? navigation.getParam('booking_data_from_text', null) : this.state.geocode_name}
               geocode_lat={navigation.getParam('booking_data_from_lat', null) !== null ? navigation.getParam('booking_data_from_lat', null) : this.state.geocode_lat}
               geocode_long={navigation.getParam('booking_data_from_long', null) !== null ? navigation.getParam('booking_data_from_long', null) : this.state.geocode_long}
@@ -1359,6 +1378,7 @@ class MapContainer extends React.Component {
                               }
                             </Text>
                             <Text>{this.state.driver_details.email}</Text>
+                            
                           </>
                           // ):(
                           //   <>
@@ -1368,6 +1388,20 @@ class MapContainer extends React.Component {
                           // )
                         }
                       </View>
+                    </View>
+                    <View>
+                      <Text>
+                        {
+                          this.state.duration_from_driver?
+                          this.state.duration_from_driver:""
+                        } 
+                      </Text>
+                      <Text>
+                        {
+                          this.state.distance_from_driver?
+                          this.state.distance_from_driver:""
+                        } 
+                      </Text>
                     </View>
                     <View
                       style={styles.hr}

@@ -409,10 +409,12 @@ export default class Dashboard extends Component {
              {this.state.user_type === '3' && <View style={{flexDirection: 'row'}}><Text style={{color: '#d3a04c'}}>I am available  </Text><Switch onValueChange = {this.toggleSwitch} value={this.state.switchValue} trackColor={{false: '#c1191c', true: "#32CD32"}} thumbColor={'#d3a04c'} /></View> }
            </Right>
           </Header>
-          <Content Styles={{position:'relative'}}>
+          <Content contentContainerStyle ={{position:'relative',flex: 1 }}>
+            
             <View style={styles.container}>
+              
             {
-                <MapContainer navigation={this.props.navigation} {...params} pinned_latitude={navigation.getParam('pinned_loc_lat', 0)} pinned_longitude={navigation.getParam('pinned_loc_long', 0)} pinned_stat={navigation.getParam('pinned_stat', true)} window_height={height} set_destination_lat={navigation.getParam('latitude', 0)} set_destination_long={navigation.getParam('longitude', 0)} />
+                <MapContainer navigation={this.props.navigation} {...params} pinned_latitude={navigation.getParam('pinned_loc_lat', 0)} pinned_longitude={navigation.getParam('pinned_loc_long', 0)} pinned_stat={navigation.getParam('pinned_stat', true)} window_height={(height)} set_destination_lat={navigation.getParam('latitude', 0)} set_destination_long={navigation.getParam('longitude', 0)} />
               }
               <SCLAlert
                 show={this.state.scl_alert.show}
@@ -423,6 +425,7 @@ export default class Dashboard extends Component {
               >
                 <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
               </SCLAlert>
+              
             </View>
           </Content>
           {
