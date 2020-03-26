@@ -315,38 +315,6 @@ class MapContainer extends React.Component {
     this.checkBookingStatus();
   }
 
-  driverLocationListener = (querySnapShot) => {
-    // const books = [];
-    // // console.log("FAYR");
-    // // console.log(querySnapShot);
-    // querySnapShot.forEach((doc) => {
-    //   console.log("ITEM");
-    //   console.log(doc);
-    //   console.log(doc.data());
-    //   const { name } = doc.data();
-    //   // books.push({
-    //   //   name
-    //   // });
-    //   this.setState({
-    //     testlocation: doc.data(),
-    //   });
-    // });
-
-    this.ref.doc(this.state.booking_details.booking_id).onSnapshot(docSnapshot => {
-      console.log(`Received doc snapshot:`);
-      console.log(docSnapshot);
-
-        this.setState({
-          testlocation: docSnapshot.data(),
-        });
-          // this.setState({
-          //   testlocation: doc.data(),
-          // });
-      // ...
-    }, err => {
-      console.log(`Encountered error: ${err}`);
-    });
-  }
 
   riderGetCurrentLocation(){
     // geolocation.getCurrentPosition(geo_success, [geo_error], [geo_options]); // FUNCTION PARAMETER
@@ -378,7 +346,7 @@ class MapContainer extends React.Component {
 
 		// let booking_id=(this.state.booking_details.booking_id)?this.state.booking_details.booking_id:0;
         if (this.state.booking_details){
-          const ref_single = this.ref.doc(Number(this.state.booking_details.booking_id));
+          const ref_single = this.ref.doc(String(Number(this.state.booking_details.booking_id)));
           ref_single.get()
             .then((docSnapshot) => {
                 if (this.state.login_id) {

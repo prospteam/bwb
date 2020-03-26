@@ -231,6 +231,7 @@ class MapContainer extends React.Component {
       (error) => console.log(JSON.stringify(error))
     );
 
+
   }
 
   componentDidMount() {
@@ -248,11 +249,6 @@ class MapContainer extends React.Component {
 
     // this.driverSendLocation();
 
-    if (this.state.booking_details) {
-
-    // this.ref.onSnapshot(this.driverLocationListener);
-    this.driverLocationListener();
-    }
 
     const { pinned_stat, navigation } = this.props;
     // if(navigation.getParam('booking_data_from_latlong', null) !== null){
@@ -322,8 +318,8 @@ class MapContainer extends React.Component {
 
   driverLocationListener = () => {
     // const books = [];
-    // console.log("FAYR");
-    // console.log(querySnapShot);
+    console.log("FAYR");
+    console.log(this.state.booking_details);
     // querySnapShot.forEach((doc) => {
     //   console.log("ITEM");
     //   console.log(doc);
@@ -337,7 +333,7 @@ class MapContainer extends React.Component {
     //   });
     // });
 
-    this.ref.doc("35").onSnapshot(docSnapshot => {
+    this.ref.doc(String(Number(this.state.booking_details.booking_id))).onSnapshot(docSnapshot => {
     // this.ref.doc(this.state.booking_details.booking_id).onSnapshot(docSnapshot => {
       console.log(`Received doc snapshot:`);
       console.log(docSnapshot.data());
@@ -515,6 +511,10 @@ class MapContainer extends React.Component {
                   booking_details: responseJson.booking_details,
                 });
 
+                if (this.state.booking_details) {
+                  this.driverLocationListener();
+                }
+      
                 const usersRef = this.ref_bookings_status.doc(String(Number(responseJson.booking_details.booking_id)));
                 usersRef.get()
                   .then((docSnapshot) => {
@@ -552,9 +552,9 @@ class MapContainer extends React.Component {
 						}
                     // }
                     
-					PushNotification.cancelLocalNotifications({ id: 'driver_details' });
+					PushNotification.cancelLocalNotifications({ id: '52341234' });
 					PushNotification.localNotification({
-						id: 'driver_details',
+						id: '52341234',
 					  foreground: false, // BOOLEAN: If the notification was received in foreground or not
 					  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
 					  message: push_notif_message, // STRING: The notification message
@@ -578,7 +578,9 @@ class MapContainer extends React.Component {
 						can_book: can_book,
 						// driver_details: prepare_driver_details,
 						booking_details: alter_booking_details,
-					  });
+            });
+            
+
 					}
 				  }, err => {
 					console.log(`Encountered error: ${err}`);
@@ -918,7 +920,7 @@ class MapContainer extends React.Component {
     //     </Button>
     //   </View>
     // )
-    console.log("MY STATUS start");
+    console.log("MY STATUS startxxx");
     console.log(this.state);
     console.log("MY STATUS end");
 	
