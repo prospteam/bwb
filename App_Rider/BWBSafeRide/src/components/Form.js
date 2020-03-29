@@ -79,7 +79,16 @@ export default class Form extends ValidationComponent {
               console.log(responseJson);
              if(responseJson.response === 'success')
               {
-                  Alert.alert('Successfully registered.');
+                  Alert.alert('Successfully registered.',
+                  '',
+                    [
+                      {text: 'Ok', onPress: () =>  Actions.pop()}
+                    ]
+                  );
+                  
+                  onButtonPress = () =>{
+                    console.log('buang kadfasdf asf');
+                  }
                   // this.login();
                   this.props.navigation.navigate('Logout');
               }else {
