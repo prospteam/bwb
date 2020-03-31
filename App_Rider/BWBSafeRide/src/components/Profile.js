@@ -137,7 +137,7 @@ export default class Profile extends ValidationComponent {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: data.user_id
+          user_id: data.login_id
        })
       }).then((response) => response.json())
         .then((responseJson) => {

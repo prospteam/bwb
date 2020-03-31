@@ -1204,6 +1204,9 @@ class MapContainer extends React.Component {
                         <Text>
 							{this.state.rider_details?this.state.rider_details.email:""} 
 						</Text>
+            <Text>
+							{this.state.rider_details?this.state.rider_details.contact_number:""} 
+						</Text>
                       </>
                     // ):(
                     //   <>
