@@ -129,10 +129,13 @@ export default class DriverProfile extends ValidationComponent {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: data.user_id
+          user_id: data.login_id
        })
       }).then((response) => response.json())
         .then((responseJson) => {
+          console.log('response');
+          console.log(responseJson);
+          
          if(responseJson.response === 'success')
           {
               this.setState({ userData: responseJson.data });
