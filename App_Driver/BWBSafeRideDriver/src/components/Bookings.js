@@ -25,11 +25,16 @@ import {
 	SCLAlertButton
 } from 'react-native-scl-alert';
 
+// redux 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { BOOKING_LIST_REFRESH_CHANGE } from '../redux/actions/index.js';
+// I included ang "index.js" para di malibog
+
 var Spinner = require('react-native-spinkit');
 var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
 
-
-export default class Bookings extends Component {
+class Bookings extends Component {
     static navigationOptions = {
         drawerLabel: 'Bookings',
         drawerIcon: () => (
@@ -251,6 +256,12 @@ export default class Bookings extends Component {
 		 .then((responseJson) => {
 			//  Alert.alert(JSON.stringify(responseJson.msg));
 			 this.displayBookings();
+			 console.log("responseJson");
+			 console.log(responseJson.status);
+			 if(responseJson.status=="reserved"){
+				this.props.BOOKING_LIST_REFRESH_CHANGE(true);
+				this.props.navigation.navigate('Dashboard');
+			 }
 			 if(JSON.stringify(responseJson.reserve_button) !== ''){
 				 this.setState({ reserve_button: responseJson.reserve_button });
 			 }
@@ -258,9 +269,9 @@ export default class Bookings extends Component {
 		   console.error(error);
 		 });
 	}
+	
 
 	async removeBooking(id){
-
 		const data = JSON.parse(await AsyncStorage.getItem('userData'));
 		fetch(Helpers.api_url+'remove_booking', {
 		 method: 'POST',
@@ -838,3 +849,18 @@ const styles = StyleSheet.create({
 		width: 25,
 	}
 });
+
+
+function mapStateToProps(state) {
+	// console.log("mapStateToProps");
+	// console.log(state);
+	return {
+		booking_list_refresh:state.redux_state.booking_list_refresh,
+	}
+  }
+  function mapActionsToDispatch(dispatch) {
+	return bindActionCreators({
+		BOOKING_LIST_REFRESH_CHANGE: BOOKING_LIST_REFRESH_CHANGE,
+	}, dispatch)
+  }
+  export default connect(mapStateToProps, mapActionsToDispatch)(Bookings);

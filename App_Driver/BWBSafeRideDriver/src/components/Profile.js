@@ -94,6 +94,7 @@ export default class Profile extends ValidationComponent {
         }
 
   setUserData = async (e) => {
+    console.log('wadafa');
       if(await AsyncStorage.getItem('userData')){
           const data = JSON.parse(await AsyncStorage.getItem('userData'));
 

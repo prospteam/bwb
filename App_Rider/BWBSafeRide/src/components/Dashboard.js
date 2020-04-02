@@ -116,6 +116,7 @@ export default class Dashboard extends Component {
             message: "message",
           },
       }
+
   }
 
   toggleSwitch = async () => {
@@ -188,6 +189,13 @@ export default class Dashboard extends Component {
 
   componentDidMount() {
 
+    // this.setState({
+    //   scl_alert: {
+    //     show: true,
+    //     title: "Alert",
+    //     message: "Unable to retrieve realtime updates, please check your internet connection",
+    //   }
+    // });
       this.getDriverStatus();
       this.checkSession();
 
@@ -419,11 +427,13 @@ export default class Dashboard extends Component {
               <SCLAlert
                 show={this.state.scl_alert.show}
                 onRequestClose={() => { this.setState({ scl_alert: { show: false } }) }}
-                theme="info"
+                theme="warning"
                 title={this.state.scl_alert.title}
                 subtitle={this.state.scl_alert.message}
+                subtitle={this.state.scl_alert.message}
+                subtitleStyle={{width:'107%'}}
               >
-                <SCLAlertButton theme="info" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
+                <SCLAlertButton theme="warning" onPress={() => { this.setState({ scl_alert: { show: false } }) }}>OK</SCLAlertButton>
               </SCLAlert>
               
             </View>

@@ -12,7 +12,7 @@ const allReducers = combineReducers({
     // ApiData      : ApiData_,
     // RiderReducer: RiderReducers,
     // RegionReducer: RegionReducer
-    driver_location: MyReducer
+    redux_state: MyReducer
 });
 
 export default allReducers;

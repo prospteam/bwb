@@ -14,7 +14,6 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { sampleFunction } from '../redux/actions/index.js';
-// I included ang "index.js" para di malibog
 
 // this.mapView = null;
 const MyMapView = (props) => {
@@ -201,7 +200,6 @@ const MyMapView = (props) => {
               console.log('GOT AN ERROR1');
             }}
           />
-			
 		{
 			props.driver_location.latitude!=0 && <MapViewDirections
             origin={{latitude:props.driver_location.latitude, longitude: props.driver_location.longitude}}
@@ -210,18 +208,15 @@ const MyMapView = (props) => {
             strokeWidth={5}
             strokeColor="orange"
             onReady={result => {
-              var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive now":result.duration.toFixed(0)+" minute\\s to arrive.";
-              var distance = result.duration.toFixed(2) + " KM from your location.";
+              var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
+              var distance = result.duration.toFixed(2) + "km from your location.";
               props.getDataDriverLocation({distance:distance,duration:duration})
-              
             }}
             onError={(errorMessage) => {	
               console.log(errorMessage);
               console.log('GOT AN ERROR2');
             }}
           />}
-          
-
     </MapView>
   )
 }
@@ -232,7 +227,7 @@ const MyMapView = (props) => {
 // export default MapContainer;
 function mapStateToProps(state) {
   return {
-    driver_location:state.driver_location.driver_location,
+    driver_location:state.redux_state.driver_location,
   }
 }
 function mapActionsToDispatch(dispatch) {

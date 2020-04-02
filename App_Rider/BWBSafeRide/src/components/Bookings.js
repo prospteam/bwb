@@ -287,8 +287,8 @@ export default class Bookings extends Component {
 
 			const data = this.state.details;
 
-			console.log(this.state);
-			console.log("XDXD");
+			// console.log(this.state);
+			// console.log("XDXD");
 			let string = '';
 
 			for (const [ key, value ] of Object.entries(data)){

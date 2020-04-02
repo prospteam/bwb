@@ -336,7 +336,7 @@ class MapContainer extends React.Component {
     this.ref.doc(String(Number(this.state.booking_details.booking_id))).onSnapshot(docSnapshot => {
     // this.ref.doc(this.state.booking_details.booking_id).onSnapshot(docSnapshot => {
       console.log(`Received doc snapshot:`);
-      console.log(docSnapshot.data());
+      // console.log(docSnapshot.data());
 
         this.setState({
           driver_location_realtime: docSnapshot.data(),
@@ -532,13 +532,13 @@ class MapContainer extends React.Component {
                     }
 					let docSnapshot_data=docSnapshot.data();
 					console.log("docSnapshot_data");
-					console.log(docSnapshot_data);
+					// console.log(docSnapshot_data);
 					let push_notif_message = "Updates On Your Bookings";
 					
 				  usersRef.onSnapshot((doc) => {
 					  docSnapshot_data=doc.data();
-					console.log("docSnapshot_data2");
-					console.log(docSnapshot_data);
+					console.log("docSnapshot_data3");
+					// console.log(docSnapshot_data);
                     // if (doc.exists) {
 						if(docSnapshot_data.additional_field_driver_status){
 							if(docSnapshot_data.additional_field_driver_status=="going_pick"){
@@ -548,7 +548,6 @@ class MapContainer extends React.Component {
 							}else if(docSnapshot_data.additional_field_driver_status=="completed"){
 								push_notif_message = "Booking complete, Thank you for using the service";
 							}
-							
 						}
                     // }
                     
@@ -565,7 +564,7 @@ class MapContainer extends React.Component {
 					// });
 					let data = doc.data();
 					console.log("docSnapshot.data()");
-					console.log(doc);
+					// console.log(doc);
 					// console.log(this.state.booking_status);
 					if (data.booking_status) {
 					  let can_book = false;
@@ -574,13 +573,16 @@ class MapContainer extends React.Component {
 					  if (data.booking_status == "completed") {
 						can_book = true;
 					  }
+					  if (data.booking_status == "reserved"){
+              this.checkBookingStatus();
+					  }
 					  this.setState({
-						can_book: can_book,
-						// driver_details: prepare_driver_details,
-						booking_details: alter_booking_details,
+              can_book: can_book,
+              // driver_details: prepare_driver_details,
+              booking_details: alter_booking_details,
             });
-            
-
+            // console.log(this.state.booking_details);
+            console.log("this.state.booking_details");
 					}
 				  }, err => {
 					console.log(`Encountered error: ${err}`);
@@ -884,24 +886,7 @@ class MapContainer extends React.Component {
     this.setState({ isDateTimePickerVisible: true });
   };
 
-  // get_realtime_booking_status = (id) => {
-  //   console.log(`getting freee:`);
 
-  //   this.ref_bookings_status.doc(id).onSnapshot(docSnapshot => {
-  //     console.log(`Received doc snapshot:`);
-  //     console.log(docSnapshot.data());
-
-  //       // this.setState({
-  //       //   testlocation: docSnapshot.data(),
-  //       // });
-  //       // this.setState({
-  //       //   testlocation: doc.data(),
-  //       // });
-  //       // ...
-  //     }, err => {
-  //       console.log(`Encountered error: ${err}`);
-  //     });
-  // };
 
   render() {
 
@@ -920,9 +905,9 @@ class MapContainer extends React.Component {
     //     </Button>
     //   </View>
     // )
-    console.log("MY STATUS startxxx");
-    console.log(this.state);
-    console.log("MY STATUS end");
+    // console.log("MY STATUS startxxx");
+    // console.log(this.state);
+    // console.log("MY STATUS end");
 	
     // if (!this.state.is_finish_check_booking_status) {
       // return (

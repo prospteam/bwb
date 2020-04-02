@@ -112,7 +112,8 @@ const DrawerContent = (props) => (
 const MyDrawerNavigator = createDrawerNavigator(
   {
     Dashboard: {
-      screen: Dashboard,
+      // screen: Dashboard,
+      screen: (props) => <Dashboard test='test' />
     },
     Profile: {
       screen: Profile,
@@ -127,7 +128,7 @@ const MyDrawerNavigator = createDrawerNavigator(
       screen: Bookings,
     },
     Payment: {
-      screen: (props) => <Payment {...props} test='test' />,
+      screen: (props) => <Payment {...props}  />,
       navigationOptions: ({ navigation }) => {
         return {
           drawerLabel: () => null,

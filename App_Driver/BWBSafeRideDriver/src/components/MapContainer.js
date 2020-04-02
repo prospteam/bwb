@@ -24,7 +24,7 @@ import {
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DRIVER_LOCATION_CHANGE } from '../redux/actions/index.js';
+import { DRIVER_LOCATION_CHANGE,BOOKING_LIST_REFRESH_CHANGE } from '../redux/actions/index.js';
 // I included ang "index.js" para di malibog
 
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
@@ -125,6 +125,16 @@ class MapContainer extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+      
+      console.log('is receveied componentWillReceiveProps1');
+      console.log(this.props);
+      if(this.props.booking_list_refresh){
+        this.initMyLocation();
+        this.checkBookingStatus();
+        console.log('gone here1');
+      }else{
+        console.log('gone here2');
+      }
         const {navigation} = this.props;
 
         if(this.state.geocode_lat !== prevState.geocode_lat){
@@ -530,6 +540,7 @@ class MapContainer extends React.Component {
             booking_details:[],
           });
         }
+        this.props.BOOKING_LIST_REFRESH_CHANGE(false);
         this.setState({
           booking_details_ready:true,
         });
@@ -1023,7 +1034,8 @@ class MapContainer extends React.Component {
         if(this.state.form_to_text !== null)
           this.locationDestRef.setAddressText(this.state.form_to_text);
     }
-    console.log('finding location');
+    console.log('this.props.booking_list_refresh');
+    console.log(this.props.booking_list_refresh);
     // console.log(this.state);
     // console.log(this.state.booking_details.pickup_latlong);
     // console.log(this.state.booking_details.dropoff_latlong);
@@ -1093,7 +1105,7 @@ class MapContainer extends React.Component {
             // this.state.user_data == false || this.state.booking_details != []? null
             // : (false) ?(
             // : (true) ?this.props.navigation.navigate('Bookings'):(
-            : (can_book || this.state.can_book) ?this.props.navigation.navigate('Bookings'):(
+            : ((can_book || this.state.can_book) && !this.props.booking_list_refresh) ?this.props.navigation.navigate('Bookings'):(
             // : (!(can_book || this.state.can_book) && this.state.booking_details != [] ) ?(
             <>
               {
@@ -1198,23 +1210,19 @@ class MapContainer extends React.Component {
                         }
                         </Text>
                         <Text>
-							{this.state.rider_details?this.state.rider_details.first_name:"No Data Found"} 
-							{this.state.rider_details?this.state.rider_details.last_name:""} 
-						</Text>
-                        <Text>
-							{this.state.rider_details?this.state.rider_details.email:""} 
-						</Text>
+                          {this.state.rider_details?this.state.rider_details.first_name:"No Data Found"} 
+                          {this.state.rider_details?this.state.rider_details.last_name:""} 
+                        </Text>
+                                    <Text>
+                          {this.state.rider_details?this.state.rider_details.email:""} 
+                        </Text>
                       </>
-                    // ):(
-                    //   <>
-                    //     <Text>Driver Name</Text>
-                    //     <Text note>Other information</Text>
-                    //   </>
-                    // )
                   }
                     </View>
                   </View>
-                  
+                  <View
+                    style={styles.hr}
+                  />
                   <View>
                       <Text>
                         {
@@ -1292,13 +1300,17 @@ class MapContainer extends React.Component {
 
 // export default MapContainer;
 function mapStateToProps(state) {
+  console.log("mapStateToProps");
+  console.log(state);
   return {
-    driver_location:state.driver_location.driver_location,
+    driver_location:state.redux_state.driver_location,
+    booking_list_refresh:state.redux_state.booking_list_refresh,
   }
 }
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
     DRIVER_LOCATION_CHANGE: DRIVER_LOCATION_CHANGE,
+    BOOKING_LIST_REFRESH_CHANGE: BOOKING_LIST_REFRESH_CHANGE,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);
