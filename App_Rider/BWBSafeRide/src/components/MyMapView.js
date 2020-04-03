@@ -105,7 +105,8 @@ const MyMapView = (props) => {
                                     Alert.alert(res.msg);
 
                                  }).catch((error) => {
-                                   console.error(error);
+                                  alert('You have encountered issued on your internet connection, Please try again later!');
+                                   //console.error(error);
                                  });
 
                             // const api = url()+'api/save_location';

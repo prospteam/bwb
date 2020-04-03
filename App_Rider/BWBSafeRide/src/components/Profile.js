@@ -89,7 +89,8 @@ export default class Profile extends ValidationComponent {
               .then((responseJson) => {
                  Alert.alert(responseJson.msg);
               }).catch((error) => {
-                console.log(error);
+                alert('You have encountered issued on your internet connection, Please try again later!');
+                //console.log(error);
               });
 
           }else{
@@ -153,7 +154,8 @@ export default class Profile extends ValidationComponent {
               this.setState({ user_id: responseJson.data.user_id });
           }
         }).catch((error) => {
-          console.log(error);
+            alert('You have encountered issued on your internet connection, Please try again later!');
+          //console.log(error);
         });
 
       }

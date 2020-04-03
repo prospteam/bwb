@@ -60,7 +60,8 @@ LocationServicesDialogBox.checkLocationServicesIsEnabled({
 }).then(function(success) {
     console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
 }).catch((error) => {
-    console.log(error.message); // error.message => "disabled"
+  alert('You have encountered issued on your internet connection, Please try again later!');
+    //console.log(error.message); // error.message => "disabled"
 });
 
 BackHandler.addEventListener('hardwareBackPress', () => { //(optional) you can use it if you need it
@@ -152,7 +153,8 @@ export default class Dashboard extends Component {
            }
 
        }).catch((error) => {
-         console.error(error);
+        alert('You have encountered issued on your internet connection, Please try again later!');
+         //console.error(error);
        });
 
   }
@@ -181,7 +183,8 @@ export default class Dashboard extends Component {
            }
 
        }).catch((error) => {
-         console.error(error);
+        alert('You have encountered issued on your internet connection, Please try again later!');
+         //console.error(error);
        });
 
   }

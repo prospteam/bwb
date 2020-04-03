@@ -598,8 +598,9 @@ class MapContainer extends React.Component {
 
               }
             }).catch((error) => {
-              console.log('NOT getting API');
-              console.error(error);
+              //console.log('NOT getting API');
+              alert('You have encountered issued on your internet connection, Please try again later!');
+              //console.error(error);
             });
 			
           this.setState({

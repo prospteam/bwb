@@ -171,7 +171,7 @@ export default class Dashboard extends Component {
           }
         }
        }).catch((error) => {
-         console.error(error);
+         //console.error(error);
          console.error("toggleSwitch");
        });
   }
@@ -216,7 +216,7 @@ export default class Dashboard extends Component {
          }
         }
       }).catch((error) => {
-        console.error(error);
+        //console.error(error);
         console.log("getDriverStatus");
       });
   }

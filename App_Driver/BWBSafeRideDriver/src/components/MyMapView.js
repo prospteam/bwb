@@ -110,7 +110,7 @@ const MyMapView = (props) => {
                                      }
                                    });
                                  }).catch((error) => {
-                                   console.error(error);
+                                   //console.error(error);
                                  });
                             // const api = url()+'api/save_location';
                            //  fetch(api, {
