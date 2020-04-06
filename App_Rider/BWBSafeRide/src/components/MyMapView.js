@@ -110,7 +110,8 @@ const MyMapView = (props) => {
                                       Alert.alert(res.msg);
 
                                   }).catch((error) => {
-                                    console.error(error);
+                                    // console.error(error);
+                                    alert('You have encountered issued on your internet connection, Please try again later!');
                                   });
 
                               // const api = url()+'api/save_location';

@@ -190,7 +190,7 @@ class Bookings extends Component {
 		console.log(this.state.listViewData_p);
 
       }).catch((error) => {
-        console.error(error);
+        //console.error(error);
       });
 	}
 
@@ -237,7 +237,8 @@ class Bookings extends Component {
 				 });
 			  }
 		 }).catch((error) => {
-		   console.error(error);
+			 alert('test');
+		   //console.error(error);
 		 });
 	}
 
@@ -267,7 +268,7 @@ class Bookings extends Component {
 				 this.setState({ reserve_button: responseJson.reserve_button });
 			 }
 		 }).catch((error) => {
-		   console.error(error);
+		   //console.error(error);
 		 });
 	}
 	

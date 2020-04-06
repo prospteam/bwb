@@ -139,7 +139,8 @@ export default class Bookings extends Component {
 		// console.error(this.state.listViewData);
 
       }).catch((error) => {
-        console.error(error);
+		alert('You have encountered issued on your internet connection, Please try again later!');
+        //console.error(error);
       });
 	}
 
@@ -184,7 +185,8 @@ export default class Bookings extends Component {
 				 });
 			  }
 		 }).catch((error) => {
-		   console.error(error);
+			alert('You have encountered issued on your internet connection, Please try again later!');
+		   //console.error(error);
 		 });
 	}
 
@@ -212,7 +214,8 @@ export default class Bookings extends Component {
 			 }
 
 		 }).catch((error) => {
-		   console.error(error);
+			alert('You have encountered issued on your internet connection, Please try again later!');
+		   //console.error(error);
 		 });
 	}
 
@@ -235,7 +238,8 @@ export default class Bookings extends Component {
 			 this.displayBookings();
 
 		 }).catch((error) => {
-		   console.error(error);
+			alert('You have encountered issued on your internet connection, Please try again later!');
+		   //console.error(error);
 		 });
 	}
 

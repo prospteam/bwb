@@ -152,7 +152,7 @@ export default class DriverProfile extends ValidationComponent {
           }
 
         }).catch((error) => {
-          console.error(error);
+          //console.error(error);
         });
 
       }

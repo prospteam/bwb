@@ -1237,6 +1237,19 @@ class MapContainer extends React.Component {
                   <View
                     style={styles.hr}
                   />
+                  <View>
+                    <Text style={styles.label1}>
+                    Your Rider Schedule
+                    </Text>
+                      <Text>
+                        {
+                          this.state.booking_details.travel_date + ' - ' + this.state.booking_details.pickup_time
+                        } 
+                      </Text>
+                    </View>
+                  <View
+                    style={styles.hr}
+                  />
                   <Text style={styles.label1}>
                    Pickup
                   </Text>

@@ -121,7 +121,8 @@ export default class Profile extends ValidationComponent {
               this.setState({ user_id: responseJson.data.user_id });
           }
         }).catch((error) => {
-          console.error(error);
+          //alert('test');
+          //console.error(error);
         });
 
       }
