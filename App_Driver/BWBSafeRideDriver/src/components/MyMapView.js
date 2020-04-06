@@ -5,6 +5,7 @@ import { Icon, Text } from 'native-base';
 import MapViewDirections from 'react-native-maps-directions';
 import Helpers from '../../Helpers';
 
+import map_style from '.././assets/map_style.js';
 let { width, height } = Dimensions.get('window');
 // const origin = {latitude: 10.3157, longitude: 123.886};
 const destination = {latitude: 37.771707, longitude: 123.4053769};
@@ -13,7 +14,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { sampleFunction } from '../redux/actions/index.js';
+import { SET_DISPLAY_DRIVER_LOCATION } from '../redux/actions/Actions';
 
 // this.mapView = null;
 const MyMapView = (props) => {
@@ -31,6 +32,7 @@ const MyMapView = (props) => {
 
   return (
     <MapView
+        customMapStyle={map_style}
         style={{ flex: 1,  height: height-100,  width: width }}
 
         // region={{origin}}
@@ -78,7 +80,6 @@ const MyMapView = (props) => {
                title={"Pickup Location"}
                description={props.geocode_name}
                pinColor='#45A163'
-              
             >
             <MapView.Callout tooltip={true}
                 style={{backgroundColor: '#d3a04c'}}
@@ -208,9 +209,11 @@ const MyMapView = (props) => {
             strokeWidth={5}
             strokeColor="orange"
             onReady={result => {
-              var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
-              var distance = result.duration.toFixed(2) + "km from your location.";
-              props.getDataDriverLocation({distance:distance,duration:duration})
+              if(this.props.display_driver_location){
+                var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
+                var distance = result.duration.toFixed(2) + "km from your location.";
+                props.getDataDriverLocation({distance:distance,duration:duration})
+              }
             }}
             onError={(errorMessage) => {	
               console.log(errorMessage);
@@ -228,11 +231,12 @@ const MyMapView = (props) => {
 function mapStateToProps(state) {
   return {
     driver_location:state.redux_state.driver_location,
+    display_driver_location:state.redux_state.display_driver_location,
   }
 }
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
-    sampleFunction: sampleFunction,
+    SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MyMapView);

@@ -21,5 +21,22 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
     marginBottom:10,
     marginTop:10,
+  },
+  center_pick_icon:{
+    position:'absolute',
+    top:'50%',
+    left:'50%',
+    marginLeft: -14,
+    marginTop: -52,
+    color: 'blue',
+    fontSize: 50
+  },
+  from_point_icon:{
+    color: 'red',
+    // fontSize: 40
+  },
+  to_point_icon:{
+    color: 'green',
+    // fontSize: 40
   }
 });

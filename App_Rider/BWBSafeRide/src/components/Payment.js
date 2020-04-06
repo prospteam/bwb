@@ -86,7 +86,8 @@ export default class Payment extends Component {
                   booking_status: "pending",
                   login_id: userData.login_id,
                   pickup_latlong: param.form_from_latlong.latitude+":"+param.form_from_latlong.longitude,
-                  dropoff_latlong: param.form_to_latlong.latitude+":"+param.form_to_latlong.longitude
+                  dropoff_latlong: param.form_to_latlong.latitude+":"+param.form_to_latlong.longitude,
+                  amount:param.payByDistance
                 },
               })
           }).then((response) => response.json())

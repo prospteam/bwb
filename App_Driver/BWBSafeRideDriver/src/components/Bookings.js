@@ -28,7 +28,7 @@ import {
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { BOOKING_LIST_REFRESH_CHANGE } from '../redux/actions/index.js';
+import { BOOKING_LIST_REFRESH_CHANGE } from '../redux/actions/Actions';
 // I included ang "index.js" para di malibog
 
 var Spinner = require('react-native-spinkit');
@@ -119,7 +119,7 @@ class Bookings extends Component {
 				scl_alert: {
 					show: true,
 					title: "Alert",
-					message: "Please check your internet connection for realtime updates",
+					message: "Please check your internet connection for realtime updates!",
 				}
 			});
 		});
@@ -175,12 +175,13 @@ class Bookings extends Component {
 				// 				listViewData_c: responseJson.data.data_completed.map(Object.values).map((_,i) => ({key: `${i}`, id: `${_[0]}`, user: `${_[1]}`, text: `Booking Date: ${_[2]}`}))
 			}
 			// Alert.alert(responseJson.response+"1");
-
+				console.log(responseJson);
+				console.log("xxresponseJson");
 			  this.setState({
 				  scl_alert: {
 					  show: true,
 					  title: "Alert",
-					  message: "Please check your internet connection for realtime updates",
+					  message: "Please check your internet connection for realtime updates.",
 				  }
 			  });
 		}

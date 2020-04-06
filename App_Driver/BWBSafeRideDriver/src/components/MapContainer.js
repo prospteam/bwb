@@ -24,7 +24,8 @@ import {
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DRIVER_LOCATION_CHANGE,BOOKING_LIST_REFRESH_CHANGE } from '../redux/actions/index.js';
+
+import { DRIVER_LOCATION_CHANGE,BOOKING_LIST_REFRESH_CHANGE,SET_DISPLAY_DRIVER_LOCATION } from '../redux/actions/Actions';
 // I included ang "index.js" para di malibog
 
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
@@ -510,11 +511,16 @@ class MapContainer extends React.Component {
           console.log(responseJson.booking_details.booking_status);
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
-               textVal = "Going to pick up location";
           }else if (responseJson.booking_details.booking_status == "reserved") {
-            if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
+            if(responseJson.booking_details.additional_field_driver_status=="none"){
+              this.props.SET_DISPLAY_DRIVER_LOCATION(true);
+              textVal = "Going to pick up location";
+            }else if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
+              
                   textVal = "Ride completed";
             }else{
+              
+              this.props.SET_DISPLAY_DRIVER_LOCATION(true);
                   textVal = "Going to drop off location";
             }
           }else if(responseJson.booking_details.booking_status == "completed"){
@@ -720,7 +726,6 @@ class MapContainer extends React.Component {
       });
 	  this.driverSendLocation();
 		// additional_field_driver_status USE THIS
-
   }
 
   // testChange = () =>{
@@ -897,12 +902,12 @@ class MapContainer extends React.Component {
       let  additional_field_driver_status = "";
 
       if(this.state.textValue == "Going to pick up location"){
-          status = "inprogress";
+          status = "reserved";
           additional_field_driver_status = "going_pick";
           console.log('pick up');
       }else if (this.state.textValue == "Going to drop off location") {
           console.log('drop off');
-          status = "inprogress";
+          status = "reserved";
           additional_field_driver_status = "going_drop";
       }else if (this.state.textValue == "Ride Complete"){
           status = "completed";
@@ -928,6 +933,7 @@ class MapContainer extends React.Component {
                    this.setState({textValue:'Going to drop off location'});
                    this.setState({disabledBotton: false});
                }else if (this.state.textValue == 'Going to drop off location') {
+                  this.props.SET_DISPLAY_DRIVER_LOCATION(true);
                    this.setState({textValue:'Ride Complete'});
                    this.setState({disabledBotton: false});
                }else if (this.state.textValue == 'Ride Complete') {
@@ -972,10 +978,6 @@ class MapContainer extends React.Component {
               // return response.json();
           });
 
-           //this.setState({textValue:'On the way tp Drop-Off'});
-           // console.log('enable');
-           // this.setState({disabledBotton: false});
-           // console.log(this.state.disabledBotton);
   }
 
   handleDatePicked = date => {
@@ -1057,24 +1059,15 @@ class MapContainer extends React.Component {
               marker1={marker1}
               region={navigation.getParam('booking_data_region', null) !== null ? navigation.getParam('booking_data_region', null) : this.state.region}
               viewed_region={this.state.viewed_region}
-              // form_from={navigation.getParam('booking_data_from_latlong', null) !== null ? navigation.getParam('booking_data_from_latlong', null) : this.state.form_from_latlong}
-              // form_to={navigation.getParam('booking_data_to_latlong', null) !== null ? navigation.getParam('booking_data_to_latlong', null) : set_destination_latlong}
               form_from={this.state.booking_details.pickup_latlong ?
                  ({
                     latitude: Number(this.state.booking_details.pickup_latlong.split(":")[0]), // Michigan Lat
                     longitude: Number(this.state.booking_details.pickup_latlong.split(":")[1]), // Michigan Long
                   })
                   : ({
-                    latitude: 0, // Michigan Lat
-                    longitude: 1, // Michigan Long
-                    // latitude: 44.3148, // Michigan Lat
-                    // longitude: -84.506836, // Michigan Long
+                    latitude: 44.3148, // Michigan Lat
+                    longitude: -84.506836, // Michigan Long
                   }) }
-              // form_to= {this.state.booking_details.dropoff_latlong ? this.state.booking_details.dropoff_latlong :  0}
-              // form_from={{
-              //   latitude: 44.3148, // Michigan Lat
-              //   longitude: -84.506836, // Michigan Long
-              // }}
               form_to= {this.state.booking_details.dropoff_latlong ?
                 ({
                    latitude: Number(this.state.booking_details.dropoff_latlong.split(":")[0]), // Michigan Lat
@@ -1220,23 +1213,27 @@ class MapContainer extends React.Component {
                   }
                     </View>
                   </View>
-                  <View
-                    style={styles.hr}
-                  />
-                  <View>
-                      <Text>
-                        {
-                          this.state.duration_from_driver?
-                          this.state.duration_from_driver:""
-                        } 
-                      </Text>
-                      <Text>
-                        {
-                          this.state.distance_from_driver?
-                          this.state.distance_from_driver:""
-                        } 
-                      </Text>
-                    </View>
+                  {(this.props.display_driver_location)?(
+                    <>    
+                      <View
+                        style={styles.hr}
+                      />
+                      <View>
+                        <Text>
+                          {
+                            this.state.duration_from_driver?
+                            this.state.duration_from_driver:""
+                          } 
+                        </Text>
+                        <Text>
+                          {
+                            this.state.distance_from_driver?
+                            this.state.distance_from_driver:""
+                          } 
+                        </Text>
+                      </View>
+                    </>
+                  ):null}
                   <View
                     style={styles.hr}
                   />
@@ -1305,12 +1302,14 @@ function mapStateToProps(state) {
   return {
     driver_location:state.redux_state.driver_location,
     booking_list_refresh:state.redux_state.booking_list_refresh,
+    display_driver_location:state.redux_state.display_driver_location,
   }
 }
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
     DRIVER_LOCATION_CHANGE: DRIVER_LOCATION_CHANGE,
     BOOKING_LIST_REFRESH_CHANGE: BOOKING_LIST_REFRESH_CHANGE,
+    SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);
