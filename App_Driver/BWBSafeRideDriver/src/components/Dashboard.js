@@ -8,10 +8,15 @@ import MapContainer from './MapContainer';
 import Helpers from '../../Helpers';
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
+import CommonProgressBar from './common/CommonProgressBar';
+
 import {
   SCLAlert,
   SCLAlertButton
 } from 'react-native-scl-alert';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -87,7 +92,7 @@ DeviceEventEmitter.addListener('locationProviderStatusChange', function(status) 
    //    }, (error)=>console.log(error));
 // }
 
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   // getCurrentLocation();
   // state = {
   // }
@@ -408,8 +413,9 @@ export default class Dashboard extends Component {
     console.log("XDXDXXDXDXD");
 
       console.log(this.props);
-
+      
       return (
+        
         <Container>
           <Header>
             <Left style={{ flexDirection: 'row' }}>
@@ -420,6 +426,7 @@ export default class Dashboard extends Component {
             </Right>
           </Header>
           <Content contentContainerStyle ={{position:'relative',flex: 1 }}>
+            {(this.props.show_app_loader)?(<CommonProgressBar/>):(null)}
             <View style={styles.container}>
             {
                 <MapContainer 
@@ -471,3 +478,19 @@ const styles = StyleSheet.create({
 });
 
 
+
+function mapStateToProps(state) {
+  // console.log("mapStateToProps");
+  // console.log(state);
+  return {
+    show_app_loader:state.redux_state.show_app_loader,
+  }
+}
+function mapActionsToDispatch(dispatch) {
+  return bindActionCreators({
+    // DRIVER_LOCATION_CHANGE: DRIVER_LOCATION_CHANGE,
+    // BOOKING_LIST_REFRESH_CHANGE: BOOKING_LIST_REFRESH_CHANGE,
+    // SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
+  }, dispatch)
+}
+export default connect(mapStateToProps, mapActionsToDispatch)(Dashboard);

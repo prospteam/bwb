@@ -13,7 +13,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from 'react-native-geolocation-service';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import firebase from './common/Firebase';
-import CommonProgressBar from './common/CommonProgressBar';
 // import Geolocation from "@react-native-community/geolocation";
 
 import {
@@ -25,7 +24,12 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { DRIVER_LOCATION_CHANGE,BOOKING_LIST_REFRESH_CHANGE,SET_DISPLAY_DRIVER_LOCATION } from '../redux/actions/Actions';
+import { 
+  DRIVER_LOCATION_CHANGE,
+  BOOKING_LIST_REFRESH_CHANGE,
+  SET_DISPLAY_DRIVER_LOCATION,
+  SET_SHOW_APP_LOADER
+ } from '../redux/actions/Actions';
 // I included ang "index.js" para di malibog
 
 const sample_img_link = 'http://web2.proweaverlinks.com/tech/bwbsafe/backend_web_api/assets/images/sample.png';
@@ -445,6 +449,7 @@ class MapContainer extends React.Component {
   }
 
   async checkBookingStatus() {
+    this.props.SET_SHOW_APP_LOADER(true);
 
     const data = JSON.parse(await AsyncStorage.getItem('userData'));
 
@@ -507,20 +512,49 @@ class MapContainer extends React.Component {
        console.log('getting API');
        console.log(responseJson);
         if(responseJson.num_of_active_booking > 0){
+          const ref_single = this.ref_bookings_status.doc(String(Number(responseJson.booking_details.booking_id)));
+          ref_single.get()
+            .then((docSnapshot) => {
+                  if (docSnapshot.exists) {
+                      ref_single.update({
+                        "booking_status":responseJson.booking_details.booking_status,
+                        "additional_field_driver_status":responseJson.booking_details.additional_field_driver_status,
+                      })
+                      .catch(function(error) {
+                          console.error("Error adding document: ", error);
+                      });
+                  } else {
+                    ref_single.set({
+                      "booking_status":responseJson.booking_details.booking_status,
+                      "additional_field_driver_status":responseJson.booking_details.additional_field_driver_status,
+                    })
+                    .catch(function(error) {
+                        console.error("Error adding document: ", error);
+                    });
+                  }
+          });
+          
+          if(responseJson.booking_details.additional_field_driver_status=="going_pick")
+          {
+            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
+          }
           // msg = responseJson.msg;
           console.log(responseJson.booking_details.booking_status);
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
+            
           }else if (responseJson.booking_details.booking_status == "reserved") {
+            
+            this.props.SET_DISPLAY_DRIVER_LOCATION(false);
             if(responseJson.booking_details.additional_field_driver_status=="none"){
-              this.props.SET_DISPLAY_DRIVER_LOCATION(true);
               textVal = "Going to pick up location";
+            }else if(responseJson.booking_details.additional_field_driver_status=="going_pick"){
+              textVal = "Going to drop off location";
+              this.props.SET_DISPLAY_DRIVER_LOCATION(true);
             }else if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
-              
                   textVal = "Ride completed";
             }else{
               
-              this.props.SET_DISPLAY_DRIVER_LOCATION(true);
                   textVal = "Going to drop off location";
             }
           }else if(responseJson.booking_details.booking_status == "completed"){
@@ -553,6 +587,9 @@ class MapContainer extends React.Component {
        this.setState({
          is_finish_check_booking_status: true,
        });
+
+       
+    this.props.SET_SHOW_APP_LOADER(false);
     }).catch((error) => {
       console.log('NOT getting API');
 		  // console.error(error);
@@ -568,6 +605,7 @@ class MapContainer extends React.Component {
       this.setState({
         is_finish_check_booking_status: false,
       });
+      this.props.SET_SHOW_APP_LOADER(false);
     });
     // this.setState({ region });
     // console.log('GETTING DSISTSATNCEEEEEEEE');
@@ -929,11 +967,12 @@ class MapContainer extends React.Component {
               console.log("response YYYYYY");
               console.log(response);
                // this.setState({textValue:'On the way to Drop-Off'});
+                   this.props.SET_DISPLAY_DRIVER_LOCATION(false);
                if(this.state.textValue == "Going to pick up location"){
                    this.setState({textValue:'Going to drop off location'});
                    this.setState({disabledBotton: false});
+                   this.props.SET_DISPLAY_DRIVER_LOCATION(true);
                }else if (this.state.textValue == 'Going to drop off location') {
-                  this.props.SET_DISPLAY_DRIVER_LOCATION(true);
                    this.setState({textValue:'Ride Complete'});
                    this.setState({disabledBotton: false});
                }else if (this.state.textValue == 'Ride Complete') {
@@ -1005,8 +1044,8 @@ class MapContainer extends React.Component {
     //   <CommonProgressBar/>
     // }
 
-    console.log("MY STATUS");
-    // console.log(this.state);
+    console.log("this.props.show_app_loader");
+    console.log(this.props.show_app_loader);
     const { distance, duration } = this.state;
 
     // console.log('boooooooooooking container');
@@ -1316,6 +1355,7 @@ function mapStateToProps(state) {
     driver_location:state.redux_state.driver_location,
     booking_list_refresh:state.redux_state.booking_list_refresh,
     display_driver_location:state.redux_state.display_driver_location,
+    show_app_loader:state.redux_state.show_app_loader,
   }
 }
 function mapActionsToDispatch(dispatch) {
@@ -1323,6 +1363,7 @@ function mapActionsToDispatch(dispatch) {
     DRIVER_LOCATION_CHANGE: DRIVER_LOCATION_CHANGE,
     BOOKING_LIST_REFRESH_CHANGE: BOOKING_LIST_REFRESH_CHANGE,
     SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
+    SET_SHOW_APP_LOADER: SET_SHOW_APP_LOADER,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);

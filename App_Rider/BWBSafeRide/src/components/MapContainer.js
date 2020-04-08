@@ -20,7 +20,7 @@ import CommonProgressBar from './common/CommonProgressBar.js';
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { sampleFunction } from '../actions/index.js';
+import { SET_DISPLAY_DRIVER_LOCATION } from '../redux/actions/Actions.js';
 // I included ang "index.js" para di malibog
 
 var PushNotification = require("react-native-push-notification"); // PUSH NOTIFICATION TEMPLATE
@@ -312,6 +312,7 @@ class MapContainer extends React.Component {
     //   longitude: parseFloat(pinned_long),
     // });
 
+    this.props.SET_DISPLAY_DRIVER_LOCATION(false);
     this.initMyLocation();
     this.checkBookingStatus();
   }
@@ -500,6 +501,10 @@ class MapContainer extends React.Component {
                 } else {
                   prepare_driver_details = [];
                 }
+                if(responseJson.booking_details.additional_field_driver_status=="going_pick")
+                {
+                  this.props.SET_DISPLAY_DRIVER_LOCATION(true);
+                }
 
                 // get_realtime_booking_status = (id) => {
                 //   console.log(`getting freee:`);
@@ -541,24 +546,28 @@ class MapContainer extends React.Component {
 					// console.log(docSnapshot_data);
                     // if (doc.exists) {
 						if(docSnapshot_data.additional_field_driver_status){
+                            this.props.SET_DISPLAY_DRIVER_LOCATION(false);
 							if(docSnapshot_data.additional_field_driver_status=="going_pick"){
+                                this.props.SET_DISPLAY_DRIVER_LOCATION(true);
 								push_notif_message = "Driver is on the way on your location";
 							}else if(docSnapshot_data.additional_field_driver_status=="going_drop"){
 								push_notif_message = "Going to drop location";
 							}else if(docSnapshot_data.additional_field_driver_status=="completed"){
 								push_notif_message = "Booking complete, Thank you for using the service";
-							}
+                            }
+                            if(docSnapshot_data.additional_field_driver_status!="none"){
+                                PushNotification.cancelLocalNotifications({ id: '52341234' });
+                                PushNotification.localNotification({
+                                id: '52341234',
+                                foreground: false, // BOOLEAN: If the notification was received in foreground or not
+                                userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+                                message: push_notif_message, // STRING: The notification message
+                                data: {}, // OBJECT: The push data
+                                });
+                            }
 						}
                     // }
                     
-					PushNotification.cancelLocalNotifications({ id: '52341234' });
-					PushNotification.localNotification({
-						id: '52341234',
-					  foreground: false, // BOOLEAN: If the notification was received in foreground or not
-					  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-					  message: push_notif_message, // STRING: The notification message
-					  data: {}, // OBJECT: The push data
-					});
 					// this.setState({
 					//   booking_status: docSnapshot.data().booking_id,
 					// });
@@ -574,15 +583,16 @@ class MapContainer extends React.Component {
 						can_book = true;
 					  }
 					  if (data.booking_status == "reserved"){
-              this.checkBookingStatus();
+              if(this.state.booking_details.booking_status!="reserved"){
+                this.checkBookingStatus();
+              }
 					  }
 					  this.setState({
               can_book: can_book,
               // driver_details: prepare_driver_details,
               booking_details: alter_booking_details,
             });
-            // console.log(this.state.booking_details);
-            console.log("this.state.booking_details");
+            
 					}
 				  }, err => {
 					console.log(`Encountered error: ${err}`);
@@ -887,10 +897,13 @@ class MapContainer extends React.Component {
     this.setState({ isDateTimePickerVisible: true });
   };
 
-
-
   render() {
 
+    // console.log("this.props.display_driver_location");
+    // console.log(this.props.display_driver_location);
+    console.log("this.state.duration_from_driver");
+    console.log(this.state.duration_from_driver);
+    
    
     // if (!this.state.is_finish_check_booking_status) {
     //   return (
@@ -954,8 +967,8 @@ class MapContainer extends React.Component {
       if (this.state.form_to_text !== null)
         this.locationDestRef.setAddressText(this.state.form_to_text);
     }
-    console.log('STATE BEFORE RENDER');
-    console.log(this.state);
+    // console.log('STATE BEFORE RENDER');
+    // console.log(this.state);
     // console.log('PROPS  BEFORE RENDER');
     // console.log(this.props);
     // console.log(this.state.booking_details);
@@ -1377,20 +1390,29 @@ class MapContainer extends React.Component {
                         }
                       </View>
                     </View>
-                    <View>
-                      <Text>
-                        {
-                          this.state.duration_from_driver?
-                          this.state.duration_from_driver:""
-                        } 
-                      </Text>
-                      <Text>
-                        {
-                          this.state.distance_from_driver?
-                          this.state.distance_from_driver:""
-                        } 
-                      </Text>
-                    </View>
+                    {
+                        // DISPLAY ESTIMATES
+                    (this.props.display_driver_location)?(
+                      <>
+                        <View
+                          style={styles.hr}
+                        />
+                        <View>
+                          <Text>
+                            {
+                              this.state.duration_from_driver?
+                              this.state.duration_from_driver:"Driver estimated arrival not available."
+                            } 
+                          </Text>
+                          <Text>
+                            {
+                              this.state.distance_from_driver?
+                              this.state.distance_from_driver:""
+                            } 
+                          </Text>
+                        </View>
+                      </>
+                    ):null}
                     <View
                       style={styles.hr}
                     />
@@ -1429,11 +1451,12 @@ class MapContainer extends React.Component {
 // export default MapContainer;
 function mapStateToProps(state) {
   return {
+    display_driver_location:state.reduxState.display_driver_location,
   }
 }
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
-    sampleFunction: sampleFunction,
+    SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MapContainer);

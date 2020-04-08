@@ -12,6 +12,9 @@ let { width, height } = Dimensions.get('window');
 const destination = {latitude: 37.771707, longitude: 123.4053769};
 const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 // this.mapView = null;
 
 const MyMapView = (props) => {
@@ -84,7 +87,6 @@ const MyMapView = (props) => {
                 description={props.geocode_name}
                 // pinColor='#45A163'
               >
-                
               <Icon style={styles.from_point_icon} type="FontAwesome5" name="map-pin" />
               <MapView.Callout tooltip={true}
                   style={{backgroundColor: '#d3a04c'}}
@@ -211,33 +213,44 @@ const MyMapView = (props) => {
                 console.log('GOT AN ERROR');
               }}
             />
-
-            
       {
         props.driver_location_realtime && <MapViewDirections
-              origin={{
-                latitude:props.driver_location_realtime.latitude, 
-                longitude: props.driver_location_realtime.longitude
-              }}
-              destination={props.form_from?props.form_from:{}}
-              apikey={GOOGLE_MAPS_APIKEY}
-              strokeWidth={5}
-              strokeColor="orange"
-              onReady={result => {
-                var duration = (Number(result.distance.toFixed(0))==0)?"Will arrive any time now":result.duration.toFixed(0)+" minute\\s to arrive.";
-                var distance = result.duration.toFixed(2) + " KM from your location.";
+          origin={{
+            latitude:props.driver_location_realtime.latitude, 
+            longitude: props.driver_location_realtime.longitude
+          }}
+          destination={props.form_from?props.form_from:{}}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={5}
+          strokeColor="orange"
+          onReady={result => {
+            // if(this.props.display_driver_location){
+                var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
+                var distance = result.duration.toFixed(2) + "km from your location.";
                 props.getDataDriverLocation({distance:distance,duration:duration})
-              }}
-              onError={(errorMessage) => {	
-                console.log(errorMessage);
-                console.log('GOT AN ERROR2');
-              }}
-            />
-            }
-
+            // }
+          }}
+          onError={(errorMessage) => {	
+            console.log(errorMessage);
+            console.log('GOT AN ERROR2');
+          }}
+        />
+        }
       </MapView>
       {/* <Icon style={styles.center_pick_icon} type="FontAwesome5" name="map-pin" /> */}
     </>
   )
 }
-export default MyMapView;
+
+// export default MapContainer;
+function mapStateToProps(state) {
+    return {
+      display_driver_location:state.reduxState.display_driver_location,
+    }
+  }
+  function mapActionsToDispatch(dispatch) {
+    return bindActionCreators({
+    //   SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
+    }, dispatch)
+  }
+  export default connect(mapStateToProps, mapActionsToDispatch)(MyMapView);

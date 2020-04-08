@@ -274,11 +274,11 @@ const MyAppDriver = createAppContainer(MyDrawerNavigatorDriver);
 
 type Props = {};
 
-
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['RiderReducer'],
+  whitelist: ['reduxState'], 
+  // ALOW EVERY THING LANG SA, comment sa
   timeout: null
 }
 

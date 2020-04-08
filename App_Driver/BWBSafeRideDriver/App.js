@@ -282,7 +282,8 @@ type Props = {};
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['RiderReducer'],
+  //Comment sa to allow all redux states
+  whitelist: ['reduxState'],
   timeout: null
 }
 
@@ -305,7 +306,6 @@ export default class App extends Component<Props> {
         message: "message",
       },
     }
-
     // this.ref = firebase.firestore().collection('books');
     // this.Save = this.Save.bind(this);
   }
@@ -439,13 +439,6 @@ export default class App extends Component<Props> {
     // console.log(AsyncStorage.setItem('userData', true));
     const { isLogged, isLoading } = this.state;
 
-    // if(isLoading){
-    //   return (
-    //     <View style={styles.container}>
-    //       <Spinner type="9CubeGrid" color="#d3a04c" />
-    //     </View>
-    //     );
-    // }
 
     // if(isLogged === false){
     // return (

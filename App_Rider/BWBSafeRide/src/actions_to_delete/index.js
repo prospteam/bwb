@@ -30,12 +30,10 @@ export function sampleFunction(type_, data) {
     //         console.log({ status_: 'error', err });
     //         alert('Error in API connection');
     //     });
-
     return {
         type: type_,
         payload: data,
     }
-
 }
 
 // export function setData(type_, data) {

@@ -5,6 +5,7 @@ import { Icon, Text } from 'native-base';
 import MapViewDirections from 'react-native-maps-directions';
 import Helpers from '../../Helpers';
 
+import styles from '.././assets/my_styles.js';
 import map_style from '.././assets/map_style.js';
 let { width, height } = Dimensions.get('window');
 // const origin = {latitude: 10.3157, longitude: 123.886};
@@ -14,10 +15,11 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyC8lpkvXFDua9S2al669zfwz7GSkeVFWs4';
 // redux 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { SET_DISPLAY_DRIVER_LOCATION } from '../redux/actions/Actions';
+import { SET_DISPLAY_DRIVER_LOCATION,SET_SHOW_APP_LOADER } from '../redux/actions/Actions';
 
 // this.mapView = null;
 const MyMapView = (props) => {
+  // this.props.SET_SHOW_APP_LOADER(false);
     // Alert.alert('hello');
   console.log('MyMapView Rendering-start');
   // console.log(props.driver_location);
@@ -79,8 +81,9 @@ const MyMapView = (props) => {
                coordinate={props.form_from}
                title={"Pickup Location"}
                description={props.geocode_name}
-               pinColor='#45A163'
+              //  pinColor='#45A163'
             >
+            <Icon style={styles.from_point_icon} type="FontAwesome5" name="map-pin" />
             <MapView.Callout tooltip={true}
                 style={{backgroundColor: '#d3a04c'}}
                 onPress={() => {
@@ -135,10 +138,15 @@ const MyMapView = (props) => {
             </MapView.Callout>
             </MapView.Marker>
         }
-            {(props.form_to) && <MapView.Marker
-                 coordinate={props.form_to}
-                 title={"Drop-off Location"}
-              />}
+              
+              {(props.form_to) && <MapView.Marker
+                  coordinate={props.form_to}
+                  title={"Drop-off Location"}
+                >
+                  
+              <Icon style={styles.to_point_icon} type="FontAwesome5" name="map-marker-alt" />
+                </MapView.Marker>
+                }
 
             {props.marker1 && <MapView.Marker
                  coordinate={{
@@ -209,7 +217,8 @@ const MyMapView = (props) => {
             strokeWidth={5}
             strokeColor="orange"
             onReady={result => {
-              if(this.props.display_driver_location){
+              if(true){
+              // if(this.props.display_driver_location){
                 var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
                 var distance = result.duration.toFixed(2) + "km from your location.";
                 props.getDataDriverLocation({distance:distance,duration:duration})
@@ -237,6 +246,7 @@ function mapStateToProps(state) {
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
     SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
+    SET_SHOW_APP_LOADER: SET_SHOW_APP_LOADER,
   }, dispatch)
 }
 export default connect(mapStateToProps, mapActionsToDispatch)(MyMapView);

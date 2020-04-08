@@ -12,6 +12,12 @@ export function SET_DISPLAY_DRIVER_LOCATION(result) {
         payload: result
     }
 }
+export function SET_SHOW_APP_LOADER(result) {
+    return {
+        type: "SET_SHOW_APP_LOADER",
+        payload: result
+    }
+}
 export function DRIVER_LOCATION_CHANGE(result) {
     return {
         type: "DRIVER_LOCATION_CHANGE",
