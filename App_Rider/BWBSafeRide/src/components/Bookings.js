@@ -162,8 +162,8 @@ export default class Bookings extends Component {
 
 			 if(responseJson.response === 'success')
 	          {
-
-							console.log(responseJson);
+					console.log('success');
+					console.log(responseJson);
 				  const details = responseJson.data;
 				  // let string = '';
 				  //
@@ -395,10 +395,23 @@ export default class Bookings extends Component {
 								>
 									<Icon type="FontAwesome" name="eye" style={{ fontSize: 19, color: 'white' }} />
 								</Animated.View>
-							</TouchableOpacity>
+								</TouchableOpacity>
+								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.displayBookDetails(data.item.id) }>
+								<Animated.View
+									style={[
+										styles.trash,
+										{
+											
+										}
+									]}
+								>
+									<Icon type="FontAwesome" name="eye" style={{ fontSize: 19, color: 'white' }} />
+								</Animated.View>
+								</TouchableOpacity>
+							{/* </TouchableOpacity>
 								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.updateBooking(data.item.id) }>
 									<Text style={styles.backTextWhite}>Reserve</Text>
-								</TouchableOpacity>
+								</TouchableOpacity> */}
 								{/*}<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnRight]} onPress={ _ => this.deleteRow(rowMap, data.item.key) }>
 									<Animated.View
 										style={[
@@ -469,9 +482,21 @@ export default class Bookings extends Component {
 									<Icon type="FontAwesome" name="eye" style={{ fontSize: 19, color: 'white' }} />
 								</Animated.View>
 							</TouchableOpacity>
-								<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.updateBooking(data.item.id) }>
-									<Text style={styles.backTextWhite}>{this.state.reserve_button}</Text>
+							<TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.displayBookDetails(data.item.id) }>
+								<Animated.View
+									style={[
+										styles.trash,
+										{
+											
+										}
+									]}
+								>
+									<Icon type="FontAwesome" name="eye" style={{ fontSize: 19, color: 'white' }} />
+								</Animated.View>
 								</TouchableOpacity>
+								{/* <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.updateBooking(data.item.id) }>
+									<Text style={styles.backTextWhite}>{this.state.reserve_button}</Text>
+							</TouchableOpacity> */}
 							</View>
 						)}
 						leftOpenValue={75}
@@ -641,7 +666,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1
 	},
 	backRightBtnReserve: {
-		backgroundColor: '#006600',
+		backgroundColor: '#0033CC',
 		right: 0,
 		borderBottomColor: 'white',
 		borderBottomWidth: 1
