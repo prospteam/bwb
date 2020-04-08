@@ -198,7 +198,7 @@ class Bookings extends Component {
 
 		console.log('asdf', id);
 
-		fetch(Helpers.api_url+'get_booking_detail', {
+		fetch(Helpers.api_url+'get_booking_detail_driver', {
 		 method: 'POST',
 		 headers: {
 		   'Accept': 'application/json',
