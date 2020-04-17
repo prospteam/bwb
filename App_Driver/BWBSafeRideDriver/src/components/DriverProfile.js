@@ -168,6 +168,7 @@ export default class DriverProfile extends ValidationComponent {
         .then((responseJson) => {
           console.log('response');
           console.log(responseJson);
+          console.log(this.state);
           
          if(responseJson.response === 'success')
           {

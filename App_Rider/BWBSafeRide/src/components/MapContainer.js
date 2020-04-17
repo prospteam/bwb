@@ -901,8 +901,8 @@ class MapContainer extends React.Component {
 
     // console.log("this.props.display_driver_location");
     // console.log(this.props.display_driver_location);
-    console.log("this.state.duration_from_driver");
-    console.log(this.state.duration_from_driver);
+    console.log("state yawa");
+    console.log(this.state);
     
    
     // if (!this.state.is_finish_check_booking_status) {
@@ -1344,17 +1344,17 @@ class MapContainer extends React.Component {
                         textAlign: 'center',
                       }}>
                         {
-                          (<Thumbnail
-                            source={require('../assets/images/avatar.png')} />
-                          )
-                          /*this.state.user.user_type_id == 3 ? null: !can_book || !this.state.can_book ?(
+                          // (<Thumbnail
+                          //   source={require('../assets/images/avatar.png')} />
+                          // )
+                          this.state.driver_details.photo != null ?(
                               <Thumbnail
                                 source={{uri: `data:image/gif;base64,${this.state.driver_details.photo}` }} />
                               ):(
                               <Thumbnail
                                 source={require('../assets/images/avatar.png')} />
                               )
-                           */
+                           
                         }
                       </View>
                       <View style={{
