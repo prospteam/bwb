@@ -142,6 +142,8 @@ export default class DriverProfile extends ValidationComponent {
 
           }).then((response) => response.json())
             .then((responseJson) => {
+              console.log('Photo response');
+              console.log(responseJson);
                Alert.alert(responseJson.msg);
             }).catch((error) => {
               console.error(error);
@@ -286,6 +288,7 @@ export default class DriverProfile extends ValidationComponent {
                   onPhotoSelect={avatar => {
                     if (avatar) {
                       // Alert.alert("data:image/png;base64${avatar}", avatar);
+                      console.log(this.state);
                       this.setState({ photo: avatar});
                       this.updatePhoto();
                     }
@@ -298,7 +301,7 @@ export default class DriverProfile extends ValidationComponent {
                    borderRadius: 75
                  }}
                  resizeMode='cover'
-                 source={(this.state.userData.photo == '' || this.state.userData.photo == null) ? require('../assets/images/avatar.png') : {uri: `data:image/gif;base64,${this.state.userData.photo}`}}
+                 source={(this.state.photo == '' || this.state.photo == null) ? require('../assets/images/avatar.png') : {uri: `data:image/gif;base64,${this.state.photo}`}}
                />
 
                {/*<Image style={styles.avatar} source={{uri: `data:image/gif;base64,${this.state.userData.photo}`}} />*/}
