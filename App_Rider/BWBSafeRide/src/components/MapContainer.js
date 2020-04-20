@@ -542,16 +542,16 @@ class MapContainer extends React.Component {
 					
 				  usersRef.onSnapshot((doc) => {
 					  docSnapshot_data=doc.data();
-					console.log("docSnapshot_data3");
+          console.log("docSnapshot_data3");
 					// console.log(docSnapshot_data);
                     // if (doc.exists) {
 						if(docSnapshot_data.additional_field_driver_status){
-                            this.props.SET_DISPLAY_DRIVER_LOCATION(false);
+                            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
 							if(docSnapshot_data.additional_field_driver_status=="going_pick"){
-                                this.props.SET_DISPLAY_DRIVER_LOCATION(true);
-								push_notif_message = "Driver is on the way on your location";
+                            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
+                push_notif_message = "Driver is on the way to your pick up location";
 							}else if(docSnapshot_data.additional_field_driver_status=="going_drop"){
-								push_notif_message = "Going to drop location";
+								push_notif_message = "Going to drop off location";
 							}else if(docSnapshot_data.additional_field_driver_status=="completed"){
 								push_notif_message = "Booking complete, Thank you for using the service";
                             }
@@ -901,10 +901,7 @@ class MapContainer extends React.Component {
 
     // console.log("this.props.display_driver_location");
     // console.log(this.props.display_driver_location);
-    console.log("state yawa");
-    console.log(this.state);
     
-   
     // if (!this.state.is_finish_check_booking_status) {
     //   return (
     //     <CommonProgressBar />
