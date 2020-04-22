@@ -57,7 +57,6 @@ export default class Profile extends ValidationComponent {
     updateSubmit(){
 
         // Alert.alert(this.state.contact_number);
-
         this.validate({
           first_name: {required: true},
           last_name: {required: true},
@@ -82,7 +81,6 @@ export default class Profile extends ValidationComponent {
                 city: this.state.city,
                 zip_code: this.state.zip_code,
                 user_id: this.state.user_id
-
               })
 
             }).then((response) => response.json())
@@ -251,14 +249,6 @@ export default class Profile extends ValidationComponent {
                   <Button vertical onPress={() => this.props.navigation.navigate('Dashboard')}>
                       <Icon name="apps" />
                       <Text>Dashboard</Text>
-                  </Button>
-                  <Button vertical>
-                      <Icon name="map" />
-                      <Text>Book Now</Text>
-                  </Button>
-                  <Button vertical>
-                      <Icon name="navigate" />
-                      <Text>Navigate</Text>
                   </Button>
               </FooterTab>
           </Footer>

@@ -600,16 +600,16 @@ class MapContainer extends React.Component {
 					
 				  usersRef.onSnapshot((doc) => {
 					  docSnapshot_data=doc.data();
-					console.log("docSnapshot_data3");
+          console.log("docSnapshot_data3");
 					// console.log(docSnapshot_data);
                     // if (doc.exists) {
 						if(docSnapshot_data.additional_field_driver_status){
-                            this.props.SET_DISPLAY_DRIVER_LOCATION(false);
+                            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
 							if(docSnapshot_data.additional_field_driver_status=="going_pick"){
-                                this.props.SET_DISPLAY_DRIVER_LOCATION(true);
-								push_notif_message = "Driver is on the way on your location";
+                            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
+                push_notif_message = "Driver is on the way to your pick up location";
 							}else if(docSnapshot_data.additional_field_driver_status=="going_drop"){
-								push_notif_message = "Going to drop location";
+								push_notif_message = "Going to drop off location";
 							}else if(docSnapshot_data.additional_field_driver_status=="completed"){
 								push_notif_message = "You have arrived, thank you for using our service.";
                             }
@@ -979,10 +979,7 @@ class MapContainer extends React.Component {
 
     // console.log("this.props.display_driver_location");
     // console.log(this.props.display_driver_location);
-    console.log("booking_details");
-    console.log(this.state.booking_details);
     
-   
     // if (!this.state.is_finish_check_booking_status) {
     //   return (
     //     <CommonProgressBar />
@@ -1468,17 +1465,17 @@ class MapContainer extends React.Component {
                         textAlign: 'center',
                       }}>
                         {
-                          (<Thumbnail
-                            source={require('../assets/images/avatar.png')} />
-                          )
-                          /*this.state.user.user_type_id == 3 ? null: !can_book || !this.state.can_book ?(
+                          // (<Thumbnail
+                          //   source={require('../assets/images/avatar.png')} />
+                          // )
+                          this.state.driver_details.photo != null ?(
                               <Thumbnail
                                 source={{uri: `data:image/gif;base64,${this.state.driver_details.photo}` }} />
                               ):(
                               <Thumbnail
                                 source={require('../assets/images/avatar.png')} />
                               )
-                           */
+                           
                         }
                       </View>
                       <View style={{

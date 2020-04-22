@@ -498,7 +498,7 @@ export default class Bookings extends Component {
 								>
 									<Icon type="FontAwesome" name="eye" style={{ fontSize: 19, color: 'white' }} />
 								</Animated.View>
-								</TouchableOpacity>
+								</TouchableOpacity>6
 								{/* <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnReserve]} onPress={ () => this.updateBooking(data.item.id) }>
 									<Text style={styles.backTextWhite}>{this.state.reserve_button}</Text>
 							</TouchableOpacity> */}

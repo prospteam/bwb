@@ -76,6 +76,7 @@ export default class DriverProfile extends ValidationComponent {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
+                login_id: this.state.userData.login_id,
                 first_name: this.state.first_name,
                 last_name: this.state.last_name,
                 email: this.state.email,
@@ -89,6 +90,9 @@ export default class DriverProfile extends ValidationComponent {
 
             }).then((response) => response.json())
               .then((responseJson) => {
+                console.log('update profile data');
+                console.log(this.state);            
+                console.log(responseJson);
                  Alert.alert(JSON.stringify(responseJson.msg));
               }).catch((error) => {
                 console.error(error);
@@ -98,6 +102,31 @@ export default class DriverProfile extends ValidationComponent {
               Alert.alert(this.getErrorMessages());
           }
         }
+
+      updateSubmitDriver = async (e) => {
+        if(await AsyncStorage.getItem('userData')){
+          const data = JSON.parse(await AsyncStorage.getItem('userData'));
+    
+          console.log(data);
+          console.log(this.state.user_id);
+          
+          // fetch(Helpers.api_url+'get_profile_driver',{
+          //   method: 'POST',
+          //   header: {
+          //     'Accept': 'application/json',
+          //     'Content-Type': 'application/json',
+          //   },
+          //   body: JSON.stringify({
+          //     login_id: data.login_id
+          //   })
+          // }).then((response) => response.json())
+          //   .then((responseJson) => {
+          //   }).catch((error) => {
+          //     //console.error(error);
+          //   });
+    
+        }
+      }  
 
       updatePhoto(){
           fetch(Helpers.api_url+'update_photo', {
@@ -113,14 +142,20 @@ export default class DriverProfile extends ValidationComponent {
 
           }).then((response) => response.json())
             .then((responseJson) => {
+              console.log('Photo response');
+              console.log(responseJson);
                Alert.alert(responseJson.msg);
             }).catch((error) => {
               console.error(error);
             });
       }
+
   setUserData = async (e) => {
       if(await AsyncStorage.getItem('userData')){
           const data = JSON.parse(await AsyncStorage.getItem('userData'));
+          
+          console.log('driver profile data');
+          console.log(data);
 
       fetch(Helpers.api_url+'get_driver_profile', {
         method: 'POST',
@@ -129,12 +164,13 @@ export default class DriverProfile extends ValidationComponent {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: data.login_id
+          login_id: data.login_id
        })
       }).then((response) => response.json())
         .then((responseJson) => {
           console.log('response');
           console.log(responseJson);
+          console.log(this.state);
           
          if(responseJson.response === 'success')
           {
@@ -146,8 +182,21 @@ export default class DriverProfile extends ValidationComponent {
               this.setState({ city: responseJson.data.city });
               this.setState({ zip_code: responseJson.data.zip_code });
               this.setState({ user_id: responseJson.data.user_id });
-              this.setState({ vehicle_number: responseJson.data.vehicle_number });
-              this.setState({ vehicle_model: responseJson.data.vehicle_model });
+              this.setState({ vehicle_number: responseJson.data2.vehicle_number });
+              this.setState({ vehicle_model: responseJson.data2.vehicle_model });
+              this.setState({ photo: responseJson.data.photo });
+          }else{
+              Alert.alert('Please provide an Vehicle number and Vehicle Model');
+              this.setState({ userData: responseJson.data });
+              this.setState({ first_name: responseJson.data.first_name });
+              this.setState({ last_name: responseJson.data.last_name });
+              this.setState({ email: responseJson.data.email });
+              this.setState({ contact_number: responseJson.data.contact_number });
+              this.setState({ city: responseJson.data.city });
+              this.setState({ zip_code: responseJson.data.zip_code });
+              this.setState({ user_id: responseJson.data.user_id });
+              this.setState({ vehicle_number: responseJson.data2.vehicle_number });
+              this.setState({ vehicle_model: responseJson.data2.vehicle_model });
               this.setState({ photo: responseJson.data.photo });
           }
 
@@ -239,6 +288,7 @@ export default class DriverProfile extends ValidationComponent {
                   onPhotoSelect={avatar => {
                     if (avatar) {
                       // Alert.alert("data:image/png;base64${avatar}", avatar);
+                      console.log(this.state);
                       this.setState({ photo: avatar});
                       this.updatePhoto();
                     }
@@ -251,7 +301,7 @@ export default class DriverProfile extends ValidationComponent {
                    borderRadius: 75
                  }}
                  resizeMode='cover'
-                 source={(this.state.userData.photo == '' || this.state.userData.photo == null) ? require('../assets/images/avatar.png') : {uri: `data:image/gif;base64,${this.state.userData.photo}`}}
+                 source={(this.state.photo == '' || this.state.photo == null) ? require('../assets/images/avatar.png') : {uri: `data:image/gif;base64,${this.state.photo}`}}
                />
 
                {/*<Image style={styles.avatar} source={{uri: `data:image/gif;base64,${this.state.userData.photo}`}} />*/}
@@ -275,11 +325,11 @@ export default class DriverProfile extends ValidationComponent {
                 </ListItem>
                 <ListItem>
                   <Text style={[styles.description, {fontWeight: '600'}]}>Vehicle Number:  </Text>
-                  <Text style={styles.description2}>{this.state.userData.vehicle_number}</Text>
+                  <Text style={styles.description2}>{this.state.vehicle_number}</Text>
                 </ListItem>
                 <ListItem>
                   <Text style={[styles.description, {fontWeight: '600'}]}>Vehicle Model:  </Text>
-                  <Text style={styles.description2}>{this.state.userData.vehicle_model}</Text>
+                  <Text style={styles.description2}>{this.state.vehicle_model}</Text>
                 </ListItem>
                   <Text> </Text>
               </List>
@@ -295,14 +345,6 @@ export default class DriverProfile extends ValidationComponent {
                   <Button vertical onPress={() => this.props.navigation.navigate('Dashboard')}>
                       <Icon name="apps" />
                       <Text>Dashboard</Text>
-                  </Button>
-                  <Button vertical>
-                      <Icon name="map" />
-                      <Text>Book Now</Text>
-                  </Button>
-                  <Button vertical>
-                      <Icon name="navigate" />
-                      <Text>Navigate</Text>
                   </Button>
               </FooterTab>
           </Footer>

@@ -542,7 +542,10 @@ class MapContainer extends React.Component {
           console.log(responseJson.booking_details.booking_status);
           let textVal = '';
           if(responseJson.booking_details.booking_status == "pending"){
-            
+            // this.props.SET_DISPLAY_DRIVER_LOCATION(false);
+            if(responseJson.booking_details.additional_field_driver_status=="none"){
+              textVal = "Going to pick up location";
+            }
           }else if (responseJson.booking_details.booking_status == "reserved") {
             
             this.props.SET_DISPLAY_DRIVER_LOCATION(false);
