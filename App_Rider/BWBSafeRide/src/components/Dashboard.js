@@ -374,9 +374,9 @@ export default class Dashboard extends Component {
     render() {
         const { navigation } = this.props;
 
-        console.log('boooooooooooking');
-        console.log(navigation.getParam('booking_data', null));
-        console.log('boooooooooooking');
+        // console.log('boooooooooooking');
+        // console.log(navigation.getParam('booking_data', null));
+        // console.log('boooooooooooking');
 
         let params = false;
       if (this.props.navigation.getParam('params',false)) {
@@ -405,9 +405,9 @@ export default class Dashboard extends Component {
       // console.log("render");
       // console.log(this.state);
 
-    console.log("XDXDXXDXDXD");
+    // console.log("XDXDXXDXDXD");
 
-      console.log(this.props);
+    //   console.log(this.props);
 
 
       return (

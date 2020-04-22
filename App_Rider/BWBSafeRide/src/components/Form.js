@@ -147,7 +147,6 @@ export default class Form extends ValidationComponent {
                   />
                   <Text style={styles.textStyle}>You are a {this.state.selectedOption || 'none'}</Text>
                 </View>*/}
-
                 <View style={styles.inputWrap}>
                     <TextInput style={styles.inputBox2} placeholder="First Name" onChangeText={(firstname) => this.setState({firstname})} />
                     <TextInput style={styles.inputBox2} placeholder="Last Name" onChangeText={(lastname) => this.setState({lastname})} />

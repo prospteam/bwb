@@ -119,9 +119,9 @@ const MyDrawerNavigator = createDrawerNavigator(
     TripHistory: {
       screen: TripHistory,
     },
-    Bookings: {
-      screen: Bookings,
-    },
+    // Bookings: {
+    //   screen: Bookings,
+    // },
     Payment: {
       screen: (props) => <Payment {...props} test='test' />,
       navigationOptions: ({navigation}) => {
@@ -178,9 +178,9 @@ const MyDrawerNavigatorDriver = createDrawerNavigator(
         }
       }
     },
-    Bookings: {
-      screen: Bookings,
-    },
+    // Bookings: {
+    //   screen: Bookings,
+    // },
     Logout: {
       screen: Routes,
       navigationOptions: ({navigation}) => {
@@ -221,14 +221,14 @@ const MyDrawerNavigatorRider = createDrawerNavigator(
       PinnedLocations: {
         screen: PinnedLocations,
       },
-      Bookings: {
-        screen: Bookings,
-        navigationOptions: ({navigation}) => {
-            return {
-                drawerLabel: () => "Bookings",
-            }
-        }
-      },
+      // Bookings: {
+      //   screen: Bookings,
+      //   navigationOptions: ({navigation}) => {
+      //       return {
+      //           drawerLabel: () => "Bookings",
+      //       }
+      //   }
+      // },
       Payment: {
         screen: (props) => <Payment {...props} test='test' />,
         navigationOptions: ({navigation}) => {

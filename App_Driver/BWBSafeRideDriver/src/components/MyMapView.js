@@ -219,7 +219,7 @@ const MyMapView = (props) => {
             onReady={result => {
               if(true){
               // if(this.props.display_driver_location){
-                var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
+                var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute(s) to arrive.";
                 var distance = result.duration.toFixed(2) + "km from your location.";
                 props.getDataDriverLocation({distance:distance,duration:duration})
               }

@@ -87,7 +87,9 @@ const MyMapView = (props) => {
                 description={props.geocode_name}
                 // pinColor='#45A163'
               >
-              <Icon style={styles.from_point_icon} type="FontAwesome5" name="map-pin" />
+              <Icon 
+              style={styles.from_point_icon} 
+              type="FontAwesome5" name="map-pin" />
               <MapView.Callout tooltip={true}
                   style={{backgroundColor: '#d3a04c'}}
                   onPress={() => {
@@ -135,7 +137,9 @@ const MyMapView = (props) => {
                   }}
               >
                   <TouchableOpacity>
-                      <Text style={{color: '#fff', padding: 10}}>Bookmark location</Text>
+                      <Text style={{color: '#fff', width:180
+                      , padding: 10
+                      }}>Bookmark location</Text>
                   </TouchableOpacity>
               </MapView.Callout>
               
@@ -225,7 +229,7 @@ const MyMapView = (props) => {
           strokeColor="orange"
           onReady={result => {
             // if(this.props.display_driver_location){
-                var duration = (Number(result.distance.toFixed(0))==0)?"You are soon to arrive to your destination.":result.duration.toFixed(0)+" minute\\s to arrive.";
+                var duration = (Number(result.distance.toFixed(0))==0)?"Driver is soon to arrive to your Location.":result.duration.toFixed(0)+" minute(s) to arrive.";
                 var distance = result.duration.toFixed(2) + "km from your location.";
                 props.getDataDriverLocation({distance:distance,duration:duration})
             // }

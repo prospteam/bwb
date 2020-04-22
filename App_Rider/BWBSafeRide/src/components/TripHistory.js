@@ -34,14 +34,16 @@ export default class TripHistory extends Component {
                    const data = {
                        user_id: this.state.userid
                    }
-
-                   fetch(Helpers.api_url+'get_ride_history',{
+                   console.log("Helpers.api_url+'get_ride_history/'+res.login_id");
+                   console.log(Helpers.api_url+'get_ride_history/'+res.login_id);
+                   
+                   fetch(Helpers.api_url+'get_ride_history/'+res.login_id,{
                        method: 'POST',
                        headers: {
                            'Accept': 'application/json',
                            'Content-Type': 'application/json'
                        },
-                       body: JSON.stringify(data)
+                    //    body: JSON.stringify(data)
                    }).then((response) => response.json())
                    .then((res) => {
 

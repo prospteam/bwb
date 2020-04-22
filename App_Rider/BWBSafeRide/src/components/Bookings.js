@@ -294,9 +294,13 @@ export default class Bookings extends Component {
 			// console.log(this.state);
 			// console.log("XDXD");
 			let string = '';
-
+			let temp_var = '';
 			for (const [ key, value ] of Object.entries(data)){
-			    string = string + key.replace(/_/g,' ').toUpperCase() + ": " + value + '\n';
+				if(value)
+				temp_var=value;
+				else
+				temp_var="Not Available";
+			    string = string + key.replace(/_/g,' ').toUpperCase() + ": " + temp_var + '\n';
 			}
 
 			const details = string;
@@ -330,6 +334,7 @@ export default class Bookings extends Component {
 				  <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
 				  	<View style={{backgroundColor: '#d3a04c', paddingVertical: 30, width: '100%', alignItems: 'center'}}><Text style={{color: 'white'}}>{'Booking Details'.toUpperCase()}</Text></View>
 					<View style={{ width: 300, height: 300, borderWidth: 2, borderColor: '#d3a04c', paddingVertical: 10, paddingHorizontal: 10, marginVertical: 20, backgroundColor: 'white'}}><Text>{details}</Text></View>
+
 					<TouchableOpacity style={{backgroundColor: '#1c1b22', paddingVertical: 10, paddingHorizontal: 20}} onPress={this.toggleModal}><Text style={{color: '#d3a04c'}}>Close</Text></TouchableOpacity>
 				  </View>
 				</Modal>

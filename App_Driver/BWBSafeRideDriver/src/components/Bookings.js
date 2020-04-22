@@ -411,9 +411,13 @@ class Bookings extends Component {
 			console.log(this.state);
 			console.log("XDXD");
 			let string = '';
-
+			let temp_var = '';
 			for (const [ key, value ] of Object.entries(data)){
-			    string = string + key.replace(/_/g,' ').toUpperCase() + ": " + value + '\n';
+				if(value)
+				temp_var=value;
+				else
+				temp_var="Not Available";
+			    string = string + key.replace(/_/g,' ').toUpperCase() + ": " + temp_var + '\n';
 			}
 
 			const details = string;
