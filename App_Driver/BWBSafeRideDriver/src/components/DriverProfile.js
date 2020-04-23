@@ -296,10 +296,10 @@ export default class DriverProfile extends ValidationComponent {
                 >
                 <Image
                  style={{
-                   width: 130,
-                   height: 130,
-                   borderRadius: 75
-                 }}
+                  width: 130,
+                  height: 130,
+                  borderRadius: 75
+                }}
                  resizeMode='cover'
                  source={(this.state.photo == '' || this.state.photo == null) ? require('../assets/images/avatar.png') : {uri: `data:image/gif;base64,${this.state.photo}`}}
                />

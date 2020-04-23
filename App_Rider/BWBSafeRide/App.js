@@ -294,7 +294,7 @@ const loader =
   width: undefined,
   height: undefined
 }}>
-  <Spinner type="WanderingCubes" color="black" size={80} />
+  {/* <Spinner type="WanderingCubes" color="black" size={80} /> */}
 </View>
 
 // export default class App extends Component {
