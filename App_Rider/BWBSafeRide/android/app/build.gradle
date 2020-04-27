@@ -150,11 +150,17 @@ android {
             keyPassword 'android'
         }
          release {
-            storeFile file('BWB-Rider.keystore')
-            storePassword 'password'
-            keyAlias 'BWB-Rider'
-            keyPassword 'password'
+            storeFile file('bwb_key_name.keystore')
+            storePassword 'proweaver'
+            keyAlias 'bwb_key_alies'
+            keyPassword 'proweaver'
         }
+        //  release {
+        //     storeFile file('BWB-Rider.keystore')
+        //     storePassword 'password'
+        //     keyAlias 'BWB-Rider'
+        //     keyPassword 'password'
+        // }
     }
     buildTypes {
         debug {
@@ -186,7 +192,7 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-autostart')
+    // implementation project(':react-native-autostart')
     implementation project(':react-native-android-location-services-dialog-box')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
