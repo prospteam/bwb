@@ -352,15 +352,15 @@ export default class App extends Component<Props> {
   // this.notificationListener();
   // }
 
-  if(TRUE) {
-    // if(isLoading){
-    // console.log('CAME HERE');
-    return (
-      <View style={styles.container}>
-        <Spinner type="9CubeGrid" color="#d3a04c" />
-      </View>
-    );
-  }
+  // if(FALSE) {
+  //   // if(isLoading){
+  //   // console.log('CAME HERE');
+  //   return (
+  //     <View style={styles.container}>
+  //       <Spinner type="9CubeGrid" color="#d3a04c" />
+  //     </View>
+  //   );
+  // }
 
   checkSession = async () => {
     let varUserType = "";
@@ -453,7 +453,7 @@ export default class App extends Component<Props> {
     
     return (
       <Provider store={store}>
-        <PersistGate loading={loader} persistor={persistor}>
+        <PersistGate loading={true} persistor={persistor}>
           <SCLAlert
             // show={true}
             show={this.state.scl_alert.show}

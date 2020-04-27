@@ -17,6 +17,9 @@ import {
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { 
+  SET_SHOW_APP_LOADER
+ } from '../redux/actions/Actions';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -356,6 +359,8 @@ class Dashboard extends Component {
         console.log(await AsyncStorage.getItem('userData'));
       }else {
           // this.props.actions.navigate('Logout');
+          
+          this.props.SET_SHOW_APP_LOADER(false);
           this.props.navigation.navigate('Logout');
           // console.log('WALA NAKA LOGIN pomise');
                // Actions.dashboard();
@@ -426,7 +431,14 @@ class Dashboard extends Component {
             </Right>
           </Header>
           <Content contentContainerStyle ={{position:'relative',flex: 1 }}>
-            {(this.props.show_app_loader)?(<CommonProgressBar/>):(null)}
+            {
+              // (false)?(
+              (this.props.show_app_loader)?(
+                <CommonProgressBar/>
+              ):(
+                null
+              )
+            }
             <View style={styles.container}>
             {
                 <MapContainer 
@@ -488,6 +500,7 @@ function mapStateToProps(state) {
 }
 function mapActionsToDispatch(dispatch) {
   return bindActionCreators({
+    SET_SHOW_APP_LOADER:SET_SHOW_APP_LOADER,
     // DRIVER_LOCATION_CHANGE: DRIVER_LOCATION_CHANGE,
     // BOOKING_LIST_REFRESH_CHANGE: BOOKING_LIST_REFRESH_CHANGE,
     // SET_DISPLAY_DRIVER_LOCATION: SET_DISPLAY_DRIVER_LOCATION,
