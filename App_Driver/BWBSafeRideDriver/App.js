@@ -283,7 +283,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   //Comment sa to allow all redux states
-  whitelist: ['reduxState'],
+  whitelist: ['redux_state'],
   timeout: null
 }
 

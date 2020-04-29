@@ -509,107 +509,107 @@ class MapContainer extends React.Component {
      console.log(response);
      return response.json();
    }).then((responseJson) => {
-       console.log('getting API');
-       console.log(responseJson);
-        if(responseJson.num_of_active_booking > 0){
-          const ref_single = this.ref_bookings_status.doc(String(Number(responseJson.booking_details.booking_id)));
-          ref_single.get()
-            .then((docSnapshot) => {
-                  if (docSnapshot.exists) {
-                      ref_single.update({
-                        "booking_status":responseJson.booking_details.booking_status,
-                        "additional_field_driver_status":responseJson.booking_details.additional_field_driver_status,
-                      })
-                      .catch(function(error) {
-                          console.error("Error adding document: ", error);
-                      });
-                  } else {
-                    ref_single.set({
-                      "booking_status":responseJson.booking_details.booking_status,
-                      "additional_field_driver_status":responseJson.booking_details.additional_field_driver_status,
-                    })
-                    .catch(function(error) {
-                        console.error("Error adding document: ", error);
-                    });
-                  }
-          });
-          
-          if(responseJson.booking_details.additional_field_driver_status=="going_pick")
-          {
-            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
-          }
-          // msg = responseJson.msg;
-          console.log(responseJson.booking_details.booking_status);
-          let textVal = '';
-          if(responseJson.booking_details.booking_status == "pending"){
-            // this.props.SET_DISPLAY_DRIVER_LOCATION(false);
-            if(responseJson.booking_details.additional_field_driver_status=="none"){
-              textVal = "Going to pick up location";
+      console.log('getting API');
+      console.log(responseJson);
+      if(responseJson.num_of_active_booking > 0){
+        const ref_single = this.ref_bookings_status.doc(String(Number(responseJson.booking_details.booking_id)));
+        ref_single.get()
+          .then((docSnapshot) => {
+            if (docSnapshot.exists) {
+              ref_single.update({
+                "booking_status":responseJson.booking_details.booking_status,
+                "additional_field_driver_status":responseJson.booking_details.additional_field_driver_status,
+              })
+              .catch(function(error) {
+                  console.error("Error adding document: ", error);
+              });
+            } else {
+              ref_single.set({
+                "booking_status":responseJson.booking_details.booking_status,
+                "additional_field_driver_status":responseJson.booking_details.additional_field_driver_status,
+              })
+              .catch(function(error) {
+                  console.error("Error adding document: ", error);
+              });
             }
-          }else if (responseJson.booking_details.booking_status == "reserved") {
-            
-            this.props.SET_DISPLAY_DRIVER_LOCATION(false);
-            if(responseJson.booking_details.additional_field_driver_status=="none"){
-              textVal = "Going to pick up location";
-            }else if(responseJson.booking_details.additional_field_driver_status=="going_pick"){
-              textVal = "Going to drop off location";
-              this.props.SET_DISPLAY_DRIVER_LOCATION(true);
-            }else if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
-                  textVal = "Ride completed";
-            }else{
-              
-                  textVal = "Going to drop off location";
-            }
-          }else if(responseJson.booking_details.booking_status == "completed"){
-               textVal = "Ride completed";
-          }
-          console.log("textVal");
-          console.log(textVal);
-          this.setState({
-            can_book:false,
-            rider_details:responseJson.rider_details,
-            driver_details:responseJson.driver_details,
-            booking_details:responseJson.booking_details,
-            rider_details: responseJson.rider_details,
-             textValue: textVal
-          });
-          // this.state.user.user_type_id
-          console.log('LOEDDEDDDD2');
-        }else{
-          console.log('LOEDDEDDDD444444444');
-          this.setState({
-            can_book:true,
-            driver_details:[],
-            booking_details:[],
-          });
-        }
-        this.props.BOOKING_LIST_REFRESH_CHANGE(false);
-        this.setState({
-          booking_details_ready:true,
         });
-       this.setState({
-         is_finish_check_booking_status: true,
-       });
-
-       
-    this.props.SET_SHOW_APP_LOADER(false);
-    }).catch((error) => {
-      console.log('NOT getting API');
-		  // console.error(error);
-      // Alert.alert('Not Able to connect to server');
-      this.setState({
-        scl_alert: {
-          show: true,
-          title: "Alert",
-          message: "Error on connecting to server",
+        
+        if(responseJson.booking_details.additional_field_driver_status=="going_pick")
+        {
+          this.props.SET_DISPLAY_DRIVER_LOCATION(true);
         }
+        // msg = responseJson.msg;
+        console.log(responseJson.booking_details.booking_status);
+        let textVal = '';
+        if(responseJson.booking_details.booking_status == "pending"){
+          // this.props.SET_DISPLAY_DRIVER_LOCATION(false);
+          if(responseJson.booking_details.additional_field_driver_status=="none"){
+            textVal = "Going to pick up location";
+          }
+        }else if (responseJson.booking_details.booking_status == "reserved") {
+          
+          this.props.SET_DISPLAY_DRIVER_LOCATION(false);
+          if(responseJson.booking_details.additional_field_driver_status=="none"){
+            textVal = "Going to pick up location";
+          }else if(responseJson.booking_details.additional_field_driver_status=="going_pick"){
+            textVal = "Going to drop off location";
+            this.props.SET_DISPLAY_DRIVER_LOCATION(true);
+          }else if(responseJson.booking_details.additional_field_driver_status=="going_drop"){
+                textVal = "Ride completed";
+          }else{
+            
+                textVal = "Going to drop off location";
+          }
+        }else if(responseJson.booking_details.booking_status == "completed"){
+              textVal = "Ride completed";
+        }
+        console.log("textVal");
+        console.log(textVal);
+        this.setState({
+          can_book:false,
+          rider_details:responseJson.rider_details,
+          driver_details:responseJson.driver_details,
+          booking_details:responseJson.booking_details,
+          rider_details: responseJson.rider_details,
+            textValue: textVal
+        });
+        // this.state.user.user_type_id
+        console.log('LOEDDEDDDD2');
+      }else{
+        console.log('LOEDDEDDDD444444444');
+        this.setState({
+          can_book:true,
+          driver_details:[],
+          booking_details:[],
+        });
+      }
+      this.props.BOOKING_LIST_REFRESH_CHANGE(false);
+      this.setState({
+        booking_details_ready:true,
+      });
+      this.setState({
+        is_finish_check_booking_status: true,
       });
 
-      this.setState({
-        is_finish_check_booking_status: false,
-      });
-      this.props.SET_SHOW_APP_LOADER(false);
+      
+  this.props.SET_SHOW_APP_LOADER(false);
+  }).catch((error) => {
+    console.log('NOT getting API');
+    // console.error(error);
+    // Alert.alert('Not Able to connect to server');
+    this.setState({
+      scl_alert: {
+        show: true,
+        title: "Alert",
+        message: "Error on connecting to server",
+      }
     });
+
+    this.setState({
+      is_finish_check_booking_status: false,
+    });
+    this.props.SET_SHOW_APP_LOADER(false);
+  });
     // this.setState({ region });
     // console.log('GETTING DSISTSATNCEEEEEEEE');
     // console.log(params);

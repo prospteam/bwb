@@ -634,15 +634,19 @@ class MapContainer extends React.Component {
 					// console.log(doc);
 					// console.log(this.state.booking_status);
 					if (data.booking_status) {
+            const alter_booking_details = this.state.booking_details;
 					  let can_book = false;
-					  const alter_booking_details = this.state.booking_details;
 					  alter_booking_details.booking_status = data.booking_status;
 					  if (data.booking_status == "completed") {
 						can_book = true;
 					  }
 					  if (data.booking_status == "reserved"){
-              if(this.state.booking_details.booking_status!="reserved"){
+              if(this.state.booking_status!="reserved"){
+                console.log('it is newly reservebed');
                 this.checkBookingStatus();
+              }else{
+                console.log('it is NOT newly reservebed');
+
               }
 					  }
 					  this.setState({
