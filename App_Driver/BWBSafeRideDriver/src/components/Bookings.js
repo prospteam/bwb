@@ -93,7 +93,7 @@ class Bookings extends Component {
 		  AsyncStorage.getItem("is_available").then((value) => {
 				console.log('donevalue');
 				console.log(value);
-				if (value==true){
+				if (value==true || value==null){
 					PushNotification.cancelLocalNotifications({ id: '123' });
 					PushNotification.localNotification({
 						id: '123',
@@ -110,7 +110,7 @@ class Bookings extends Component {
 		});
 
 	  }else{
-		// console.log("THIS IS OLD");
+		// alert("THIS IS OLD");
 	  }
     }, err => {
       // console.log(`Encountered error: ${err}`);
