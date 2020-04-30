@@ -157,8 +157,8 @@ class Bookings extends Component {
 		// console.error(responseJson.data.map(Object.values).map((_,i) => ({key: `${i}`, text: `${_}`})));
 		// const val = ["Booking 1", "Booking 2", "Booking 3", "Booking 4"];
 		// console.error(val.map((_,i) => ({key: `${i}`, text: `${_}`})));
-		// console.log("responseJson");
-		// console.log(responseJson);
+		console.log("responseJson33");
+		console.log(responseJson);
 		// console.log("responseJson Pending");
 		// console.log(responseJson.data);
 		//console.log(responseJson.data.data_pending[0].booking_id);
@@ -177,13 +177,13 @@ class Bookings extends Component {
 			// Alert.alert(responseJson.response+"1");
 				console.log(responseJson);
 				console.log("xxresponseJson");
-			  this.setState({
-				  scl_alert: {
-					  show: true,
-					  title: "Alert",
-					  message: "Please check your internet connection for realtime updates.",
-				  }
-			  });
+			//   this.setState({
+			// 	  scl_alert: {
+			// 		  show: true,
+			// 		  title: "Alert",
+			// 		  message: "Please check your internet connection for realtime updates.",
+			// 	  }
+			//   });
 		}
 		// console.error(this.state.listViewData);
 		console.log('Pengding state');
