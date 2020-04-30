@@ -612,17 +612,22 @@ class MapContainer extends React.Component {
 								push_notif_message = "Going to drop off location";
 							}else if(docSnapshot_data.additional_field_driver_status=="completed"){
 								push_notif_message = "You have arrived, thank you for using our service.";
-                            }
-                            if(docSnapshot_data.additional_field_driver_status!="none"){
-                                PushNotification.cancelLocalNotifications({ id: '52341234' });
-                                PushNotification.localNotification({
-                                id: '52341234',
-                                foreground: false, // BOOLEAN: If the notification was received in foreground or not
-                                userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
-                                message: push_notif_message, // STRING: The notification message
-                                data: {}, // OBJECT: The push data
-                                });
-                            }
+              }
+
+              if(docSnapshot_data.additional_field_driver_status!="none"){
+                let last_notif = "";
+                if(last_notif!=push_notif_message){
+                  PushNotification.cancelLocalNotifications({ id: '52341234' });
+                  PushNotification.localNotification({
+                  id: '52341234',
+                  foreground: false, // BOOLEAN: If the notification was received in foreground or not
+                  userInteraction: false, // BOOLEAN: If the notification was opened by the user from the notification area or not
+                  message: push_notif_message, // STRING: The notification message
+                  data: {}, // OBJECT: The push data
+                  });
+                  let last_notif = push_notif_message;
+                }
+              }
 						}
                     // }
                     
