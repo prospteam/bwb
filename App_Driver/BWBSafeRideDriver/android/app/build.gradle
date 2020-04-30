@@ -149,11 +149,17 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
-        release  {
-            storeFile file('BWB-Driver.keystore')
-            storePassword 'password'
-            keyAlias 'BWB-Driver'
-            keyPassword 'password'
+        // release  {
+        //     storeFile file('BWB-Driver.keystore')
+        //     storePassword 'password'
+        //     keyAlias 'BWB-Driver'
+        //     keyPassword 'password'
+        // }
+         release {
+            storeFile file('bwb_key_name.keystore')
+            storePassword 'proweaver'
+            keyAlias 'bwb_key_alies'
+            keyPassword 'proweaver'
         }
     }
     buildTypes {
