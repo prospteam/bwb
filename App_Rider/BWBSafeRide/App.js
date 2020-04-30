@@ -44,6 +44,20 @@ import { PersistGate } from 'redux-persist/integration/react';
 // import Routes from './Routes';
 import allReducers from './src/redux/reducers/index.js';
 
+// THESE IS FOR FIREBASE TESTINGS
+  // import firebase from './src/components/common/Firebase';
+  // firebase.firestore()
+  // .collection('watch_new_pending').doc('last_pending').onSnapshot(docSnapshot => {
+    //   console.log("dara2");
+    // console.log(docSnapshot.data());
+    // }, err => {
+      //   console.log("error_lagi2");
+      //   console.log(err);
+      // });
+// THESE IS FOR FIREBASE TESTINGS
+
+
+
 YellowBox.ignoreWarnings([
   'Warning: componentWillUpdate is deprecated',
   'Warning: componentWillMount is deprecated',

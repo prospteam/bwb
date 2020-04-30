@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text, Tab, Tabs } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import Helpers from '../../Helpers';
@@ -136,6 +136,7 @@ export default class TripHistory extends Component {
             </Header>
             <Tabs tabBarUnderlineStyle={{backgroundColor: '#d3a04c'}}>
                 <Tab heading="Completed Bookings" tabStyle={{backgroundColor: '#1c1b22'}} textStyle={{color: '#fff'}} activeTextStyle={{color: '#fff'}} activeTabStyle={{backgroundColor: '#d3a04c'}}>
+                <ScrollView>
                     {this.state.trip_history && this.state.trip_history.map((value, index) => {
                         if(value.booking_status == 'completed'){
                         return (<View key={index} style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 25, paddingVertical: 20, borderBottomWidth: 2, borderColor: '#e3e3e3'}}>
@@ -144,9 +145,11 @@ export default class TripHistory extends Component {
                                 <Text style={styles.tabTextContents}>To: {value.dropoff_location != null ? value.dropoff_location: '-'}</Text>
                             </View>
                             <View style={styles.tabListContents, {width: 80}}><Text style={{fontSize: 11}}>{value.travel_date}</Text></View>
-                            {value.saved_booking == "no" && <TouchableOpacity style={styles.tabListContents, {width: 38, padding: 3, borderRadius: 30, borderWidth: 2, borderColor: '#e3e3e3'}} onPress={() => this.onPressPinned(value.booking_id)}><Icon name="bookmark" style={{fontSize: 25, color: '#d3a04c', textAlign: 'center'}} /></TouchableOpacity>}
+                            {value.saved_booking == "no" && <TouchableOpacity style={styles.tabListContents, {width: 38, padding: 3, borderRadius: 30, borderWidth: 2, borderColor: '#e3e3e3'}} onPress={() => this.onPressPinned(value.booking_id)}><Icon name="bookmark" style={{fontSize: 25, color: '#d3a04c', textAlign: 'center'}} />
+                            </TouchableOpacity>}
                         </View>);}
                     })}
+                </ScrollView>
                 </Tab>
             </Tabs>
         </Container>

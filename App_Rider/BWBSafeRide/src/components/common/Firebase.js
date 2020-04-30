@@ -1,15 +1,17 @@
 import * as firebase from 'firebase';
-// const firebaseConfig = {
-//     apiKey: "AIzaSyBHoGShWYIEzuHM0Lfnl67EkVgi4hEM4qw",
-//     authDomain: "bwbsaferide.firebaseapp.com",
-//     databaseURL: "https://bwbsaferide.firebaseio.com",
-//     projectId: "bwbsaferide",
-//     storageBucket: "bwbsaferide.appspot.com",
-//     messagingSenderId: "903140254593",
-//     appId: "1:903140254593:web:7e259c6891e88a5837be80"
-// };
+import firestore from 'firebase/firestore';
 
-var firebaseConfig = {
+const firebaseConfig = {
+    apiKey: "AIzaSyBHoGShWYIEzuHM0Lfnl67EkVgi4hEM4qw",
+    authDomain: "bwbsaferide.firebaseapp.com",
+    databaseURL: "https://bwbsaferide.firebaseio.com",
+    projectId: "bwbsaferide",
+    storageBucket: "bwbsaferide.appspot.com",
+    messagingSenderId: "903140254593",
+    appId: "1:903140254593:web:7e259c6891e88a5837be80"
+};
+
+const firebaseConfig2 = {
     apiKey: "AIzaSyAb5kfppQCQjfo1_S6yDsLD8onpoU27bY8",
     authDomain: "bwbsaferide-6e68c.firebaseapp.com",
     databaseURL: "https://bwbsaferide-6e68c.firebaseio.com",
@@ -20,6 +22,6 @@ var firebaseConfig = {
   };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig2);
 
 export default firebase;
