@@ -17,7 +17,7 @@
     "geolib": "^3.2.1",
     "native-base": "^2.13.8",
     "react": "16.9.0",
-    "react-native": "0.61",
+    "react-native": "0.62",
     "react-native-android-location-services-dialog-box": "^2.8.2",
     "react-native-form-validator": "^0.2.0",
     "react-native-fs": "^2.14.1",
